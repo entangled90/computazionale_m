@@ -1,0 +1,31 @@
+ `plot` is the primary command for drawing plots with `gnuplot`.  It creates
+ plots of functions and data in many, many ways.  `plot` is used to draw 2D
+ functions and data; `splot` draws 2D projections of 3D surfaces and data.
+ `plot` and `splot` offer many features in common; see `splot` for differences.
+ Note specifically that although the `binary <binary list>` variation does
+ work for both `plot` and `splot`, there are small differences between them.
+
+ Syntax:
+       plot {<ranges>}
+            {<iteration>}
+            {<function> | {"<datafile>" {datafile-modifiers}}}
+            {axes <axes>} {<title-spec>} {with <style>}
+            {, {definitions{,}} <function> ...}
+
+ where either a <function> or the name of a data file enclosed in quotes is
+ supplied.  A function is a mathematical expression or a pair of mathematical
+ expressions in parametric mode.  Functions may be builtin, user-defined, or
+ provided in the plot command itself.  Multiple datafiles and/or functions may
+ be plotted in a single command, separated by commas.  See `data`, `functions`.
+
+ Examples:
+       plot sin(x)
+       plot sin(x), cos(x)
+       plot f(x) = sin(x*a), a = .2, f(x), a = .4, f(x)
+       plot "datafile.1" with lines, "datafile.2" with points
+       plot [t=1:10] [-pi:pi*2] tan(t), \
+            "data.1" using (tan($2)):($3/$4) smooth csplines \
+                     axes x1y2 notitle with lines 5
+       plot for [datafile in "spinach.dat broccoli.dat"] datafile
+
+ See also `show plot`.

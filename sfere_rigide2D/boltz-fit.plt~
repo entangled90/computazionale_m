@@ -1,0 +1,12 @@
+set autoscale
+unset log
+set xtic auto
+#define fit function
+f(x)= N*x*sqrt(x)*exp(-a*x)
+set terminal postscript portrait enhanced mono dashed lw 1 "Helvetica" 14 
+set outpus "boltz-fit.eps"
+N=10^2
+a=1
+fit f(x) 'boltzmann-histo.dat' via N,a
+plot f(x), 'boltzmann-histo.dat'
+
