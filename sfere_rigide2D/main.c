@@ -504,7 +504,6 @@ void r_squared_save ( char * filename){
 
 
 
-
 /**************************************************************************************
 ***********************************************************************************
 MAIN
@@ -567,7 +566,7 @@ print_coordinate();
 printf("#Collisions: %d \n", numOfCollisions);
 printf(" K = %e \t P= %e \n", kin_en(), total_momentum());
 temperature = 2*kin_en()/((double) N)/(double) NUMBER_OF_PARTICLES/K_BOLTZ;
-//FILE *f_time_collision = fopen("data/time_collision.dat","w");
+FILE *pdf_time_coll_fileindex = fopen(tcpdf_file,"w");
 /*****************
 EVOLUZIONE
 *****************/
@@ -582,17 +581,18 @@ while (total_time < TIME_MAX){
 	if( numOfCollisions % 10000 == 0 ){
 		printf("#Collisions: %d  Total Time: %e\n", numOfCollisions, total_time);
 	}
+	fprintf(pdf_time_coll_fileindex,"%f\n",time_collision);
 }
+fclose(pdf_time_coll_fileindex);
 if (time_counted > NUM_TEMPI_SALVATI){
 	printf("ERROR \n");
 }
 r_squared_save(r2_file);
-//fclose(f_time_collision);
 pression*=SIGMA/total_time/3.0/kin_en();
 pression+=1.0;
 pression*=fraz_imp/M_PI*2*sqrt(3.00);
 FILE *f_collision=fopen(tc_file,"a");
-fprintf(f_collision,"%e\t%e\n",fraz_imp,2*numOfCollisions/(double)NUMBER_OF_PARTICLES*total_time);
+fprintf(f_collision,"%e\t%e\n",fraz_imp,total_time/(2*numOfCollisions/(double)NUMBER_OF_PARTICLES);
 FILE *f_pression=fopen(press_file,"a");
 fprintf(f_pression, "%s\n",header_file);
 fprintf(f_pression,"%e\t%e\n",fraz_imp, pression);
