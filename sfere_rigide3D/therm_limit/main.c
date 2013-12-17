@@ -3,6 +3,14 @@
 altrimenti eta viene impostato di default a eta = 0.1 (fraz_imp)
 */
 
+
+
+/****************************
+VERSIONE DEL PROGRAMMA PER LIMITE TERMODINAMICO!!!
+TUTTTO IL RESTO E' ELIMINATO
+
+**********************/
+
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
@@ -14,7 +22,7 @@ altrimenti eta viene impostato di default a eta = 0.1 (fraz_imp)
 #define TERM_TIME 20000
 #define MAX_COLLISION 2e5
 #define TIME_MAX 30
-/*Numero particelle */
+/*Numero particelle da tenere fissato a 256 */
 int NUMBER_OF_PARTICLES = 256;
 /* Diametro sfere */
 double SIGMA =  0;
