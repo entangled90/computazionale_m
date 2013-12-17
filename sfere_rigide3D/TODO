@@ -1,6 +1,10 @@
 MANCA DA FARE:
 
+*********************
+~ FIX DEI COEFFICIENTI DI SIGMA, ETA ecc per 3 DIMENSIONI!!
+
 ~Fissare temperatura (ora oscilla!)
 ~Verificare che tutto funga correttamente
 ~funzione di impacchettamento
+~controlla che evolve_therm non calcoli la pressione (anche in 2d)
 
