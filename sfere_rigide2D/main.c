@@ -504,9 +504,10 @@ void r_squared_save ( char * filename){
 
 
 
-/**************************************************************************************
-***********************************************************************************
+/****************************************************************************************
+*****************************************************************************************
 MAIN
+*****************************************************************************************
 *****************************************************************************************
 */
 
@@ -539,7 +540,9 @@ if (argc > 1){
 }
 SIGMA = sqrt(4*fraz_imp/ NUMBER_OF_PARTICLES / M_PI);
 DIST_RET = sqrt(4*0.76/ NUMBER_OF_PARTICLES / M_PI);
-printf("SIGMA = %e\n",SIGMA);
+printf("\n\n*****************************************************\n");
+printf("Starting simulation with:");
+printf("SIGMA = %e\t",SIGMA);
 printf("Frazione di impacchettamento: %e\n", fraz_imp);
 collTable = malloc (NUMBER_OF_PARTICLES*NUMBER_OF_PARTICLES*sizeof(double));
 particleList = malloc ( NUMBER_OF_PARTICLES * sizeof(particle_s));
@@ -547,7 +550,8 @@ time_list = malloc (NUM_TEMPI_SALVATI*NUMBER_OF_PARTICLES * sizeof(particle_s));
 particle_init ( particleList);
 fix_boundaries();
 temperature = 2*kin_en()/((double) N)/(double) NUMBER_OF_PARTICLES/K_BOLTZ;
-
+printf(" K = %e \t P= %e \t", kin_en(), total_momentum());
+printf("Temperature is: %f \n",temperature );
 
 /****** GESTIONE FILE  ******/
 char r2_file[64] = "";
@@ -564,8 +568,7 @@ snprintf(header_file, 256, "#header: N=%d\t eta=%f\tTIME_MAX=%d\tTERM_TIME=%d\tT
 //check_distance();
 print_coordinate();
 printf("#Collisions: %d \n", numOfCollisions);
-printf(" K = %e \t P= %e \n", kin_en(), total_momentum());
-temperature = 2*kin_en()/((double) N)/(double) NUMBER_OF_PARTICLES/K_BOLTZ;
+
 FILE *pdf_time_coll_fileindex = fopen(tcpdf_file,"w");
 /*****************
 EVOLUZIONE
@@ -578,9 +581,10 @@ total_time = 0;
 printf("Termalizzato: %d urti\n",numOfCollisions);
 while (total_time < TIME_MAX){
 	evolve();
-	if( numOfCollisions % 10000 == 0 ){
+	/*if( numOfCollisions % 10000 == 0 ){
 		printf("#Collisions: %d  Total Time: %e\n", numOfCollisions, total_time);
 	}
+	*/
 	fprintf(pdf_time_coll_fileindex,"%f\n",time_collision);
 }
 fclose(pdf_time_coll_fileindex);
@@ -592,7 +596,7 @@ pression*=SIGMA/total_time/3.0/kin_en();
 pression+=1.0;
 pression*=fraz_imp/M_PI*2*sqrt(3.00);
 FILE *f_collision=fopen(tc_file,"a");
-fprintf(f_collision,"%e\t%e\n",fraz_imp,total_time/(2*numOfCollisions/(double)NUMBER_OF_PARTICLES);
+fprintf(f_collision,"%e\t%e\n",fraz_imp,total_time/(2*numOfCollisions/(double)NUMBER_OF_PARTICLES));
 FILE *f_pression=fopen(press_file,"a");
 fprintf(f_pression, "%s\n",header_file);
 fprintf(f_pression,"%e\t%e\n",fraz_imp, pression);
