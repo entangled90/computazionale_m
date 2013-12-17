@@ -8,9 +8,9 @@ altrimenti eta viene impostato di default a eta = 0.1 (fraz_imp)
 #include <stdlib.h>
 #include <time.h>
 #include <float.h>
-#include "vect2d.h"
+#include "vect3d.h"
 /*Numero di dimensioni */
-#define N 2
+#define N 3
 #define TERM_TIME 20000
 #define MAX_COLLISION 2e5
 #define TIME_MAX 30
@@ -85,51 +85,60 @@ inline void boltzmann_file_save ( void ){
 }
 /*******************************************************************************************/
 
-/* Inizializzazione delle particelle */
-void particle_init (){
+void particle_init ( particle_s *particleList ){
 	int i_part= 0;
 	int i,j;
-	int row=0;
-	double x_cur = - DIST_RET;
-	double y_cur = 0;
-	double speed_cm[2];
-	speed_cm[0] = 0;
-	speed_cm[1] = 0;
-	/*if ( DIST_RET < SIGMA){
-		printf("Troppe particelle!\n");
-		exit(EXIT_FAILURE);
+	double r_0[N];
+	double speed_cm[3];
+	int z_row = 0;
+	double offsetX=0;
+	double offsetY=0;
+	
+	for ( i = 0; i<N;i++) {
+		r_0[i]=0;
+		speed_cm[i]=0.0;
 	}
-	*/
-	for ( i_part = 0; i_part< NUMBER_OF_PARTICLES; i_part++){
-		x_cur += DIST_RET;
-		particleList[i_part].distance = 0;
-		particleList[i_part].n_collision=0;
-		particleList[i_part].last_time_collision=0;
-		if ( x_cur > 1 - SIGMA){
-			row++;
-			x_cur =  (row%2)*DIST_RET/2.0;
-			y_cur += sqrt(3)/2.0*DIST_RET;
-			
+	
+	while (i_part <NUMBER_OF_PARTICLES){
+		for ( i=0; i<N;i++){
+		particleList[i_part].position[i] = r_0[i];
 		}
-		if ( y_cur > 1 - SIGMA){
-				printf("Impacchettamento non completato: raggiunto il margine superiore\n");
-				exit(EXIT_FAILURE);
+		//particleList[i_part].dist = 0;
+		//particleList[i_part].num_collision=0;
+	//printf("%d Printed: (%e,%e,%e)\n", i_part,r_0[0],r_0[1],r_0[2]);
+	r_0[0] += DIST_RET;
+	if ( r_0[0] > 1.0 - SIGMA + offsetX){
+		r_0[0] = offsetX;
+		r_0[1] += DIST_RET;
+		if ( r_0[1] > 1.0 - SIGMA + offsetY){
+			z_row++;
+			offsetX= (z_row%2)*DIST_RET/2.0 ;
+			r_0[0] = offsetX;
+			offsetY= (z_row%2)*DIST_RET/2.0;
+			r_0[1] = offsetY;
+			r_0[2] += DIST_RET/sqrt(2.0);
 		}
-			particleList[i_part].position[0] = x_cur;
-			particleList[i_part].position[1] = y_cur;
-			particleList[i_part].speed[0] =2* (rand()/(RAND_MAX*1.0)) -1.0 ;
-			particleList[i_part].speed[1] = 2*(rand()/(RAND_MAX*1.0)) -1.0 ;
-			speed_cm[0] += particleList[i_part].speed[0];
-			speed_cm[1] += particleList[i_part].speed[1];
-			//print_coordinate();
-		}
-	for ( i= 0; i<NUMBER_OF_PARTICLES;i++){
-		for(j=0;j<N;j++){
-			particleList[i].speed[j] -= speed_cm[j]/((double) NUMBER_OF_PARTICLES);
+	}
+	if (r_0[2]> 1 - SIGMA){
+		printf("%e\n",r_0[2]);
+		print_coordinate(particleList);
+		printf("Impacchettamento non completato\n");
+		exit(1);
+	}
+	i_part++;
+	}
+	for ( i = 0; i< NUMBER_OF_PARTICLES; i++){
+		for ( j = 0; j<N;j++){
+			particleList[i].speed[j] = 2*(rand()/(RAND_MAX*1.0)) - 1.0 ;
+			speed_cm[j] += particleList[i].speed[j];
+			}
+	}
+	for (i =0 ; i< NUMBER_OF_PARTICLES; i++){
+		for ( j = 0; j<N;j++){
+			particleList[i].speed[j] -= (speed_cm[j]/((double) NUMBER_OF_PARTICLES));
 		}
 	}
 }
-
 /* Controlla che le sfere non si compenetrino.
 *Utilizzata solo all'inizio
 */
@@ -137,19 +146,22 @@ void check_distance (){
 	int i,j;
 	double distance = 0;
 	double diff_v[N];
-	int x,y;
+	int x,y,z;
 	particle_s temp_part;
 	for (i = 0 ; i< NUMBER_OF_PARTICLES ; i++){
 		for(j = i+1;j <NUMBER_OF_PARTICLES ; j++){
 			for ( x= -1; x < 2 ; x++){
 				for ( y = -1; y<2 ; y++){
-					temp_part = particleList[j];
-					temp_part.position[0] += x;
-					temp_part.position[1] += y;
-					diff(particleList[i].position,temp_part.position,diff_v);	
-					distance = sqrt(scalar_prod(diff_v,diff_v));
-					if( distance <SIGMA){
-						printf("Sfere (%d,%d) troppo vicine!\n",i,j);
+					for ( z = -1 ; z<2 ; z++){
+						temp_part = particleList[j];
+						temp_part.position[0] += x;
+						temp_part.position[1] += y;
+						temp_part.position[2] += z;
+						diff(particleList[i].position,temp_part.position,diff_v);	
+						distance = sqrt(scalar_prod(diff_v,diff_v));
+						if( distance <SIGMA){
+							printf("Sfere (%d,%d) troppo vicine!\n",i,j);
+						}
 					}
 				}
 			}			
@@ -158,7 +170,7 @@ void check_distance (){
 }
 /* Calcola il tempo minimo fra le 9 immagini  */
 double calc_min ( int i , int j){
-	double x,y;
+	double x,y,z;
 	double min= DBL_MAX;
 	double r_diff[N];
 	double v_diff[N];
@@ -167,18 +179,21 @@ double calc_min ( int i , int j){
 	particle_s temp_part;
 	for ( x= -1; x < 2 ; x++){
 		for ( y = -1; y<2 ; y++){
-			temp_part = particleList[j];
-			temp_part.position[0] += x;
-			temp_part.position[1] += y;
-			diff(particleList[i].position,temp_part.position, r_diff);
-			diff( particleList[i].speed,temp_part.speed, v_diff);
-			if( scalar_prod( r_diff, v_diff) < 0){
-				det = scalar_prod(r_diff,v_diff)*scalar_prod(r_diff,v_diff) - scalar_prod(v_diff,v_diff)*( scalar_prod(r_diff,r_diff) -SIGMA*SIGMA);
-				if (det > 0){
-					//uso debug: printf("Scalar prod: %e \n",(scalar_prod(v_diff,v_diff)));
-					temp = ( - scalar_prod( r_diff, v_diff) - sqrt( det ))/ (scalar_prod(v_diff,v_diff) );
-					if ( temp < min ){
-						min = temp;
+			for ( z = -1 ; z<2 ; z++){
+				temp_part = particleList[j];
+				temp_part.position[0] += x;
+				temp_part.position[1] += y;
+				temp_part.position[2] += z;
+				diff(particleList[i].position,temp_part.position, r_diff);
+				diff( particleList[i].speed,temp_part.speed, v_diff);
+				if(	 scalar_prod( r_diff, v_diff) < 0){
+					det = scalar_prod(r_diff,v_diff)*scalar_prod(r_diff,v_diff) - scalar_prod(v_diff,v_diff)*( scalar_prod(r_diff,r_diff) -SIGMA*SIGMA);
+					if (det > 0){
+						//uso debug: printf("Scalar prod: %e \n",(scalar_prod(v_diff,v_diff)));
+						temp = ( - scalar_prod( r_diff, v_diff) - sqrt( det ))/ (scalar_prod(v_diff,v_diff) );
+						if ( temp < min ){
+							min = temp;
+						}
 					}
 				}
 			}
@@ -239,10 +254,10 @@ void step (double time_step){
 
 void switch_speeds(){
 	int j;
-	int  x,y;
+	int  x,y,z;
 	double temp_r_diff[N]; /* Vettore differenza temporaneo per le 9 immagini*/
 	double v_diff[N];
-	double rdiff[2]={0,0}; /*Vero vettore differenza*/
+	double rdiff[N]={0,0,0}; /*Vero vettore differenza*/
 	/* temp_r_diff = R0 - R1
 	 * v_diff = V0 _ V1
 	 */
@@ -252,15 +267,18 @@ void switch_speeds(){
 	double v_temp;
 	for ( x= -1; x < 2 ; x++){
 		for ( y = -1; y<2 ; y++){
-			temp_part = particleList[index_collision[1]];
-			temp_part.position[0] += x;
-			temp_part.position[1] += y;
-			diff(particleList[index_collision[0]].position,temp_part.position, temp_r_diff); /*vettore differenza salvato in temp_r_diff*/
-			tmp_dbl = scalar_prod(temp_r_diff,temp_r_diff) ; 
-			if ( tmp_dbl < min){
-				min = tmp_dbl;
-				for ( j= 0; j<N; j++){
-				rdiff[j] = temp_r_diff[j];
+			for ( z = -1 ; z<2 ; z++){
+				temp_part = particleList[index_collision[1]];
+				temp_part.position[0] += x;
+				temp_part.position[1] += y;
+				temp_part.position[2] += z;
+				diff(particleList[index_collision[0]].position,temp_part.position, temp_r_diff); /*vettore differenza salvato in temp_r_diff*/
+				tmp_dbl = scalar_prod(temp_r_diff,temp_r_diff) ; 
+				if ( tmp_dbl < min){
+					min = tmp_dbl;
+					for ( j= 0; j<N; j++){
+					rdiff[j] = temp_r_diff[j];
+					}
 				}
 			}
 		}
@@ -272,7 +290,7 @@ void switch_speeds(){
 		particleList[index_collision[0]].speed[j] -= v_temp*rdiff[j];
 		particleList[index_collision[1]].speed[j] += v_temp*rdiff[j];
 	}
-	}
+}
 
 	
 /* Aggiorna i tempi di collisioni per le righe e le colonne della matrice della particelle che hanno colliso:
@@ -331,7 +349,7 @@ double kin_en ( void) {
 /*Calcola momento totale (in norma)*/
 double total_momentum (){
 	int i,j;
-	double  sum[2] = {0,0};
+	double  sum[N] = {0,0,0};
 	for ( i = 0; i< NUMBER_OF_PARTICLES ; i++){
 		for ( j = 0; j< N ; j++){
 		sum[j] += particleList[i].speed[j];
@@ -446,22 +464,25 @@ inline double r_squared_calc ( particle_s * list_0, particle_s * list_1){
 	double sum = 0;
 	double rdiff[N];
 	double distance, min;
-	double rdiff2[2]={0,0};
-	int x,y;
+	double rdiff2[N]={0,0,0};
+	int x,y,z;
 	particle_s temp_part;
 	for ( i = 0; i< NUMBER_OF_PARTICLES;i++){
 		min = DBL_MAX;
 		for ( x= -1; x < 2 ; x++){
 			for ( y = -1; y<2 ; y++){
-				temp_part = list_0[i];
-				temp_part.position[0] += x;
-				temp_part.position[1] += y;
-				diff(list_1[i].position,temp_part.position,rdiff);
-				distance = scalar_prod(rdiff,rdiff);
-				if( distance < min ){
-					min = distance;
-					for ( k = 0; k<N;k++){
-						rdiff2[k] = rdiff[k];
+				for ( z = -1 ; z<2 ; z++){
+					temp_part = list_0[i];
+					temp_part.position[0] += x;
+					temp_part.position[1] += y;
+					temp_part.position[2] += z;
+					diff(list_1[i].position,temp_part.position,rdiff);
+					distance = scalar_prod(rdiff,rdiff);
+					if( distance < min ){
+						min = distance;
+						for ( k = 0; k<N;k++){
+							rdiff2[k] = rdiff[k];
+						}
 					}
 				}
 			}
@@ -519,7 +540,6 @@ strftime (date_buffer,30,"%F--%T",timeinfo);
 *******************/
 /*Calcola il numero di istanti temporali che verranno salvati*/
 NUM_TEMPI_SALVATI = (int) (floor( (double) TIME_MAX / DeltaT)+1);
-unsigned int i ;
 srand(time(NULL));
 double dist_tot=0;
 double fraz_imp=0.1;
@@ -542,14 +562,15 @@ temperature = 2*kin_en()/((double) N)/(double) NUMBER_OF_PARTICLES/K_BOLTZ;
 printf(" K = %e \t P= %e \t", kin_en(), total_momentum());
 printf("Temperature is: %f \n",temperature );
 
+
 /****** GESTIONE FILE  ******/
 char r2_file[64] = "";
 snprintf(r2_file,64,"data/dr2/%.2f__%s.dat",fraz_imp,date_buffer); 
 char * press_file = "data/press.dat";
 char * tc_file = "data/tc.dat";
-char tcpdf_file[64] = "";
-snprintf(tcpdf_file, 64, "data/pdf_tc/%2f__%s.dat", fraz_imp,date_buffer);
-char * mfp_file = "data/mfp.dat";
+//char tcpdf_file[64] = "";
+//snprintf(tcpdf_file, 64, "data/pdf_tc/%2f__%s.dat", fraz_imp,date_buffer);
+///char * mfp_file = "data/mfp.dat";
 snprintf(header_file, 256, "#header: N=%d\t eta=%f\tTIME_MAX=%d\tTERM_TIME=%d\tTEMP=%f\n",N,fraz_imp,TIME_MAX,TERM_TIME,temperature);
 /****FINE GESTIONE FILE***/
 
@@ -558,7 +579,7 @@ snprintf(header_file, 256, "#header: N=%d\t eta=%f\tTIME_MAX=%d\tTERM_TIME=%d\tT
 print_coordinate();
 printf("#Collisions: %d \n", numOfCollisions);
 
-FILE *pdf_time_coll_fileindex = fopen(tcpdf_file,"w");
+//FILE *pdf_time_coll_fileindex = fopen(tcpdf_file,"w");
 /*****************
 EVOLUZIONE
 *****************/
@@ -574,9 +595,9 @@ while (total_time < TIME_MAX){
 		printf("#Collisions: %d  Total Time: %e\n", numOfCollisions, total_time);
 	}
 	*/
-	fprintf(pdf_time_coll_fileindex,"%f\n",time_collision);
+//	fprintf(pdf_time_coll_fileindex,"%f\n",time_collision);
 }
-fclose(pdf_time_coll_fileindex);
+//fclose(pdf_time_coll_fileindex);
 if (time_counted > NUM_TEMPI_SALVATI){
 	printf("ERROR \n");
 }
@@ -588,7 +609,8 @@ FILE *f_collision=fopen(tc_file,"a");
 fprintf(f_collision,"%e\t%e\n",fraz_imp,total_time/(2*numOfCollisions/(double)NUMBER_OF_PARTICLES));
 FILE *f_pression=fopen(press_file,"a");
 fprintf(f_pression, "%s\n",header_file);
-fprintf(f_pression,"%e\t%e\n",fraz_imp, pression);
+fprintf(f_pression,"%e\t%e\n\n",fraz_imp, pression);
+/*
 FILE *f_mean_path = fopen(mfp_file,"w");
 for ( i = 0; i< NUMBER_OF_PARTICLES;i++){
 	fprintf(f_mean_path,"%e\n",particleList[i].distance/((double)particleList[i].n_collision));
@@ -597,10 +619,11 @@ FILE *f_mean_mfp = fopen( "data/mfp_eta.dat","a");
 for ( i = 0; i<NUMBER_OF_PARTICLES;i++){
 	dist_tot += particleList[i].distance;
 }
+*/
 dist_tot /= (double) numOfCollisions;
-fprintf(f_mean_mfp,"%e\t%e\n",fraz_imp, dist_tot);
-fclose(f_mean_mfp);
-fclose(f_mean_path);
+//fprintf(f_mean_mfp,"%e\t%e\n",fraz_imp, dist_tot);
+//fclose(f_mean_mfp);
+//fclose(f_mean_path);
 fclose(f_collision);
 fclose(f_pression);
 free(particleList);
