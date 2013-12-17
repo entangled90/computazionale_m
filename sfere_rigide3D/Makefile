@@ -19,13 +19,8 @@ all: rmxeq mkdep mkxeq rmpmk
 
 # main programs and required modules 
 
-MAIN =  main main2
-#RANDOM =ranlxs ranlxd
-#gauss pdf
+MAIN =  main
 
-#START = start 
-
-#EXTRAS = sfere_rigide2D
 
 MODULES = $(RANDOM) $(START)
 #$(EXTRAS) # search path for modules
@@ -39,7 +34,7 @@ VPATH = $(MDIR)/random:$(MDIR)/start:
 
 # additional include directories
 
-INCPATH = ../include /usr/include/
+INCPATH = ../include /usr/include/ ./include
 
 
 # additional libraries to be included 
@@ -52,8 +47,7 @@ LIBPATH =
 
 # scheduling and optimization options (such as -DSSE -DSSE2 -DP4)
  
-CFLAGS = -Wall  -std=gnu99 -g3 -O3 -DSSE2 -march=native ../include/gnuplot_i.o
-
+CFLAGS = -Wall  -std=gnu99 -g3 -O3 -DSSE2 -march=native 
 ############################## do not change ###################################
 
 SHELL=/bin/bash
