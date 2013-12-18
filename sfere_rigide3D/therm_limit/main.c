@@ -150,7 +150,7 @@ void particle_init ( particle_s *particleList ){
 /* Controlla che le sfere non si compenetrino.
 *Utilizzata solo all'inizio
 */
-void check_distance (){
+int check_distance (){
 	int i,j;
 	double distance = 0;
 	double diff_v[N];
@@ -169,12 +169,14 @@ void check_distance (){
 						distance = sqrt(scalar_prod(diff_v,diff_v));
 						if( distance <SIGMA){
 							printf("Sfere (%d,%d) troppo vicine!\n",i,j);
+							return 1;
 						}
 					}
 				}
 			}			
 		}
 	}
+	return 0;
 }
 /* Calcola il tempo minimo fra le 9 immagini  */
 double calc_min ( int i , int j){
@@ -436,7 +438,7 @@ strftime (date_buffer,30,"%F--%T",timeinfo);
 *******************/
 /*Calcola il numero di istanti temporali che verranno salvati*/
 srand(time(NULL));
-double dist_tot=0;
+//double dist_tot=0;
 // DA NON CAMBIARE!!!!!!!!!!!
 double fraz_imp=0.3;
 // ORA L'ARGOMENTO E' IL NUMERO DI PARTICELLE!!!!
@@ -444,8 +446,8 @@ if (argc > 1){
 	number_of_particles = atof(argv[1]);
 }
 
-SIGMA = cbrt(6*fraz_imp/ NUMBER_OF_PARTICLES / M_PI);
-DIST_RET = cbrt(6*0.61/ (NUMBER_OF_PARTICLES *M_PI));printf("\n\n*****************************************************\n");
+SIGMA = cbrt(6*fraz_imp/ number_of_particles / M_PI);
+DIST_RET = cbrt(6*0.61/ (number_of_particles *M_PI));printf("\n\n*****************************************************\n");
 printf("Starting simulation with:");
 printf("SIGMA = %e\t",SIGMA);
 printf("Frazione di impacchettamento: %e\n", fraz_imp);
@@ -463,7 +465,7 @@ printf("Temperature is: %f \n",temperature );
 char r2_file[64] = "";
 snprintf(r2_file,64,"data/dr2/%.2f__%s.dat",fraz_imp,date_buffer); 
 char * press_file = "data/press.dat";
-char * tc_file = "data/tc.dat";
+//char * tc_file = "data/tc.dat";
 //char tcpdf_file[64] = "";
 //snprintf(tcpdf_file, 64, "data/pdf_tc/%2f__%s.dat", fraz_imp,date_buffer);
 ///char * mfp_file = "data/mfp.dat";
@@ -471,7 +473,10 @@ snprintf(header_file, 256, "#header: N=%d\t eta=%f\tTIME_MAX=%d\tTERM_TIME=%d\tT
 /****FINE GESTIONE FILE***/
 
 
-//check_distance();
+if ( check_distance() != 0){
+	printf("Sfere troppo vicine tra loro. Avvio annullato\n");
+	exit(EXIT_FAILURE);
+}
 print_coordinate();
 printf("#Collisions: %d \n", numOfCollisions);
 
@@ -498,26 +503,9 @@ if (time_counted > NUM_TEMPI_SALVATI){
 pression*=SIGMA/total_time/3.0/kin_en();
 pression+=1.0;
 pression*=fraz_imp/0.7405;
-FILE *f_collision=fopen(tc_file,"a");
-fprintf(f_collision,"%e\t%e\n",fraz_imp,total_time/(2*numOfCollisions/(double)number_of_particles));
 FILE *f_pression=fopen(press_file,"a");
 fprintf(f_pression, "%s\n",header_file);
 fprintf(f_pression,"%e\t%e\n\n",fraz_imp, pression);
-/*
-FILE *f_mean_path = fopen(mfp_file,"w");
-for ( i = 0; i< number_of_particles;i++){
-	fprintf(f_mean_path,"%e\n",particleList[i].distance/((double)particleList[i].n_collision));
-}
-FILE *f_mean_mfp = fopen( "data/mfp_eta.dat","a");
-for ( i = 0; i<number_of_particles;i++){
-	dist_tot += particleList[i].distance;
-}
-*/
-dist_tot /= (double) numOfCollisions;
-//fprintf(f_mean_mfp,"%e\t%e\n",fraz_imp, dist_tot);
-//fclose(f_mean_mfp);
-//fclose(f_mean_path);
-fclose(f_collision);
 fclose(f_pression);
 free(particleList);
 free(collTable);
