@@ -14,20 +14,19 @@ def loop (eta_values,index):
 	start = time.time()
 	f = open("log/core" + index + ".log", "w")
 	for l in eta_values:
-		print ("Starting sfere2D with eta=" + str(l))
+		print ("Starting program with particles=" + str(l)+ " with core ",str(index))
 		call(["./main",str(l)],stdout=f)
+		print ("Program with ",str(l)," particles finished")
 	print("time elapsed for core"+index+": ", str(datetime.timedelta(seconds=(time.time() - start))))
 
-eta=float(sys.argv[1])
-eta_max=float(sys.argv[2])
-n_iteration=int(sys.argv[3])
-n_core = int(sys.argv[4])
-iteration_per_core= int(n_iteration/n_core)
-step = (eta_max - eta)/n_iteration
-allvalues = np.arange(eta,eta_max,step).tolist()
-if ( n_iteration % n_core != 0):
-	print("Iterazioni multiple del numero di core selezionati(",n_core,")!")
-	sys.exit(1)
+
+iteration = int(sys.argv[2])
+n_core = int(sys.argv[1])
+# 32 son le iterazione fra 16 e 512 con passo di 16
+step = int ((512 - 32)/ iteration)
+iteration_per_core = int ( iteration/n_core)
+allvalues =[]
+allvalues.extend(range(32,512,step))
 temp=[]
 temp_index= 0
 eta_cores=[]
@@ -37,6 +36,7 @@ for i in range(n_core):
 		temp_index = int(random.random()*len(allvalues))
 		temp.append(allvalues[temp_index])
 		allvalues.pop(temp_index)
+	temp = sorted(temp)
 	eta_cores.append(temp)
 
 jobs=[]

@@ -606,9 +606,11 @@ if (time_counted > NUM_TEMPI_SALVATI){
 	printf("ERROR \n");
 }
 r_squared_save(r2_file);
-pression*=SIGMA/total_time/3.0/kin_en();
+pression*=SIGMA/total_time/2.0/kin_en();
 pression+=1.0;
 pression*=fraz_imp/0.7405;
+//prima era pv/nk t Ora metto P:
+pression *= number_of_particles*temperature;
 FILE *f_collision=fopen(tc_file,"a");
 fprintf(f_collision,"%e\t%e\n",fraz_imp,total_time/(2*numOfCollisions/(double)number_of_particles));
 FILE *f_pression=fopen(press_file,"a");

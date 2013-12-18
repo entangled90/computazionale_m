@@ -84,12 +84,22 @@ inline void boltzmann_file_save ( void ){
 	fclose(f);
 }
 /*******************************************************************************************/
-
+// n deve esser maggiore di 0
+int min_square ( int n) {
+	int i = 1;
+	int result = 1;	
+	while ( i*i <= n){
+		result = i;
+		i++;
+	}
+	return result;
+}
 /* Inizializzazione delle particelle */
 void particle_init (){
 	int i_part= 0;
 	int i,j;
 	int row=0;
+	DIST_RET = 1/((double) min_square(number_of_particles));
 	double x_cur = - DIST_RET;
 	double y_cur = 0;
 	double speed_cm[2];
@@ -105,6 +115,8 @@ void particle_init (){
 		particleList[i_part].distance = 0;
 		particleList[i_part].n_collision=0;
 		particleList[i_part].last_time_collision=0;
+		
+
 		if ( x_cur > 1 - SIGMA){
 			row++;
 			x_cur =  (row%2)*DIST_RET/2.0;
@@ -129,6 +141,7 @@ void particle_init (){
 		}
 	}
 }
+
 
 /* Controlla che le sfere non si compenetrino.
 *Utilizzata solo all'inizio
@@ -585,6 +598,7 @@ r_squared_save(r2_file);
 pression*=SIGMA/total_time/3.0/kin_en();
 pression+=1.0;
 pression*=fraz_imp/M_PI*2*sqrt(3.00);
+pression *= number_of_particles*temperature;
 FILE *f_collision=fopen(tc_file,"a");
 fprintf(f_collision,"%e\t%e\n",fraz_imp,total_time/(2*numOfCollisions/(double)number_of_particles));
 FILE *f_pression=fopen(press_file,"a");

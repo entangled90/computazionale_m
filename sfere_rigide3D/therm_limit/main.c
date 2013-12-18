@@ -500,12 +500,13 @@ while (total_time < TIME_MAX){
 if (time_counted > NUM_TEMPI_SALVATI){
 	printf("ERROR \n");
 }
-pression*=SIGMA/total_time/3.0/kin_en();
-pression+=1.0;
-pression*=fraz_imp/0.7405;
+// Ora printo pv/nkt -1 non la pressione vera e propria)
+pression*=SIGMA/total_time/2.0/kin_en();
+//pression+=1.0;
+//pression*=fraz_imp/0.7405;
 FILE *f_pression=fopen(press_file,"a");
 fprintf(f_pression, "%s\n",header_file);
-fprintf(f_pression,"%e\t%e\n\n",fraz_imp, pression);
+fprintf(f_pression,"%d\t%e\n\n",number_of_particles, pression);
 fclose(f_pression);
 free(particleList);
 free(collTable);
