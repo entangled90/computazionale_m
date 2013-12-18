@@ -99,9 +99,9 @@ void particle_init (){
 	int i_part= 0;
 	int i,j;
 	int row=0;
-	DIST_RET = 1/((double) min_square(number_of_particles));
-	double x_cur = - DIST_RET;
-	double y_cur = 0;
+	//DIST_RET = 1/((double) min_square(number_of_particles));
+	double x_cur = 0;
+	double y_cur = DIST_RET/2.0;
 	double speed_cm[2];
 	speed_cm[0] = 0;
 	speed_cm[1] = 0;
@@ -115,15 +115,13 @@ void particle_init (){
 		particleList[i_part].distance = 0;
 		particleList[i_part].n_collision=0;
 		particleList[i_part].last_time_collision=0;
-		
-
-		if ( x_cur > 1 - SIGMA){
+		if ( x_cur > 1 - SIGMA ){
 			row++;
 			x_cur =  (row%2)*DIST_RET/2.0;
 			y_cur += sqrt(3)/2.0*DIST_RET;
 			
 		}
-		if ( y_cur > 1 - SIGMA){
+		if ( y_cur > 1){
 				printf("Impacchettamento non completato: raggiunto il margine superiore\n");
 				exit(EXIT_FAILURE);
 		}
@@ -133,7 +131,7 @@ void particle_init (){
 			particleList[i_part].speed[1] = 2*(rand()/(RAND_MAX*1.0)) -1.0 ;
 			speed_cm[0] += particleList[i_part].speed[0];
 			speed_cm[1] += particleList[i_part].speed[1];
-			//print_coordinate();
+			print_coordinate();
 		}
 	for ( i= 0; i<number_of_particles;i++){
 		for(j=0;j<N;j++){
@@ -539,7 +537,8 @@ if (argc > 1){
 	fraz_imp = atof(argv[1]);
 }
 SIGMA = sqrt(4*fraz_imp/ number_of_particles / M_PI);
-DIST_RET = sqrt(4*0.76/ number_of_particles / M_PI);
+/* DA dove salta fuori?*/
+DIST_RET = sqrt(4*0.74/ number_of_particles / M_PI);
 printf("\n\n*****************************************************\n");
 printf("Starting simulation with:");
 printf("SIGMA = %e\t",SIGMA);
