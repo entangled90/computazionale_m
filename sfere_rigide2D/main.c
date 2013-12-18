@@ -397,16 +397,12 @@ inline void evolve_therm ( ) {
 	step(time_collision);
 	diff(particleList[index_collision[0]].speed,particleList[index_collision[1]].speed,deltaV_pre);
 	switch_speeds();
-	//calcoli pressione
-	diff(particleList[index_collision[0]].speed,particleList[index_collision[1]].speed,deltaV_post);
-	diff(deltaV_pre,deltaV_post,deltaV);
 	//condizioni al bordo
 	fix_boundaries();
 	substract_t0();
 	update_coll_table();
 	numOfCollisions +=1;
 	total_time+=time_collision;
-	pression+= sqrt(scalar_prod(deltaV,deltaV));
 	}
 
 void vel_file_save ( ){
