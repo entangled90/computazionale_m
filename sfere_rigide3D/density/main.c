@@ -547,8 +547,8 @@ double fraz_imp=0.1;
 if (argc > 1){
 	fraz_imp = atof(argv[1]);
 }
-SIGMA = sqrt(4*fraz_imp/ NUMBER_OF_PARTICLES / M_PI);
-DIST_RET = sqrt(4*0.76/ NUMBER_OF_PARTICLES / M_PI);
+SIGMA = cbrt(6*fraz_imp/ NUMBER_OF_PARTICLES / M_PI);
+DIST_RET = cbrt(6*0.61/ (NUMBER_OF_PARTICLES *M_PI));
 printf("\n\n*****************************************************\n");
 printf("Starting simulation with:");
 printf("SIGMA = %e\t",SIGMA);
@@ -604,7 +604,7 @@ if (time_counted > NUM_TEMPI_SALVATI){
 r_squared_save(r2_file);
 pression*=SIGMA/total_time/3.0/kin_en();
 pression+=1.0;
-pression*=fraz_imp/M_PI*2*sqrt(3.00);
+pression*=fraz_imp/0.7405;
 FILE *f_collision=fopen(tc_file,"a");
 fprintf(f_collision,"%e\t%e\n",fraz_imp,total_time/(2*numOfCollisions/(double)NUMBER_OF_PARTICLES));
 FILE *f_pression=fopen(press_file,"a");

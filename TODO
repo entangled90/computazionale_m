@@ -3,4 +3,6 @@ MANCA DA FARE:
 ~Fissare temperatura (ora oscilla!)
 ~Verificare che tutto funga correttamente
 ~funzione di impacchettamento
+*********************
+~controlla che evolve_therm non calcoli la pressione (anche in 2d)
 
