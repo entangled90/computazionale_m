@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 
-#define  N 256
+#define  N 32
 
 
 void init(spin * s){
@@ -51,15 +51,29 @@ int main (){
 	list = malloc(N*sizeof(spin));
 	list2  = malloc (N*sizeof(spin));
 	int i ;
-	spinListInit(list,N);
+	listInit(list,N);
+	listInit(list2,N);
 	for ( i = 0 ; i< N ; i++){
-		list[i].i = i;
-		list[i].j = 0;
-		list2[i].i = 0;
-		list2[i].j = i;
-		spinExtend( list+i, list2+i);
+		list[i].index = i;
+		list2[i].index = i+N;
 	}
-	flowList( list , list);
+	spin * tmp = list->prev; // culo della prima lista
+	spin * tmp2 = list2->prev; // culo della seconda
+
+//	joinList(list, list2);
+	if ( list->prev == tmp2 ){
+		printf("funge\n");
+	}
+	for ( i = 0; i<N ; i++){
+		extend ( list+N, list2+i);
+	}
+
+	spin * temp = list;
+	while ( temp->next != list){
+		printf("prev:%d\t indice: %d\t next:%d\n", temp->prev->index,temp->index,temp->next->index);
+		temp = temp->next;
+	}
+	printf("indece del prossimo è: %d\n", temp->next->index);
 
 	//init(list);
 	//savePPM(list);
