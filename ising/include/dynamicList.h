@@ -2,6 +2,7 @@
 #include <stdlib.h>
 
 
+<<<<<<< HEAD
 struct Spin {
 	unsigned int i,j;
 	unsigned int spin;
@@ -96,3 +97,4 @@ void deleteNode(Node * n_del){
 		}
 	}
 }
+
