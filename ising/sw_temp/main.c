@@ -2,14 +2,15 @@
 #include <stdlib.h>
 #include <math.h>
 #include "list.h"
+#include <time.h>
 
 
-#define N 8 
-#define ITERATION_MAX 1000
+#define N 512
+#define ITERATION_MAX 10000
 
 /* Variabili Globali */
 int cluster_max=-1;
-float BETAJ = -3;
+float BETAJ = 0.2;
 
 void spin_init ( Spin * matrix, Node * n){
 	int i,j;
@@ -50,7 +51,7 @@ int set_bond (Spin * s1, Spin * s2){
 	float tmp;
 	if( s1->spin == s2->spin){
 		tmp = rand()/(double)RAND_MAX;
-		if ( tmp < (1- exp(BETAJ)))
+		if ( tmp < (1- exp(-BETAJ)))
 			return 1;
 		else
 			return 0;
@@ -139,19 +140,33 @@ void drawCluster(Spin * s){
 	}
 }
 
+void drawSpin(Spin * s){
+	int i,j;
+	for ( i = 0; i<N;i++){
+		for ( j = 0; j<N;j++){
+			if(s[i*N+j].spin == 1){
+				printf("|\t0\t");				
+			}
+			else
+				printf("|\t+\t");
+		}
+		printf("|\n");
+	}
+}
+
 void flip_spin ( Spin * m){
 	int i,j;
 	int * flipper;
-	flipper = malloc(sizeof(int)*(cluster_max+1));
-	if (flipper){
-		printf("errore in flip spin: cluster_max = %d",cluster_max+1);
+	flipper = (int *) malloc(sizeof(int)*(cluster_max+1));
+	if (!flipper){
+		printf("errore in flip spin: cluster_max = %d\n",cluster_max+1);
 		exit(1);
 	}
-	for (i=0 ; i<N*N ; i++){
-		if ( rand()/RAND_MAX < 0.5)
-			flipper[i] = -1;
-		else
+	for (i=0 ; i<cluster_max+1 ; i++){
+		if ( rand()/(float)RAND_MAX < 0.5)
 			flipper[i] = 1;
+		else
+			flipper[i] = -1;
 	}
 	printf("\n");
 	for (i=0;i<N;i++){
@@ -164,6 +179,7 @@ void flip_spin ( Spin * m){
 }
 
 int main () {
+	srand(time(NULL));
 	Spin * matrix = (Spin *) malloc(sizeof(Spin)*N*N);
 	Node * nodes = (Node *) malloc(sizeof(Node)*N*N);
 	if(!matrix){
@@ -173,14 +189,17 @@ int main () {
 	int iteration ;
 	spin_init(matrix,nodes);
 	for ( iteration = 0 ; iteration < ITERATION_MAX ; iteration++){
-		if (iteration %1 == 0){
+		if (iteration %100 == 0){
 			printf("Iteration #%d\n",iteration);
-			savePPM(matrix);
+	//		savePPM(matrix);
 			printf("La magnetizzazione è %lf\n",magnetization(matrix));
 		}
 		startClustering(matrix,nodes);
 		flip_spin(matrix);
-		drawCluster(matrix);
+	/*	drawCluster(matrix);
+		printf("---------------------------------------------------------------------------\n");
+		drawSpin(matrix);
+	*/
 		reset_cluster(matrix,nodes);
 	}
 	free(matrix);
