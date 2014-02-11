@@ -5,12 +5,13 @@
 #include <time.h>
 
 
-#define N 512
-#define ITERATION_MAX 10000
+#define N 128
+#define ITERATION_MAX 50000
+#define ITERATION_TEMP 10000
 
 /* Variabili Globali */
 int cluster_max=-1;
-float BETAJ = 0.2;
+float BETAJ = 0;
 
 void spin_init ( Spin * matrix, Node * n){
 	int i,j;
@@ -168,32 +169,21 @@ void flip_spin ( Spin * m){
 		else
 			flipper[i] = -1;
 	}
-	printf("\n");
 	for (i=0;i<N;i++){
 		for(j = 0; j<N;j++){
 			m[i*N+j].spin *= flipper[m[i*N+j].cluster];
 		}
 	}
-	printf("\n");
 	free(flipper);
 }
 
-int main () {
-	srand(time(NULL));
-	Spin * matrix = (Spin *) malloc(sizeof(Spin)*N*N);
-	Node * nodes = (Node *) malloc(sizeof(Node)*N*N);
-	if(!matrix){
-		printf("Cannot call malloc || MAIN ||\n");
-		exit(1);
-	}
-	int iteration ;
-	spin_init(matrix,nodes);
-	for ( iteration = 0 ; iteration < ITERATION_MAX ; iteration++){
+void evolve_therm (Spin * matrix, Node * nodes){
+	int iteration = 0;
+	for ( iteration = 0 ; iteration < ITERATION_TEMP ; iteration++){
 		if (iteration %100 == 0){
 			printf("Iteration #%d\n",iteration);
-	//		savePPM(matrix);
 			printf("La magnetizzazione è %lf\n",magnetization(matrix));
-		}
+			}
 		startClustering(matrix,nodes);
 		flip_spin(matrix);
 	/*	drawCluster(matrix);
@@ -202,6 +192,40 @@ int main () {
 	*/
 		reset_cluster(matrix,nodes);
 	}
+
+}
+
+void evolve( Spin * matrix, Node * nodes){
+	startClustering(matrix,nodes);
+	flip_spin(matrix);
+	//PRENDERE DATI QUI
+	reset_cluster(matrix,nodes);
+}
+
+int main ( int argc, char * argv[]) {
+	double mag_mean=0;
+	int iteration = 0;
+	char mag_file[64] = "";
+	snprintf(mag_file,64,"data/magnetization_mean_%d.dat",N); 
+	srand(time(NULL));
+	Spin * matrix = (Spin *) malloc(sizeof(Spin)*N*N);
+	Node * nodes = (Node *) malloc(sizeof(Node)*N*N);
+	if(!matrix){
+		printf("Cannot call malloc || MAIN ||\n");
+		exit(1);
+	}
+	if (argc>1){
+		BETAJ = atof(argv[1]);
+	}
+	spin_init(matrix,nodes);
+	evolve_therm(matrix,nodes);
+	for ( iteration=0;iteration<ITERATION_MAX; iteration++){
+		evolve(matrix,nodes);
+		mag_mean += magnetization(matrix);
+	}
+	mag_mean /= (double)(ITERATION_MAX);
+	FILE * f_mag_mean = fopen(mag_file,"a");
+	fprintf(f_mag_mean,"%lf\t%lf\n",BETAJ,mag_mean);
 	free(matrix);
 	free(nodes);
 	return 0;
