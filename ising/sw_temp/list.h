@@ -1,38 +1,53 @@
+#include <stdio.h>
+#include <stdlib.h>
 
- struct point {
-	int i;
-	int j;
+typedef struct Spin {
+	int i,j;
 	int spin;
 	int cluster;
-};
-typedef struct point point;
+} Spin;
 
- struct Node {
-	point p;
-	point * next;
-};
+typedef struct Node {
+	Spin * data;
+	struct Node * next;
+} Node;
+
+typedef struct List{
+	Node * head;
+} List;
 
 
-typedef struct Node Node;
-struct List {
-	Node firstNode;
-};
-
-/*
-Inserisce n_new dopo n_old
-*/
-void insertAfter (Node n_old , Node n_new ){
-	if(!n_old){
-		n_new.next = n_old.next;
-		n_old.next = n_new;
-	}
+/*Il primo elemento dlela lista sarà l'ultimo ed ha NULL come puntatore a next*/
+List  initCluster(Node * n, int n_cluster){
+	List t;
+	n->next = NULL;
+	t.head = n;
+	n->data->cluster = n_cluster;
+	return t;
+}
+/* Aggiunge in testa alla lista --> FIFO
+Ritorna la nuova testa */
+void addToHead( Node * n, List * l){	
+		n->next = l->head;
+		l->head = n;
 }
 
-/*
-Elimina il nodo
-*/
-void deleteNode (Node n){
-	if (!n){
-		
+/* Ritorna la testa (nuova o vecchia che sia */
+void removeElement (Node * del , List * list){
+	Node * tmp = list->head;
+	Node * tmp_prev = tmp;
+	while (tmp){
+		if (tmp == del){
+			tmp_prev->next = tmp->next;
+			if ( tmp == list->head){
+				list->head = tmp->next;
+			}
+			return;
+		}
+		else{
+			tmp = tmp->next;
+		}
 	}
+	printf ("Item not found\n");
+	exit(1);
 }

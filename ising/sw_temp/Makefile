@@ -13,47 +13,40 @@
 #
 ################################################################################
 
-all: rmxeq mkdep mkxeq
+all: rmxeq mkdep mkxeq rmpmk
 .PHONY: all
 
 
 # main programs and required modules 
 
-MAIN = ising 
+MAIN =  main
 
-RANDOM = ranlxs ranlxd gauss
+#MODULES = module
+#$(EXTRAS) # search path for modules
 
-START = start utils
+#MDIR = ../../modules
 
-#EXTRAS = 
-METROPOLIS = metropolis
-MODULES = $(RANDOM) $(EXTRAS) $(METROPOLIS) $(START)
+#VPATH = $(MDIR)/random:$(MDIR)/start:
+#$(MDIR)/extras
 
-#$(START) 
-# search path for modules
-
-MDIR = ../modules
-
-VPATH = $(MDIR)/random:$(MDIR)/start:$(MDIR)/extras:$(MDIR)/metropolis
 
 
 # additional include directories
 
-INCPATH = ../include ../../include
+INCPATH = ../include /usr/include/ ./include
 
 
 # additional libraries to be included 
  
-LIBS = m
+LIBS = m 
 
-LIBPATH =
+LIBPATH = 
 
 
 # scheduling and optimization options (such as -DSSE -DSSE2 -DP4)
  
-CFLAGS = -Wall -O3 -DSSE2
- 
-
+CFLAGS = -Wall -g
+#-O3 -DSSE2  
 ############################## do not change ###################################
 
 SHELL=/bin/bash
@@ -67,6 +60,12 @@ INCDIRS = $(addprefix -I,$(INCPATH))
 OBJECTS = $(addsuffix .o,$(MODULES))
 
 LDFLAGS = $(addprefix -L,$(LIBPATH)) $(addprefix -l,$(LIBS))
+
+# Mac OS alternate link options
+ifeq "$(OSTYPE)" "Darwin"
+LDFLAGS	= -framework Carbon -framework OpenGL -framework GLUT -lm -lGLEW
+endif
+
 
 -include $(addsuffix .d,$(PGMS))
 
@@ -106,6 +105,8 @@ rmxeq:
 mkdep:  $(addsuffix .d,$(PGMS))
 	@ echo "generate tables of dependencies"
 
+rmpmk: 
+	@ -rm -rf *.d *.o *.tmp
 
 # clean directory 
 
