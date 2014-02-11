@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "list.h"
+#include <stdlib.h>
 #include <math.h>
 
 #define N 32
@@ -9,34 +9,54 @@
 typedef struct Spin {
 	int i,j;
 	int spin;
-	int checked;
-	struct Spin * next;
-}
+	int cluster;
+} Spin;
 
-typedef struct list {
-	struct Spin * head;
-	struct Spin * tail;
-}
-
+typedef struct Node {
+	Spin * data;
+	struct Node * next;
+} Node;
 
 
 /* Variabili Globali */
-int cluster_max=0;
+int cluster_max=-1;
 
 
-/* Aggiunge in fondo alla lista*/
-void add( Spin * s_new, list * l){
-	(l->tail)->next = s_new;
-	s_new->next = NULL;
-	l->tail = s_new;
+Node * initCluster(Spin * s){
+	Node * t;
+	t = malloc(sizeof(Node));
+	t->data = s;
+	t->next = NULL;
+	return t;
+}
+/* Aggiunge in testa alla lista --> FIFO
+Ritorna la nuova testa */
+Node * addToHead( Spin * s_new, Node * head){
+	Node * t = malloc(sizeof(Node));
+	if (t){	
+		t->data = s_new;
+		t->next = head;
+		return t;
+	}
+	else {
+		printf("Non c'è memoria -- add \n");
+		exit(1);
+	}
 }
 
-/*DEVI TENERE CONTO DI CLUSTER_MAX!*/
-void join (list * l1, list * l2){
-	
+/* Ritorna la testa (nuova o vecchia che sia */
+Node * removeElement (Spin * s , Node * head){
+	Node * t = head;
+	while (t->next){
+		if (t->data == s)
+			
+		else
+			t = t->next;
+	}
 }
 
-void spin init ( Spin * matrix){
+
+void spin_init ( Spin * matrix){
 	int i,j;
 	double tmp;
 	for ( i = 0; i< N; i++){
@@ -50,8 +70,7 @@ void spin init ( Spin * matrix){
 			}
 			matrix[i*N+j].i = i;
 			matrix[i*N+j].j = j;
-			matrix[i*N+j].checked = 0;
-			matrix[i*N+j].next = NULL;
+			matrix[i*N+j].cluster = -1;
 		}
 	}
 }
@@ -59,9 +78,7 @@ void reset_cluster (Spin * matrix){
 	int i,j;
 	for ( i = 0; i< N; i++){
 		for ( j = 0; j<N ; j++){
-			matrix[i*N+j].checked = 0;
-			list[i*N+j]->head = NULL;
-			list[i*N+j]->tail = NULL;
+			matrix[i*N+j].cluster = -1;
 		}
 	}
 	cluster_max = 0;
@@ -85,34 +102,48 @@ int set_bond (Spin * s1, Spin * s2){
 		return 0;
 }
 
-void clusterize(Spin * matrix, Spin ** cluster){
+void fillCluster( Spin * matrix,Node * c){
+	Spin * s_head;
+	Spin * s_cycle;
+	int x,y;
+	int i,j;
+	while (c){
+		s_head = c->data;
+		i = c->data->i;
+		j = c->data->j;
+		for ( x = -1; x< 1; x++){
+			for ( y = -1; y<1; y++){
+				s_cycle = matrix +  ((i + N + x)%N)*N + (j + N + y)%N;
+				if ( s_cycle->cluster == -1){
+					if (set_bond(s_cycle, s_head) == 1){
+						//La nuova testa viene messa qui
+							c = addToHead(s_cycle,c);
+							s_cycle->cluster = cluster_max;
+					}
+				}
+			}
+		}
+
+	}
+}
+
+
+void startClustering (Spin * matrix){
 	int i,j;
 	int x,y;
 	int ii,jj;
 	Spin * s_cycle;
 	Spin * s_temp;
-	matrix[0].cluster = 1;
+	Node * c;
 	for ( i = 0; i< N; i++){
 		for ( j = 0; j<N ; j++){
 			s_cycle = matrix + i*N+j;
-			if ( s_cycle->cluster == 0){
-				cluster[cluster_max] = s_cycle;
+			if ( s_cycle->cluster == -1){
 				cluster_max++;
-			}
-			for ( x = -1; x< 1; x++){
-				for ( y = -1; y<1; y++){
-					s_temp = matrix +  ((i + N + x)%N)*N + (j + N + y)%N;
-					if ( s_temp->checked == 0){
-						if (set_bond(s_cycle, s_temp) == 1){
-							if(s_temp->cluster == 0){
-								s_temp->cluster = s_cycle->cluster;
-							}
-							else{
+				c = initCluster(s_cycle);
+				c->data=NULL;
+				//CHIAMA FUNZIONE DEL CLUSTER
 
-							}
-						}
-					}
-				}
 			}
 		}
 	}
@@ -122,7 +153,7 @@ void clusterize(Spin * matrix, Spin ** cluster){
 
 int main () {
 	Spin * matrix = malloc(sizeof(Spin)*N*N);
-	Spin * list = malloc(sizeof(list*)*N*N);
+	return 0;
 
 
 }
