@@ -1,12 +1,11 @@
+#ifndef SW_C
+#define SW_C
 #include "list.h"
-
-#define N 256
-#define ITERATION_MAX 5000
-#define ITERATION_TEMP 10000
-
-/* Variabili Globali */
-int cluster_max=-1;
-float BETAJ = 0;
+#include "sw.h"
+#include "constants.h"
+#include <math.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 
 
@@ -20,7 +19,7 @@ void spin_init ( Spin * matrix, Node * n){
 				matrix[i*N+j].spin = +1;
 			}
 			else {
-				matrix[i*N+j].spin = -11;
+				matrix[i*N+j].spin = -1;
 			}
 			matrix[i*N+j].i = i;
 			matrix[i*N+j].j = j;
@@ -207,3 +206,5 @@ void evolve( Spin * matrix, Node * nodes){
 	//PRENDERE DATI QUI
 	reset_cluster(matrix,nodes);
 }
+
+#endif

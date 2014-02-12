@@ -1,3 +1,4 @@
+#!/usr/bin/python2 
 # ising.py
 # Simulates the two-dimensional Ising model using the Metropolis algorithm
 # This version uses Tkinter for the GUI
@@ -13,6 +14,7 @@ running = False                     # will be true when simulation is running
 theWindow = Tkinter.Tk()            # create the GUI window
 theWindow.title("Ising Model")
 theWindow.geometry('+50+50')        # get the window away from the corner
+
 # Here's the Canvas where we draw the lattice using a Tkinter PhotoImage:
 theCanvas = Tkinter.Canvas(theWindow, width=canvasWidth, height=canvasWidth)
 theCanvas.pack()                    # put it at the top of the window
@@ -44,7 +46,7 @@ goButton.pack(side="left")
 
 # Function to color the square representing site (i,j):
 def colorSquare(i, j):
-    theColor = "#7000ff" if s[i,j]==1 else "#ffffff"    # purple and white
+    theColor = "#000000" if s[i,j]==1 else "#ffffff"    # purple and white
     theImage.put(theColor, to=(i*squareWidth,j*squareWidth,(i+1)*squareWidth,(j+1)*squareWidth))
     # the "put" function colors the indicated rectangle within the image
 

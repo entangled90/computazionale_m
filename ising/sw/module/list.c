@@ -1,20 +1,10 @@
+#ifndef LIST_C
+
+#define LIST_C
+
 #include <stdio.h>
 #include <stdlib.h>
-
-typedef struct Spin {
-	int i,j;
-	int spin;
-	int cluster;
-} Spin;
-
-typedef struct Node {
-	Spin * data;
-	struct Node * next;
-} Node;
-
-typedef struct List{
-	Node * head;
-} List;
+#include <list.h>
 
 
 /*Il primo elemento dlela lista sarà l'ultimo ed ha NULL come puntatore a next*/
@@ -51,3 +41,6 @@ void removeElement (Node * del , List * list){
 	printf ("Item not found\n");
 	exit(1);
 }
+
+
+#endif

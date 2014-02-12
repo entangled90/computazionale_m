@@ -21,11 +21,13 @@ all: rmxeq mkdep mkxeq rmpmk
 
 MAIN =  main
 
-#MODULES = module
+MODULES = sw list
 #$(EXTRAS) # search path for modules
 
-#MDIR = ../../modules
+MDIR = module
 
+
+VPATH = $(MDIR)
 #VPATH = $(MDIR)/random:$(MDIR)/start:
 #$(MDIR)/extras
 
@@ -33,7 +35,7 @@ MAIN =  main
 
 # additional include directories
 
-INCPATH = ../include /usr/include/ ./include
+INCPATH =  /usr/include/ ./include .
 
 
 # additional libraries to be included 
@@ -45,7 +47,7 @@ LIBPATH =
 
 # scheduling and optimization options (such as -DSSE -DSSE2 -DP4)
  
-CFLAGS = -Wall -g
+CFLAGS = -Wall -g -O3 -DSSE2
 #-O3 -DSSE2  
 ############################## do not change ###################################
 

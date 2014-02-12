@@ -4,12 +4,16 @@
 #include <time.h>
 
 // my includes
-//#include "list.h" -> già incluso in sw.h
 #include "sw.h"
+#include "constants.h"
 
+
+int cluster_max = -1;
+float BETAJ = 0;
 
 
 int main ( int argc, char * argv[]) {
+
 	double mag_mean=0;
 	int iteration = 0;
 	char mag_file[64] = "";
