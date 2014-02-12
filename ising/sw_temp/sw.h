@@ -1,8 +1,8 @@
 #include "list.h"
 
-#define N 64
+#define N 256
 #define ITERATION_MAX 5000
-#define ITERATION_TEMP 1000
+#define ITERATION_TEMP 10000
 
 /* Variabili Globali */
 int cluster_max=-1;
@@ -20,7 +20,7 @@ void spin_init ( Spin * matrix, Node * n){
 				matrix[i*N+j].spin = +1;
 			}
 			else {
-				matrix[i*N+j].spin = +1;
+				matrix[i*N+j].spin = -11;
 			}
 			matrix[i*N+j].i = i;
 			matrix[i*N+j].j = j;
@@ -186,9 +186,10 @@ void print_data (Spin * m){
 void evolve_therm (Spin * matrix, Node * nodes){
 	int iteration = 0;
 	for ( iteration = 0 ; iteration < ITERATION_TEMP ; iteration++){
-		if (iteration %1 == 0){
+		if (iteration %50 == 0){
 			printf("Iteration #%d\n",iteration);
 			printf("La magnetizzazione è %lf\n",magnetization(matrix));
+			savePPM(matrix);
 			}
 		startClustering(matrix,nodes);
 // DISEGNA CLUSTER E SPIN SU STDOUT
@@ -202,6 +203,7 @@ void evolve_therm (Spin * matrix, Node * nodes){
 void evolve( Spin * matrix, Node * nodes){
 	startClustering(matrix,nodes);
 	flip_spin(matrix);
+	//savePPM(matrix);
 	//PRENDERE DATI QUI
 	reset_cluster(matrix,nodes);
 }
