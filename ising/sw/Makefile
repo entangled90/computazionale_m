@@ -21,7 +21,7 @@ all: rmxeq mkdep mkxeq rmpmk
 
 MAIN =  main
 
-MODULES = sw list
+MODULES = sw list mtwist
 #$(EXTRAS) # search path for modules
 
 MDIR = module

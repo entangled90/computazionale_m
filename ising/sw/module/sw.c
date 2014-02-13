@@ -6,6 +6,7 @@
 #include <math.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include "mtwist.h"
 
 
 
@@ -49,8 +50,8 @@ void reset_cluster (Spin * matrix, Node * n){
 int set_bond (Spin * s1, Spin * s2){
 	float tmp;
 	if( s1->spin == s2->spin){
-		tmp = rand()/(double)RAND_MAX;
-		if ( tmp < (1- exp(-BETAJ)))
+		tmp = mt_drand();
+		if ( tmp < (1- exp(-BETA)))
 			return 1;
 		else
 			return 0;
@@ -111,7 +112,7 @@ inline double magnetization(Spin *x){
 			mag += x[i*N+j].spin;
 		}
 	}
-	return mag/((double) (N*N));
+	return mag/((double)(N*N));
 }
 inline void savePPM(Spin * s)
 {
@@ -145,10 +146,10 @@ void drawSpin(Spin * s){
 	for ( i = 0; i<N;i++){
 		for ( j = 0; j<N;j++){
 			if(s[i*N+j].spin == 1){
-				printf("|\t0\t");				
+				printf("|\t+\t");				
 			}
 			else
-				printf("|\t+\t");
+				printf("|\t0\t");
 		}
 		printf("|\n");
 	}
@@ -192,7 +193,7 @@ void evolve_therm (Spin * matrix, Node * nodes){
 			}
 		startClustering(matrix,nodes);
 // DISEGNA CLUSTER E SPIN SU STDOUT
-//		print_data(matrix);
+		print_data(matrix);
 		flip_spin(matrix);
 		reset_cluster(matrix,nodes);
 	}
