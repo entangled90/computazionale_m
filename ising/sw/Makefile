@@ -24,10 +24,10 @@ MAIN =  main
 MODULES = sw list mtwist
 #$(EXTRAS) # search path for modules
 
-MDIR = module
+MDIR = ../modules
 
 
-VPATH = $(MDIR)
+VPATH = $(MDIR)/mersenne:$(MDIR)/sw
 #VPATH = $(MDIR)/random:$(MDIR)/start:
 #$(MDIR)/extras
 
@@ -35,7 +35,7 @@ VPATH = $(MDIR)
 
 # additional include directories
 
-INCPATH =  /usr/include/ ./include .
+INCPATH =  /usr/include/ ./include . ../include
 
 
 # additional libraries to be included 

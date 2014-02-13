@@ -2,7 +2,7 @@
 #define SW_C
 #include "list.h"
 #include "sw.h"
-#include "constants.h"
+#include "constants-sw.h"
 #include <math.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -48,10 +48,8 @@ void reset_cluster (Spin * matrix, Node * n){
 2-non creare bond
 */
 int set_bond (Spin * s1, Spin * s2){
-	float tmp;
 	if( s1->spin == s2->spin){
-		tmp = mt_drand();
-		if ( tmp < (1- exp(-BETA)))
+		if ( mt_drand() < (1- exp(-2*BETA)))
 			return 1;
 		else
 			return 0;
@@ -114,6 +112,8 @@ inline double magnetization(Spin *x){
 	}
 	return mag/((double)(N*N));
 }
+
+
 inline void savePPM(Spin * s)
 {
     unsigned char white[3] = {255,255,255};
@@ -164,7 +164,7 @@ void flip_spin ( Spin * m){
 		exit(1);
 	}
 	for (i=0 ; i<cluster_max+1 ; i++){
-		if ( rand()/(float)RAND_MAX < 0.5)
+		if ( mt_drand() < 0.5)
 			flipper[i] = 1;
 		else
 			flipper[i] = -1;
@@ -186,14 +186,14 @@ void print_data (Spin * m){
 void evolve_therm (Spin * matrix, Node * nodes){
 	int iteration = 0;
 	for ( iteration = 0 ; iteration < ITERATION_TEMP ; iteration++){
-		if (iteration %50 == 0){
+/*		if (iteration %50 == 0){
 			printf("Iteration #%d\n",iteration);
 			printf("La magnetizzazione è %lf\n",magnetization(matrix));
 			savePPM(matrix);
 			}
-		startClustering(matrix,nodes);
+*/		startClustering(matrix,nodes);
 // DISEGNA CLUSTER E SPIN SU STDOUT
-		print_data(matrix);
+//		print_data(matrix);
 		flip_spin(matrix);
 		reset_cluster(matrix,nodes);
 	}

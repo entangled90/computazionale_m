@@ -5,7 +5,8 @@
 
 // my includes
 #include "sw.h"
-#include "constants.h"
+#include "list.h"
+#include "constants-sw.h"
 #include "mtwist.h"
 
 
@@ -14,7 +15,10 @@ float BETA = 1;
 
 
 int main ( int argc, char * argv[]) {
-	double mag_mean=0;
+	double mag_abs_mean=0; // Valor medio del modulo della magnetizzazione
+	double mag2_mean=0; // Valor medio di magnetizzazione al quadrato
+	double mag_mean = 0; // valor medio di magnetizzazione
+	double chi = 0;
 	int iteration = 0;
 	Spin * matrix = (Spin *) malloc(sizeof(Spin)*N*N);
 	Node * nodes = (Node *) malloc(sizeof(Node)*N*N);
@@ -36,22 +40,31 @@ int main ( int argc, char * argv[]) {
 	/***** FILENAMES AND FILE OPENING ******/
 	char mag_file[64] = "";
 	snprintf(mag_file,64,"data/magnetization_mean_%d.dat",N);
-	char m_file_long[64] = "";
-	snprintf(m_file_long,64,"data/magnetization_long_%d.dat",N); 
+	char chi_file[64] = "";
+	snprintf(chi_file,64,"data/chi_%d.dat",N); 
 	FILE * f_mag_mean = fopen(mag_file,"a");
-	FILE * f_mag_long = fopen(m_file_long,"a");	
+	FILE * f_chi = fopen(chi_file,"a");	
 
 	/*Start*/
-	srand(time(NULL));
 	spin_init(matrix,nodes);
 	evolve_therm(matrix,nodes);
+	double tmp ;
 	for ( iteration=0;iteration<ITERATION_MAX; iteration++){
 		evolve(matrix,nodes);
-		fprintf(f_mag_long, "%lf\t%lf\n", BETA, magnetization(matrix) );
-		mag_mean += fabs(magnetization(matrix));
+	//	fprintf(f_mag_long, "%lf\t%lf\n", BETA, magnetization(matrix) );
+		tmp = magnetization(matrix);
+		mag2_mean += tmp*tmp;
+		mag_abs_mean += fabs(tmp);
+		mag_mean  += tmp ;
+
 	}
+	mag_abs_mean /= (double)(ITERATION_MAX);
+	mag2_mean /= (double)(ITERATION_MAX);
 	mag_mean /= (double)(ITERATION_MAX);
-	fprintf(f_mag_mean,"%lf\t%lf\n",BETA,mag_mean);
+	chi = (mag2_mean - mag_mean*mag_mean);
+	fprintf(f_mag_mean,"%lf\t%lf\n",BETA,mag_abs_mean);
+	fprintf(f_chi,"%lf\t%lf\n",BETA,chi);
+	fclose(f_mag_mean);
 	free(matrix);
 	free(nodes);
 	return 0;

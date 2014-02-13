@@ -76,17 +76,17 @@ int main (int argc, char *argv[]){
 	printf("hamiltoniana %e\n",hamiltonian_ising(configuration));
 	while(iteration < ITERATION_THERM){
 		metropolis_ising(configuration);
-		if(iteration %20 == 0){
+/*		if(iteration %20 == 0){
 			savePPM(configuration);
-			mag = magnetization(configuration);
-			printf("%d\t mag = %e\t mag_expected%e\n",iteration, mag,mag_prevista);
-			fprintf(f_mag,"%d\t%e\n",iteration,mag);
+//			mag = magnetization(configuration);
+//			printf("%d\t mag = %e\t mag_expected%e\n",iteration, mag,mag_prevista);
+//			fprintf(f_mag,"%d\t%e\n",iteration,mag);
 		}
-		
+*/		
 		iteration++;
 	}
-	
-	while(iteration < ITERATION_MAX+ITERATION_THERM){
+	iteration = 0;	
+	while(iteration < ITERATION_MAX){
 		metropolis_ising(configuration);
 		if(iteration %20 == 0){
 			mag = magnetization(configuration);
