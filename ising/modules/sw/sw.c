@@ -1,5 +1,6 @@
 #ifndef SW_C
 #define SW_C
+
 #include "list.h"
 #include "sw.h"
 #include "constants-sw.h"

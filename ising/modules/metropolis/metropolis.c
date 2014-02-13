@@ -1,6 +1,7 @@
 #include "constants.h"
-#include "random.h"
+
 #include <math.h>
+#include ""
 #include <stdlib.h>
 #include <stdio.h>
 #define METROPOLIS_C

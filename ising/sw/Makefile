@@ -28,14 +28,11 @@ MDIR = ../modules
 
 
 VPATH = $(MDIR)/mersenne:$(MDIR)/sw
-#VPATH = $(MDIR)/random:$(MDIR)/start:
-#$(MDIR)/extras
-
 
 
 # additional include directories
 
-INCPATH =  /usr/include/ ./include . ../include
+INCPATH =  /usr/include/  ../include
 
 
 # additional libraries to be included 
