@@ -1,69 +1,95 @@
-#include "constants.h"
-
-#include <math.h>
-#include ""
 #include <stdlib.h>
 #include <stdio.h>
+#include "constants-metro.h"
+#include <math.h>
+#include "mtwist.h"
+
 #define METROPOLIS_C
+
+
+void spin_init (short int * configuration){
+	int i,j;
+	double tmp;
+	for ( i = 0; i< N; i++){
+		for ( j = 0; j<N ; j++){
+			tmp = mt_drand()/(double)RAND_MAX;
+			if ( tmp > 0.5){
+				configuration[i*N+j] = +1;
+			}
+			else {
+				configuration[i*N+j] = -1;
+			}
+		}
+	}
+}
+
+inline void savePPM(short int * x)
+{
+    unsigned char white[3] = {255,255,255};
+    unsigned char black[3] = {0,0,0};
+   FILE *f = fopen("image.ppm", "wb");
+    fprintf(f, "P6\n%d %d\n255\n", N, N);
+    int i,j;
+    for(i = N-1; i >= 0; i--)
+        for(j = 0; j < N; j++){
+            if(x[i*N+j] == 1)
+                fwrite(white, sizeof(unsigned char), 3, f);
+            if(x[i*N+j] == -1)
+                fwrite(black, sizeof(unsigned char), 3, f);
+        }
+    fclose(f);
+}
+
+
+inline double magnetization(short int *x){
+	int i,j;
+	int mag=0;
+	for (i=0;i<N;i++){
+		for(j=0;j<N;j++){
+			mag += x[i*N+j];
+		}
+	}
+	return mag/((double)(N*N));
+}
 
 
 inline double delta_Ham_ising ( short int * configuration,int a, int b){
 	double ham;
-	ham = -J * ( configuration[ ((a+1)%WIDTH)*WIDTH + b]+ configuration[((a-1+WIDTH)%WIDTH)*WIDTH+b]
-		 + configuration[a*WIDTH+(b+1)%HEIGHT]+configuration[a*WIDTH + (b-1+HEIGHT)%HEIGHT])*(-2*configuration[a*WIDTH +b]); 
+	ham = -J * ( configuration[ ((a+1)%N)*N + b]+ configuration[((a-1+N)%N)*N+b]
+		 + configuration[a*N+(b+1)%N]+configuration[a*N + (b-1+N)%N])*(-2*configuration[a*N +b]); 
 	return ham;
 }
 
 inline void metropolis_ising( short int *x ){
 	double dH;
-	float *tmp = malloc(sizeof(float)*WIDTH*WIDTH) ;
-	ranlxs(tmp,WIDTH*WIDTH);
 	int i,j;
-	for (i = 0; i<WIDTH;i++){
-		for(j= 0; j<WIDTH;j++){
-			dH = delta_Ham_ising(x,i,j);
-			if( tmp[i*WIDTH+j] <  exp(-BETA*dH)){
-				x[i*WIDTH+j] = - x[i*WIDTH+j];
-			}
-		}
-	}
-}
-
-
-
-/*
-inline void metropolis( short int *x ){
-	double dH;
-	float *tmp = malloc(sizeof(float)*N) ;
-	unsigned int * new = malloc(sizeof(float)*N);
-	ranlxs(tmp,N);
-	int i,j;
-	for (i = 0; i<WIDTH;i++){
-		for(j= 0; j<WIDTH;j++){
-			dH = delta_Ham(x,i,j);
-			if( tmp[i*WIDTH+j] <  exp(-BETA*dH)){
-				new[i*WIDTH+j] = - x[i*WIDTH+j];
-			}
-			else{
-				new[i*WIDTH+j] = x[i*WIDTH+j];
-			}
-		}
-	}
 	for (i = 0; i<N;i++){
-		x[i] = new[i];
+		for(j= 0; j<N;j++){
+			dH = delta_Ham_ising(x,i,j);
+			if( mt_drand() <  exp(-BETA*dH)){
+				x[i*N+j] = - x[i*N+j];
+			}
+		}
 	}
 }
-*/
 
 inline double hamiltonian_ising ( short int * configuration){
 	double ham=0;
 	int a,b;
-	for (a = 0; a<WIDTH ; a++){
-		for ( b= 0; b<HEIGHT; b++){
-			ham += J * ( configuration[ ((a+1+WIDTH)%WIDTH)*WIDTH + b]+ configuration[((a-1+WIDTH)%WIDTH)*WIDTH+b]
-				+ configuration[a*WIDTH+(b+1+HEIGHT)%HEIGHT]+configuration[a*WIDTH + (b-1+HEIGHT)%HEIGHT])*(configuration[a*WIDTH +b]); 
+	for (a = 0; a<N ; a++){
+		for ( b= 0; b<N; b++){
+			ham += J * ( configuration[ ((a+1+N)%N)*N + b]+ configuration[((a-1+N)%N)*N+b]
+				+ configuration[a*N+(b+1+N)%N]+configuration[a*N + (b-1+N)%N])*(configuration[a*N +b]); 
 		}
 	}
 	return (ham/2.0);
 }
 
+double sum_row(short int * configuration, int row){
+	double sum = 0;
+	int j = 0;
+	for (j = 0; j<N ;j++){
+		sum += configuration[row*N+j];
+	}
+	return sum /= (double) N ;
+}

@@ -21,25 +21,17 @@ all: rmxeq mkdep mkxeq
 
 MAIN = ising 
 
-RANDOM = ranlxs ranlxd gauss
-
-START = start utils
-
-#EXTRAS = 
-METROPOLIS = metropolis
-MODULES = $(RANDOM) $(EXTRAS) $(METROPOLIS) $(START)
-
-#$(START) 
+MODULES = metropolis mtwist
 # search path for modules
 
 MDIR = ../modules
 
-VPATH = $(MDIR)/random:$(MDIR)/start:$(MDIR)/extras:$(MDIR)/metropolis
+VPATH = $(MDIR)/metropolis:$(MDIR)/mersenne 
 
 
 # additional include directories
 
-INCPATH = ../include ../../include
+INCPATH = ../include  
 
 
 # additional libraries to be included 

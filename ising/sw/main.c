@@ -65,6 +65,7 @@ int main ( int argc, char * argv[]) {
 	fprintf(f_mag_mean,"%lf\t%lf\n",BETA,mag_abs_mean);
 	fprintf(f_chi,"%lf\t%lf\n",BETA,chi);
 	fclose(f_mag_mean);
+	fclose(f_chi);
 	free(matrix);
 	free(nodes);
 	return 0;

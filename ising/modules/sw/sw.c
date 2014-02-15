@@ -50,7 +50,7 @@ void reset_cluster (Spin * matrix, Node * n){
 */
 int set_bond (Spin * s1, Spin * s2){
 	if( s1->spin == s2->spin){
-		if ( mt_drand() < (1- exp(-2*BETA)))
+		if ( mt_drand() < 1) //(1- exp(-2*BETA)))
 			return 1;
 		else
 			return 0;
@@ -194,7 +194,7 @@ void evolve_therm (Spin * matrix, Node * nodes){
 			}
 */		startClustering(matrix,nodes);
 // DISEGNA CLUSTER E SPIN SU STDOUT
-//		print_data(matrix);
+		print_data(matrix);
 		flip_spin(matrix);
 		reset_cluster(matrix,nodes);
 	}

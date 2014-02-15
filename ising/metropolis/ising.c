@@ -3,102 +3,89 @@
 #include <stdlib.h>
 #include <time.h>
 #include <float.h>
-#include "start.h"
-#include "random.h"
+#include "mtwist.h"
 #include "constants-metro.h"
 #include "metropolis.h"
 
+double BETA = 1;
 
-
-void spin_init (short int * configuration){
-	int i,j;
-	double tmp;
-	for ( i = 0; i< WIDTH; i++){
-		for ( j = 0; j<HEIGHT ; j++){
-			tmp = rand()/(double)RAND_MAX;
-			if ( tmp > 0.5){
-				configuration[i*WIDTH+j] = +1;
-			}
-			else {
-				configuration[i*WIDTH+j] = -1;
-			}
-		}
-	}
-}
-
-inline void savePPM(short int * x)
-{
-    unsigned char white[3] = {255,255,255};
-    unsigned char black[3] = {0,0,0};
-   FILE *f = fopen("image.ppm", "wb");
-    fprintf(f, "P6\n%d %d\n255\n", WIDTH, HEIGHT);
-    int i,j;
-    for(i = WIDTH-1; i >= 0; i--)
-        for(j = 0; j < WIDTH; j++){
-            if(x[i*WIDTH+j] == 1)
-                fwrite(white, sizeof(unsigned char), 3, f);
-            if(x[i*WIDTH+j] == -1)
-                fwrite(black, sizeof(unsigned char), 3, f);
-        }
-    fclose(f);
-}
-
-
-inline double magnetization(short int *x){
-	int i,j;
-	int mag=0;
-	for (i=0;i<WIDTH;i++){
-		for(j=0;j<WIDTH;j++){
-			mag += x[i*WIDTH+j];
-		}
-	}
-	return mag/((double) (WIDTH*WIDTH));
-}
 
 
 int main (int argc, char *argv[]){	
-	int i;
+	mt_seed();
 	int iteration = 0;
-	double mag;
-	double sum = 0;
-	double mag_prevista = ( 1 - pow(sinh(2*BETA*J),-4));
+	double mag_abs_mean=0; // Valor medio del modulo della magnetizzazione
+	double mag2_mean=0; // Valor medio di magnetizzazione al quadrato
+	double mag_mean = 0; // valor medio di magnetizzazione
+	double chi = 0;
+	double tmp= 0;
+	double S_n[N];
+	int i = 0;
+	// init vettore
+	for ( i = 0; i<N;i++){
+		S_n[i]=0;
+	}
+	if (argc>1){
+		BETA = atof(argv[1]);
+	}
+	else{
+		printf("Inserire il valore di Beta\n");
+		return 0;
+	}
+
+//	double mag_prevista = ( 1 - pow(sinh(2*BETA*J),-4));
 	short int  * configuration;
 	srand(time(NULL));
-	rlxs_init(1,time(NULL));
-/*
-	for ( i=0 ; i<5000;i++){
-		mersenne_generate();
-	}
-*/
-	FILE *f_mag = fopen("data/magnetization.dat","w+");
-	configuration = malloc(WIDTH*WIDTH*sizeof(short int));
+	configuration = malloc(N*N*sizeof(short int));
 	spin_init(configuration);
 	printf("hamiltoniana %e\n",hamiltonian_ising(configuration));
+
+	/***** FILENAMES AND FILE OPENING ******/
+	char mag_file[64] = "";
+	snprintf(mag_file,64,"data/magnetization_mean_%d.dat",N);
+	char chi_file[64] = "";
+	snprintf(chi_file,64,"data/chi_%d.dat",N); 
+	char corr_row_file[64]= "";
+	snprintf(corr_row_file,64,"data/corr_row_%dParticle_%lf.3BETA.dat",N,BETA);
+	FILE * f_mag_mean = fopen(mag_file,"a");
+	FILE * f_chi = fopen(chi_file,"a");	
+	FILE * f_corr_row = fopen(corr_row_file,"w");
 	while(iteration < ITERATION_THERM){
-		metropolis_ising(configuration);
-/*		if(iteration %20 == 0){
-			savePPM(configuration);
-//			mag = magnetization(configuration);
-//			printf("%d\t mag = %e\t mag_expected%e\n",iteration, mag,mag_prevista);
-//			fprintf(f_mag,"%d\t%e\n",iteration,mag);
+		if(iteration %200 == 0){
+			printf("Iterazione: %d\n",iteration);
 		}
-*/		
+		metropolis_ising(configuration);
 		iteration++;
 	}
 	iteration = 0;	
 	while(iteration < ITERATION_MAX){
-		metropolis_ising(configuration);
-		if(iteration %20 == 0){
-			mag = magnetization(configuration);
-			savePPM(configuration);
-			printf("%d\t mag = %e\t mag_expected%e\n",iteration, mag,mag_prevista);
-			fprintf(f_mag,"%d\t%e\n",iteration,mag);
+		if(iteration %200 == 0){
+			printf("Iterazione: %d\n",iteration);
 		}
-		mag = magnetization(configuration);
-		sum+=mag;
+		metropolis_ising(configuration);
+		tmp = magnetization(configuration);
+		mag2_mean += tmp*tmp;
+		mag_abs_mean += fabs(tmp);
+		mag_mean  += tmp ;
 		iteration++;
+		for ( i = 0; i<N;i++){
+		S_n[i] += sum_row(configuration,i);
+		}
 	}
-	fclose(f_mag);
-	printf("Magnetizzazione media: %lf\n",sum/((double) ITERATION_MAX));
+
+	for ( i = 0; i<N;i++){
+		S_n[i]/=(double)ITERATION_MAX;
+		fprintf(f_corr_row, "%d\t%lf\n",i,S_n[i] );
+	}
+	mag_abs_mean /= (double)(ITERATION_MAX);
+	mag2_mean /= (double)(ITERATION_MAX);
+	mag_mean /= (double)(ITERATION_MAX);
+	chi = (mag2_mean - mag_mean*mag_mean);
+	fprintf(f_mag_mean,"%lf\t%lf\n",BETA,mag_abs_mean);
+	fprintf(f_chi,"%lf\t%lf\n",BETA,chi);
+	fclose(f_mag_mean);
+	fclose(f_chi);
+	fclose(f_corr_row);
+	//printf("Magnetizzazione media: %lf\n",sum/((double) ITERATION_MAX));
 	exit(EXIT_SUCCESS);
 }

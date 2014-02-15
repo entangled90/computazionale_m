@@ -17,7 +17,7 @@ def loop (iter,index):
 	f = open("log/core" + index + ".log", "w")
 	for l in iter:
 		print ("Starting ising sw with Beta*J=" + str(l))
-		call(["./main",str(l)],stdout=f)
+		call(["./ising",str(l)],stdout=f)
 	print("time elapsed for core"+index+": ", str(datetime.timedelta(seconds=(time.time() - start))))
 
 x=float(sys.argv[1])
