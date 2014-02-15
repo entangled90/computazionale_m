@@ -50,7 +50,7 @@ void reset_cluster (Spin * matrix, Node * n){
 */
 int set_bond (Spin * s1, Spin * s2){
 	if( s1->spin == s2->spin){
-		if ( mt_drand() < 1) //(1- exp(-2*BETA)))
+		if ( mt_drand() < (1- exp(-2*BETA)))
 			return 1;
 		else
 			return 0;
@@ -73,11 +73,11 @@ void fillCluster( Spin * matrix, Node * nodes, List * l){
 		for ( k = 0 ; k<4;k++){
 				ii = (i + N + v[0][k])%N;
 				jj = (j + N + v[1][k])%N;
-				if ( matrix[ii*N+jj].cluster == -1){
+				if ( matrix[ii*N+jj].cluster < 0){
 					if ( set_bond(matrix+i*N+j, matrix+ii*N+jj) ){
 						//La nuova testa viene messa qui
+							matrix[ii*N+jj].cluster = l->head->data->cluster;
 							addToHead( nodes+ii*N+jj,l);
-							matrix[ii*N+jj].cluster = cluster_max;
 					}
 				}
 			}
@@ -88,16 +88,16 @@ void fillCluster( Spin * matrix, Node * nodes, List * l){
 
 void startClustering (Spin * matrix, Node * nodes){
 	int i,j;
-	List cluster;
+	List * cluster = malloc(sizeof(List));
 	for ( i = 0; i< N; i++){
 		for ( j = 0; j<N ; j++){
 			if ( matrix[i*N+j].cluster == -1){
 				cluster_max++;
 //				printf("Cluster #%d\n",cluster_max);
 				//Crea un nuovo cluster
-				cluster = initCluster(nodes+i*N+j,cluster_max);
+				initCluster(nodes+i*N+j,cluster_max,cluster);
 				//CHIAMA FUNZIONE DEL CLUSTER
-				fillCluster(matrix,nodes,&cluster);
+				fillCluster(matrix,nodes,cluster);
 			}
 		}
 	}

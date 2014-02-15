@@ -17,8 +17,7 @@ typedef struct List{
 	Node * head;
 } List;
 
-
-List  initCluster(Node * n, int n_cluster);
+void  initCluster(Node * n, int n_cluster, List * l);
 void addToHead( Node * n, List * l);
 void removeElement (Node * del , List * list);
 

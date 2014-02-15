@@ -8,12 +8,10 @@
 
 
 /*Il primo elemento dlela lista sarà l'ultimo ed ha NULL come puntatore a next*/
-List  initCluster(Node * n, int n_cluster){
-	List t;
+void  initCluster(Node * n, int n_cluster, List * l){
 	n->next = NULL;
-	t.head = n;
+	l->head = n;
 	n->data->cluster = n_cluster;
-	return t;
 }
 /* Aggiunge in testa alla lista --> FIFO
 Ritorna la nuova testa */
@@ -28,13 +26,14 @@ void removeElement (Node * del , List * list){
 	Node * tmp_prev = tmp;
 	while (tmp){
 		if (tmp == del){
-			tmp_prev->next = tmp->next;
-			if ( tmp == list->head){
-				list->head = tmp->next;
+			if ( del == list->head){
+				list->head = list->head->next;
 			}
+			tmp_prev->next = tmp->next;
 			return;
 		}
 		else{
+			tmp_prev = tmp;
 			tmp = tmp->next;
 		}
 	}
