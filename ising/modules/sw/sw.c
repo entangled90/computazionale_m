@@ -9,9 +9,9 @@
 #include <stdio.h>
 #include "mtwist.h"
 
+int cluster_max = -1;
 
-
-void spin_init ( Spin * matrix, Node * n){
+void spin_init ( Spin * matrix, Node * n, int N){
 	int i,j;
 	double tmp;
 	for ( i = 0; i< N; i++){
@@ -31,7 +31,7 @@ void spin_init ( Spin * matrix, Node * n){
 		}
 	}
 }
-void reset_cluster (Spin * matrix, Node * n){
+void reset_cluster (Spin * matrix, Node * n, int N){
 	int i,j;
 	for ( i = 0; i< N; i++){
 		for ( j = 0; j<N ; j++){
@@ -48,7 +48,7 @@ void reset_cluster (Spin * matrix, Node * n){
 1- creare bond
 2-non creare bond
 */
-int set_bond (Spin * s1, Spin * s2){
+int set_bond (Spin * s1, Spin * s2, float BETA){
 	if( s1->spin == s2->spin){
 		if ( mt_drand() < (1- exp(-2*BETA)))
 			return 1;
@@ -59,7 +59,7 @@ int set_bond (Spin * s1, Spin * s2){
 		return 0;
 }
 
-void fillCluster( Spin * matrix, Node * nodes, List * l){
+void fillCluster( Spin * matrix, Node * nodes, List * l, int N, float BETA){
 /* Matrice con le possibili direzioni: 4 coppie di vettori bidimensionali
 	-1 	0	1 	0
 	0 	-1 	0 	1 
@@ -74,7 +74,7 @@ void fillCluster( Spin * matrix, Node * nodes, List * l){
 				ii = (i + N + v[0][k])%N;
 				jj = (j + N + v[1][k])%N;
 				if ( matrix[ii*N+jj].cluster < 0){
-					if ( set_bond(matrix+i*N+j, matrix+ii*N+jj) ){
+					if ( set_bond(matrix+i*N+j, matrix+ii*N+jj,BETA) ){
 						//La nuova testa viene messa qui
 							matrix[ii*N+jj].cluster = l->head->data->cluster;
 							addToHead( nodes+ii*N+jj,l);
@@ -86,7 +86,7 @@ void fillCluster( Spin * matrix, Node * nodes, List * l){
 }
 
 
-void startClustering (Spin * matrix, Node * nodes){
+void startClustering (Spin * matrix, Node * nodes, int N, float BETA){
 	int i,j;
 	List * cluster = malloc(sizeof(List));
 	for ( i = 0; i< N; i++){
@@ -97,13 +97,13 @@ void startClustering (Spin * matrix, Node * nodes){
 				//Crea un nuovo cluster
 				initCluster(nodes+i*N+j,cluster_max,cluster);
 				//CHIAMA FUNZIONE DEL CLUSTER
-				fillCluster(matrix,nodes,cluster);
+				fillCluster(matrix,nodes,cluster,N,BETA);
 			}
 		}
 	}
 }
 
-inline double magnetization(Spin *x){
+inline double magnetization(Spin *x, int N){
 	int i,j;
 	int mag=0;
 	for (i=0;i<N;i++){
@@ -111,11 +111,11 @@ inline double magnetization(Spin *x){
 			mag += x[i*N+j].spin;
 		}
 	}
-	return mag/((double)(N*N));
+	return mag;
 }
 
 
-inline void savePPM(Spin * s)
+inline void savePPM(Spin * s, int N)
 {
     unsigned char white[3] = {255,255,255};
     unsigned char black[3] = {0,0,0};
@@ -132,7 +132,7 @@ inline void savePPM(Spin * s)
     fclose(f);
 }
 
-void drawCluster(Spin * s){
+void drawCluster(Spin * s, int N){
 	int i,j;
 	for ( i = 0; i<N;i++){
 		for ( j = 0; j<N;j++){
@@ -142,7 +142,7 @@ void drawCluster(Spin * s){
 	}
 }
 
-void drawSpin(Spin * s){
+void drawSpin(Spin * s, int N){
 	int i,j;
 	for ( i = 0; i<N;i++){
 		for ( j = 0; j<N;j++){
@@ -156,7 +156,7 @@ void drawSpin(Spin * s){
 	}
 }
 
-void flip_spin ( Spin * m){
+void flip_spin ( Spin * m, int N){
 	int i,j;
 	int * flipper;
 	flipper = (int *) malloc(sizeof(int)*(cluster_max+1));
@@ -177,36 +177,28 @@ void flip_spin ( Spin * m){
 	}
 	free(flipper);
 }
-void print_data (Spin * m){
-		drawCluster(m);
+void print_data (Spin * m,int N){
+		drawCluster(m,N);
 		printf("---------------------------------------------------------------------------\n");
-		drawSpin(m);		
+		drawSpin(m,N);		
 		printf("---------------------------------------------------------------------------\n\n");
 
 }
-void evolve_therm (Spin * matrix, Node * nodes){
+void evolve_therm (Spin * matrix, Node * nodes, int N, float BETA){
 	int iteration = 0;
 	for ( iteration = 0 ; iteration < ITERATION_TEMP ; iteration++){
-/*		if (iteration %50 == 0){
-			printf("Iteration #%d\n",iteration);
-			printf("La magnetizzazione è %lf\n",magnetization(matrix));
-			savePPM(matrix);
-			}
-*/		startClustering(matrix,nodes);
-// DISEGNA CLUSTER E SPIN SU STDOUT
-	//	print_data(matrix);
-		flip_spin(matrix);
-		reset_cluster(matrix,nodes);
+		startClustering(matrix,nodes,N,BETA);
+		flip_spin(matrix,N);
+		reset_cluster(matrix,nodes,N);
 	}
 
 }
 
-void evolve( Spin * matrix, Node * nodes){
-	startClustering(matrix,nodes);
-	flip_spin(matrix);
-	//savePPM(matrix);
+void evolve( Spin * matrix, Node * nodes, int N, float BETA){
+	startClustering(matrix,nodes,N,BETA);
+	flip_spin(matrix,N);
 	//PRENDERE DATI QUI
-	reset_cluster(matrix,nodes);
+	reset_cluster(matrix,nodes,N);
 }
 
 #endif
