@@ -58,9 +58,9 @@ int main ( int argc, char * argv[]) {
 		mag_mean  += tmp ;
 
 	}
-	mag_abs_mean /= (double)(ITERATION_MAX*N*N);
-	mag2_mean /= (double)(ITERATION_MAX*N*N);
-	mag_mean /= (double)(ITERATION_MAX*N*N);
+	mag_abs_mean /= (double)(ITERATION_MAX*N*N*N*N);
+	mag2_mean /= (double)(ITERATION_MAX*N*N*N*N);
+	mag_mean /= (double)(ITERATION_MAX*N*N*N*N);
 	chi = (mag2_mean - mag_mean*mag_mean);
 	fprintf(f_mag_mean,"%lf\t%lf\n",BETA,mag_abs_mean);
 	fprintf(f_chi,"%lf\t%lf\n",BETA,chi);

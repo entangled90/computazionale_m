@@ -79,12 +79,9 @@ int main (int argc, char *argv[]){
 		S_n[i]/=(double)ITERATION_MAX;
 		fprintf(f_corr_row, "%d\t%lf\n",i,S_n[i] );
 	}
-	mag2_mean /= (double)(N*N*N*N);
-	mag_mean /= (double) (N*N);
-	mag_abs_mean /= (double) (N*N);
-	mag_abs_mean /= (double)(ITERATION_MAX);
-	mag2_mean /= (double)(ITERATION_MAX);
-	mag_mean /= (double)(ITERATION_MAX);
+	mag_abs_mean /= (double)(ITERATION_MAX*N*N*N*N);
+	mag2_mean /= (double)(ITERATION_MAX*N*N*N*N));
+	mag_mean /= (double)(ITERATION_MAX*N*N*N*N));
 	chi = (mag2_mean - mag_mean*mag_mean);	
 	fprintf(f_mag_mean,"%lf\t%lf\n",BETA,mag_abs_mean);
 	fprintf(f_chi,"%lf\t%lf\n",BETA,chi);
