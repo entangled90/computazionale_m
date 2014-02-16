@@ -194,7 +194,7 @@ void evolve_therm (Spin * matrix, Node * nodes){
 			}
 */		startClustering(matrix,nodes);
 // DISEGNA CLUSTER E SPIN SU STDOUT
-		print_data(matrix);
+	//	print_data(matrix);
 		flip_spin(matrix);
 		reset_cluster(matrix,nodes);
 	}

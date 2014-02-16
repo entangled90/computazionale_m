@@ -12,7 +12,7 @@
 
 int cluster_max = -1;
 float BETA = 1;
-
+int N = 40;
 
 int main ( int argc, char * argv[]) {
 	double mag_abs_mean=0; // Valor medio del modulo della magnetizzazione
@@ -31,6 +31,7 @@ int main ( int argc, char * argv[]) {
 	/*Check for command line arguments*/
 	if (argc>1){
 		BETA = atof(argv[1]);
+		N = atoi(argv[2]);
 	}
 	else{
 		printf("Inserire il valore di Beta\n");
