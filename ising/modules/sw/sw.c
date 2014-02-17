@@ -105,13 +105,12 @@ void startClustering (Spin * matrix, Node * nodes, int N, float BETA){
 
 inline double magnetization(Spin *x, int N){
 	int i,j;
-	double mag=0;
+	int mag=0;
 	for (i=0;i<N;i++){
 		for(j=0;j<N;j++){
 			mag += x[i*N+j].spin;
 		}
 	}
-	mag /= ((double)(N*N));
 	return mag;
 }
 

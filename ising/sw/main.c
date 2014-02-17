@@ -59,7 +59,9 @@ int main ( int argc, char * argv[]) {
 	mag_abs_mean /= (double)(ITERATION_MAX);
 	mag2_mean /= (double)(ITERATION_MAX);
 	mag_mean /= (double)(ITERATION_MAX);
-	chi = (mag2_mean - mag_abs_mean*mag_abs_mean);
+	chi = (mag2_mean - mag_abs_mean*mag_abs_mean)/((double)(N*N));
+	mag_mean /=(double)(N*N);
+	mag_abs_mean /=(double)(N*N);
 	printf("BETA: %lf , mag2: %.6e \t mag*mag: %.6e\t mag:%.6e\n",BETA,mag2_mean, mag_mean*mag_mean,mag_mean);
 	fprintf(f_mag_mean,"%lf\t%lf\n",BETA,mag_abs_mean);
 	fprintf(f_chi,"%lf\t%lf\n",BETA,chi);
