@@ -12,7 +12,6 @@
 
 
 int main ( int argc, char * argv[]) {
-	int cluster_max = -1;
 	float BETA = 1;
 	int N = 40;
 	double mag_abs_mean=0; // Valor medio del modulo della magnetizzazione
@@ -56,17 +55,17 @@ int main ( int argc, char * argv[]) {
 		mag2_mean += tmp*tmp;
 		mag_abs_mean += fabs(tmp);
 		mag_mean  += tmp ;
-
 	}
-	mag_abs_mean /= (double)(ITERATION_MAX*N*N*N*N);
-	mag2_mean /= (double)(ITERATION_MAX*N*N*N*N);
-	mag_mean /= (double)(ITERATION_MAX*N*N*N*N);
-	chi = (mag2_mean - mag_mean*mag_mean);
+	mag_abs_mean /= (double)(ITERATION_MAX);
+	mag2_mean /= (double)(ITERATION_MAX);
+	mag_mean /= (double)(ITERATION_MAX);
+	chi = (mag2_mean - mag_abs_mean*mag_abs_mean);
+	printf("BETA: %lf , mag2: %.6e \t mag*mag: %.6e\t mag:%.6e\n",BETA,mag2_mean, mag_mean*mag_mean,mag_mean);
 	fprintf(f_mag_mean,"%lf\t%lf\n",BETA,mag_abs_mean);
 	fprintf(f_chi,"%lf\t%lf\n",BETA,chi);
 	fclose(f_mag_mean);
 	fclose(f_chi);
 	free(matrix);
 	free(nodes);
-	return 0;
+	return EXIT_SUCCESS;
 }
