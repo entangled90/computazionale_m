@@ -5,7 +5,7 @@
 import Tkinter, numpy, random, math
 
 size = 128                           # number of sites in a lattice row (change if desired)
-squareWidth = int(math.floor(700.0/size))                   # width of one site in pixels (change if desired)
+squareWidth = int( math.floor(700.0/size) )                   # width of one site in pixels (change if desired)
 canvasWidth = size * squareWidth    # full width of canvas in pixels
 s = numpy.ones((size, size), int)   # 2D array of dipoles (1=up, -1=down)
 running = False                     # will be true when simulation is running
@@ -34,7 +34,7 @@ controlFrame = Tkinter.Frame(theWindow)        # a frame to hold the GUI control
 controlFrame.pack()                            # put it below the canvas
 tLabel = Tkinter.Label(controlFrame, text="Temperature: ")
 tLabel.pack(side="left")
-tSlider = Tkinter.Scale(controlFrame, from_=0.01, to=10.0, resolution=0.01, length=120, orient="horizontal")
+tSlider = Tkinter.Scale(controlFrame, from_=0.001, to=10.0, resolution=0.001, length=120, orient="horizontal")
 tSlider.pack(side="left")
 tSlider.set(2.27)                              # set to critical temperature initially
 spacer = Tkinter.Frame(controlFrame, width=40)

@@ -23,11 +23,12 @@ double meanOfDoubleArray( double *array , int n){
 	for (i= 0; i< n; i++){
 		mean += array[i];
 	}
-	mean /= (double ) n ;
+	mean /= (double)(n);
 	for ( i =0;i<n;i++){
-	  variance += (-array[i]+mean)*(-array[i]+mean);
+	  variance += array[i]*array[i];
 	}
-	variance /= (double) n;
+	variance /=(double)n;
+	variance -= (mean*mean);
 	return(variance);
 	}
 

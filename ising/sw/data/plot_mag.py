@@ -10,7 +10,7 @@ y=[]
 filename = sys.argv[1]
 temp = np.loadtxt(filename, comments='#')
 #Ordina i valori x,y secondo la x:
-temp = sorted(temp, key=itemgetter(0))
+#temp = sorted(temp, key=itemgetter(0))
 for vector in temp:
 	x.append(float(vector[0]))
 	y.append(float(abs(vector[1])))

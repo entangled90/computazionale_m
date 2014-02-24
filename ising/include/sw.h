@@ -16,6 +16,6 @@ void flip_spin ( Spin * m, int N);
 void print_data (Spin * m, int N);
 void evolve_therm (Spin * matrix, Node * nodes,int , float);
 void evolve( Spin * matrix, Node * nodes, int, float);
-
+double hamiltoniana(Spin * configuration, int N);
 //#endif
 #endif

@@ -201,7 +201,7 @@ void evolve( Spin * matrix, Node * nodes, int N, float BETA){
 	reset_cluster(matrix,nodes,N);
 }
 
-inline double hamiltonian_ising ( Spin * configuration, int N){
+inline double hamiltoniana( Spin * configuration, int N){
 	double ham=0;
 	int a,b;
 	for (a = 0; a<N ; a++){
