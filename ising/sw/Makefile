@@ -21,13 +21,13 @@ all: rmxeq mkdep mkxeq rmpmk
 
 MAIN =  main
 
-MODULES = sw list mtwist
+MODULES = sw list mtwist raccolta_dati
 #$(EXTRAS) # search path for modules
 
 MDIR = ../modules
 
 
-VPATH = $(MDIR)/mersenne:$(MDIR)/sw
+VPATH = $(MDIR)/mersenne:$(MDIR)/sw:$(MDIR)/dati
 
 
 # additional include directories

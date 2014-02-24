@@ -8,7 +8,7 @@
 #include "list.h"
 #include "constants-sw.h"
 #include "mtwist.h"
-
+#include "raccolta_dati.h"
 
 
 int main ( int argc, char * argv[]) {
@@ -49,9 +49,13 @@ int main ( int argc, char * argv[]) {
 	spin_init(matrix,nodes,N);
 	evolve_therm(matrix,nodes,N,BETA);
 	double tmp ;
+	double * mag_vet_dati ;
+	double * mag_vet_binnato;
+	mag_vet_dati = malloc(sizeof(double)*ITERATION_MAX);
 	for ( iteration=0;iteration<ITERATION_MAX; iteration++){
 		evolve(matrix,nodes,N,BETA);
 		tmp = magnetization(matrix,N);
+		mag_vet_dati[iteration] = fabs(tmp);
 		mag2_mean += tmp*tmp;
 		mag_abs_mean += fabs(tmp);
 		mag_mean  += tmp ;
@@ -62,6 +66,16 @@ int main ( int argc, char * argv[]) {
 	chi = (mag2_mean - mag_abs_mean*mag_abs_mean)/((double)(N*N));
 	mag_mean /=(double)(N*N);
 	mag_abs_mean /=(double)(N*N);
+	// BINNING E DATI VARI
+	int larghezza_bin;
+	FILE * correl_file = fopen("data/correl_file.dat","w");
+	mag_vet_binnato = malloc(sizeof(double)*(ITERATION_MAX/2));
+	for ( larghezza_bin = 2; larghezza_bin < 100 ; larghezza_bin+=2){
+		binning(mag_vet_dati,mag_vet_binnato,ITERATION_MAX,larghezza_bin);
+		fprintf(correl_file,"%d\t%.14e\n", larghezza_bin, sqrt(varianceOfDoubleArray(mag_vet_binnato,ITERATION_MAX/larghezza_bin)));
+	}
+	free(mag_vet_binnato);
+	fclose(correl_file);
 	printf("BETA: %lf , mag2: %.6e \t mag*mag: %.6e\t mag:%.6e\n",BETA,mag2_mean, mag_mean*mag_mean,mag_mean);
 	fprintf(f_mag_mean,"%lf\t%lf\n",BETA,mag_abs_mean);
 	fprintf(f_chi,"%lf\t%lf\n",BETA,chi);
@@ -69,5 +83,6 @@ int main ( int argc, char * argv[]) {
 	fclose(f_chi);
 	free(matrix);
 	free(nodes);
+	free(mag_vet_dati);
 	return EXIT_SUCCESS;
 }
