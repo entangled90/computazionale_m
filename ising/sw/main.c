@@ -52,7 +52,8 @@ int main ( int argc, char * argv[]) {
 	char en_corr_filename[64] = "";
 	snprintf(en_corr_filename,64,"data/en_autocorrN%d_B%.8lf.dat",N,BETA);
 	char en_temp_filename[64] = "data/en_temp.dat";
-	char mag_autocorr_file[64] = "data/mag_corr.dat";
+	char mag_autocorr_filename[64] = "";
+	snprintf(mag_autocorr_filename,64,"data/mag_autocorrN%d_B%.8lf.dat",N,BETA);
 	FILE * f_mag_mean = fopen(mag_file,"a");
 	FILE * f_chi = fopen(chi_file,"a");	
 	FILE * mag_bin_file = fopen(mag_file_binning,"w");
@@ -60,7 +61,7 @@ int main ( int argc, char * argv[]) {
 	FILE * en_corr_file = fopen(en_corr_filename,"w");
 	FILE * en_file = fopen(en_filename,"a");
 	FILE * en_temp_file = fopen(en_temp_filename,"w");
-	FILE * f_mag_autocorr = fopen(mag_autocorr_file,"w");
+	FILE * f_mag_autocorr = fopen(mag_autocorr_filename,"w");
 	/*Start*/
 	spin_init(matrix,nodes,N);
 	evolve_therm(matrix,nodes,N,BETA);
@@ -132,12 +133,14 @@ int main ( int argc, char * argv[]) {
 	fclose(f_chi);
 	fclose(en_file);
 	fclose(en_temp_file);
+	fclose(f_mag_autocorr);
 	/* Free della memoria */
 	free(mag_vet_dati) ;
 	free(mag_vet_binnato);
 	free(en_vet_dati);
 	free(en_vet_binnato);
 	free(en_autocorr);
+	free(mag_autocorr);
 	free(matrix);
 	free(nodes);
 	return EXIT_SUCCESS;
