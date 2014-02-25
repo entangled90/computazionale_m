@@ -21,12 +21,12 @@ all: rmxeq mkdep mkxeq
 
 MAIN = ising 
 
-MODULES = metropolis mtwist
+MODULES = metropolis mtwist raccolta_dati
 # search path for modules
 
 MDIR = ../modules
 
-VPATH = $(MDIR)/metropolis:$(MDIR)/mersenne 
+VPATH = $(MDIR)/metropolis:$(MDIR)/mersenne:$(MDIR)/dati
 
 
 # additional include directories

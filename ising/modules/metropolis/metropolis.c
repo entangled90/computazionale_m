@@ -73,12 +73,12 @@ inline void metropolis_ising( short int *x, int N , double BETA ){
 	}
 }
 
-inline double hamiltonian_ising ( short int * configuration, int N){
+inline double hamiltoniana ( short int * configuration, int N){
 	double ham=0;
 	int a,b;
 	for (a = 0; a<N ; a++){
 		for ( b= 0; b<N; b++){
-			ham += J * ( configuration[ ((a+1+N)%N)*N + b]+ configuration[((a-1+N)%N)*N+b]
+			ham += -( configuration[ ((a+1+N)%N)*N + b]+ configuration[((a-1+N)%N)*N+b]
 				+ configuration[a*N+(b+1+N)%N]+configuration[a*N + (b-1+N)%N])*(configuration[a*N +b]); 
 		}
 	}

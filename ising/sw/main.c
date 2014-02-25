@@ -27,7 +27,7 @@ int main ( int argc, char * argv[]) {
 		N = atoi(argv[2]);
 	}
 	else{
-		printf("Inserire il valore di Beta\n");
+		printf("Inserire il valore di Beta e N\n");
 		exit(1);
 	}
 	Spin * matrix = (Spin *) malloc(sizeof(Spin)*N*N);
@@ -39,28 +39,32 @@ int main ( int argc, char * argv[]) {
 	}
 	float index_simulation = mt_drand();
 	/***** FILENAMES AND FILE OPENING ******/
-	char mag_file[64] = "";
-	snprintf(mag_file,64,"data/mag_mean%d.dat",N);
-	char chi_file[64] = "";
-	snprintf(chi_file,64,"data/chi%d.dat",N); 
-	char mag_file_binning[64] = "";
-	snprintf(mag_file_binning,64,"data/binning/mag_N%d__B%.6lf__%.8lf.dat",N,BETA,index_simulation); 
-	char en_file_binning[64] = "";
-	snprintf(en_file_binning,64,"data/binning/en_N%d__B%.6lf__%.8lf.dat",N,BETA,index_simulation);
+	/**** IL NOME DELLA Stringa CONTIENE ----filename----
+	*/
+	char mag_filename[64] = "";
+	snprintf(mag_filename,64,"data/mag_mean%d.dat",N);
+	char chi_filename[64] = "";
+	snprintf(chi_filename,64,"data/chi%d.dat",N); 
+	char mag_binning_filename[64] = "";
+	snprintf(mag_binning_filename,64,"data/binning/mag_N%d__B%.6lf.dat",N,BETA); 
+	char en_binning_filename[64] = "";
+	snprintf(en_binning_filename,64,"data/binning/en_N%d__B%.6lf.dat",N,BETA);
 	char en_filename[64] = "";
 	snprintf(en_filename,64,"data/en_N%d.dat",N);
-	char en_corr_filename[64] = "";
-	snprintf(en_corr_filename,64,"data/en_autocorrN%d_B%.8lf.dat",N,BETA);
+	char en_autocorr_filename[64] = "";
+	snprintf(en_autocorr_filename,64,"data/en_autocorrN%d_B%.8lf.dat",N,BETA);
 	char en_temp_filename[64] = "data/en_temp.dat";
 	char mag_autocorr_filename[64] = "";
 	snprintf(mag_autocorr_filename,64,"data/mag_autocorrN%d_B%.8lf.dat",N,BETA);
-	FILE * f_mag_mean = fopen(mag_file,"a");
-	FILE * f_chi = fopen(chi_file,"a");	
-	FILE * mag_bin_file = fopen(mag_file_binning,"w");
-	FILE * en_bin_file = fopen(en_file_binning,"w");
-	FILE * en_corr_file = fopen(en_corr_filename,"w");
-	FILE * en_file = fopen(en_filename,"a");
-	FILE * en_temp_file = fopen(en_temp_filename,"w");
+
+	/*** I File sono chiamati: f_$(Nomestringa) ****/
+	FILE * f_mag = fopen(mag_filename,"a");
+	FILE * f_chi = fopen(chi_filename,"a");	
+	FILE * f_mag_bin = fopen(mag_binning_filename,"w");
+	FILE * f_en_bin = fopen(en_binning_filename,"w");
+	FILE * f_en_autocorr = fopen(en_autocorr_filename,"w");
+	FILE * f_en = fopen(en_filename,"a");
+	FILE * f_en_temp = fopen(en_temp_filename,"w");
 	FILE * f_mag_autocorr = fopen(mag_autocorr_filename,"w");
 	/*Start*/
 	spin_init(matrix,nodes,N);
@@ -93,20 +97,20 @@ int main ( int argc, char * argv[]) {
 	en_mean /= (double)(ITERATION_MAX);
 	// BINNING E DATI VARI
 	int larghezza_bin;
-	mag_vet_binnato = malloc(sizeof(double)*(ITERATION_MAX/2));
-	en_vet_binnato = malloc(sizeof(double)*(ITERATION_MAX/2));
-	for ( larghezza_bin = 2; larghezza_bin < 100 ; larghezza_bin+=2){
+	mag_vet_binnato = malloc(sizeof(double)*(ITERATION_MAX));
+	en_vet_binnato = malloc(sizeof(double)*(ITERATION_MAX));
+	for ( larghezza_bin = 1; larghezza_bin < 100 ; larghezza_bin+=1){
 		binning(mag_vet_dati,mag_vet_binnato,ITERATION_MAX,larghezza_bin);
 		binning(en_vet_dati,en_vet_binnato,ITERATION_MAX,larghezza_bin);
-		fprintf(mag_bin_file,"%d\t%.14e\n", larghezza_bin,
+		fprintf(f_mag_bin,"%d\t%.14e\n", larghezza_bin,
 			sqrt(varianceOfDoubleArray(mag_vet_binnato,ITERATION_MAX/larghezza_bin)/(double)(ITERATION_MAX/larghezza_bin)));
-		fprintf(en_bin_file,"%d\t%.14e\n", larghezza_bin,
+		fprintf(f_en_bin,"%d\t%.14e\n", larghezza_bin,
 			sqrt(varianceOfDoubleArray(en_vet_binnato,ITERATION_MAX/larghezza_bin)/(double)(ITERATION_MAX/larghezza_bin)));
 	}
 	autocorrelation(en_vet_dati,en_autocorr,ITERATION_MAX,CORR_MAX);
-	if(en_corr_file){
+	if(f_en_autocorr){
 		for (i = 0; i<CORR_MAX;i++){
-			fprintf(en_corr_file,"%d\t%.14e\n",i,en_autocorr[i]);
+			fprintf(f_en_autocorr,"%d\t%.14e\n",i,en_autocorr[i]);
 		}
 	}
 	autocorrelation(mag_vet_dati,mag_autocorr,ITERATION_MAX,CORR_MAX);
@@ -119,20 +123,20 @@ int main ( int argc, char * argv[]) {
 
 
 	for ( i=0;i<ITERATION_MAX;i++){
-		fprintf(en_temp_file,"%.14e\n",en_vet_dati[i]);
+		fprintf(f_en_temp,"%.14e\n",en_vet_dati[i]);
 	}
 	printf("BETA: %lf , mag2: %.6e \t mag*mag: %.6e\t mag:%.6e\n",BETA,mag2_mean, mag_mean*mag_mean,mag_mean);
-	fprintf(f_mag_mean,"%.14e\t%.14e\n",BETA,mag_mean);
+	fprintf(f_mag,"%.14e\t%.14e\n",BETA,mag_mean);
 	fprintf(f_chi,"%.14e\t%.14e\n",BETA,chi);
-	fprintf(en_file,"%.14e\t%.14e\n",BETA,en_mean);
+	fprintf(f_en,"%.14e\t%.14e\n",BETA,en_mean);
  	/* Chiusura file */
-	fclose(mag_bin_file);
-	fclose(en_bin_file);
-	fclose(en_corr_file);
-	fclose(f_mag_mean);
+	fclose(f_mag_bin);
+	fclose(f_en_bin);
+	fclose(f_en_autocorr);
+	fclose(f_mag);
 	fclose(f_chi);
-	fclose(en_file);
-	fclose(en_temp_file);
+	fclose(f_en);
+	fclose(f_en_temp);
 	fclose(f_mag_autocorr);
 	/* Free della memoria */
 	free(mag_vet_dati) ;

@@ -36,11 +36,13 @@ if ( n_iteration % n_core != 0):
 	print("Iterazioni multiple del numero di core selezionati(",n_core,")!")
 	sys.exit(1)
 eta_cores = []
+temp_index = 0
 for i in range(n_core):
 	temp = []
 	for j in range(iteration_per_core):
-		temp.append([str(allvalues[i]),str(n_lattice)])
-		allvalues.pop(i)
+		temp_index = int(random.random()*len(allvalues))
+		temp.append([str(allvalues[temp_index]),str(n_lattice)])
+		allvalues.pop(temp_index)
 	eta_cores.append(temp)
 jobs=[]
 for i in range(n_core):
