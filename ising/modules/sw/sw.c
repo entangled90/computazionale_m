@@ -206,7 +206,7 @@ inline double hamiltoniana( Spin * configuration, int N){
 	int a,b;
 	for (a = 0; a<N ; a++){
 		for ( b= 0; b<N; b++){
-			ham += ( configuration[ ((a+1+N)%N)*N + b].spin+ configuration[((a-1+N)%N)*N+b].spin
+			ham += -( configuration[ ((a+1+N)%N)*N + b].spin+ configuration[((a-1+N)%N)*N+b].spin
 				+ configuration[a*N+(b+1+N)%N].spin+configuration[a*N + (b-1+N)%N].spin)*(configuration[a*N +b].spin); 
 		}
 	}
