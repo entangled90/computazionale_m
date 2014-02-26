@@ -34,7 +34,7 @@ int main ( int argc, char * argv[]) {
 	Node * nodes= (Node *) malloc(sizeof(Node)*N*N);
 	/*Check for allocation*/
 	if(!matrix || !nodes){
-		printf("Cannot call malloc || MAIN ||\n");
+		printf("Cannot call malloc || MAIN \n");
 		exit(1);
 	}
 	float index_simulation = mt_drand();
@@ -58,7 +58,6 @@ int main ( int argc, char * argv[]) {
 	char en_temp_filename[64] = "data/en_temp.dat";
 	char cv_filename[64]="";
 	snprintf(cv_filename,64,"data/cv%d.dat",N);
-/*** I File sono chiamati: f_$(Nomestringa) ****/
 /*** I File sono chiamati: f_$(Nomestringa) ****/
 	FILE * f_mag = fopen(mag_filename,"a");
 	FILE * f_chi = fopen(chi_filename,"a");	

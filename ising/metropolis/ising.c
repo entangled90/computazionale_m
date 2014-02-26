@@ -49,14 +49,14 @@ int main (int argc, char *argv[]){
 	char mag_binning_filename[64] = "";
 	snprintf(mag_binning_filename,64,"data/binning/mag_N%d__B%.4lf.dat",N,BETA); 
 	char mag_autocorr_filename[64] = "";
-	snprintf(mag_autocorr_filename,64,"data/.mag_autocorrN%d_B%.4lf.dat",N,BETA);
+	snprintf(mag_autocorr_filename,64,"data/mag_corr/mag_autocorrN%d_B%.4lf.dat",N,BETA);
 /*----------------------_ENergia*/
 	char en_binning_filename[64] = "";
 	snprintf(en_binning_filename,64,"data/binning/en_N%d__B%.4lf.dat",N,BETA);
 	char en_filename[64] = "";
 	snprintf(en_filename,64,"data/en_N%d.dat",N);
 	char en_autocorr_filename[64] = "";
-	snprintf(en_autocorr_filename,64,"data/.en_autocorrN%d_B%.4lf.dat",N,BETA);
+	snprintf(en_autocorr_filename,64,"data/en_corr/en_autocorrN%d_B%.4lf.dat",N,BETA);
 	char en_temp_filename[64] = "data/en_temp.dat";
 	char cv_filename[64]="";
 	snprintf(cv_filename,64,"data/cv%d.dat",N);
@@ -177,15 +177,19 @@ int main (int argc, char *argv[]){
 	}
 /* Chiusura file */
 	fclose(f_mag_bin);
-	fclose(f_en_bin);
-	fclose(f_en_autocorr);
 	fclose(f_mag);
+	fclose(f_mag_temp);
+	fclose(f_mag_autocorr);
 	fclose(f_chi);
+
 	fclose(f_en);
 	fclose(f_en_temp);
-	fclose(f_mag_autocorr);
+	fclose(f_en_bin);
+	fclose(f_en_autocorr);
+	fclose(f_cv);
+
 	fclose(f_corr_row);
-	fclose(f_mag_temp);
+
 		/* Free della memoria */
 	free(mag_vet_dati) ;
 	free(mag_vet_binnato);
