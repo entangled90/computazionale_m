@@ -120,8 +120,8 @@ int main (int argc, char *argv[]){
 		en2_mean += en_tmp*en_tmp;
 		iteration++;
 		for ( i = 0; i<N;i++){
-			X_n[i] = sum_row(matrix,i,N);
-			Y_n[i] = sum_col(matrix,i,N);
+			X_n[i] = sum_row(configuration,i,N);
+			Y_n[i] = sum_col(configuration,i,N);
 		}
 		for (j = 0; j < N; ++j){
 			for (i = 0; i < N;i++){
@@ -137,9 +137,11 @@ int main (int argc, char *argv[]){
 
 	for ( i = 0; i<N;i++){
 		S_xt[i] += S_yt[i];
-		S_xt[i]/=(double)2.0*ITERATION_MAX;
+		S_xt[i] += S_xt[N-1-i];
+		S_xt[i] += S_yt[N-1-i];
+		S_xt[i]/=3.0*ITERATION_MAX;
 	}
-	for ( i = 0; i<N/2;i++){
+	for ( i = 0; i<N/3;i++){
 		fprintf(f_corr_row, "%d\t%lf\n",i,S_xt[i] );
 	}
 
