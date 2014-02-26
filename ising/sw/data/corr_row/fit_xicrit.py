@@ -12,19 +12,23 @@ from operator import itemgetter
 def fit_fun(x,*p):
 	return p[0]*(np.exp(x*p[1]))
 
+def fit_fun_xi(x,*p):
+	return p[0]*( ( (p[2] + -1*x) /p[2])**p[1])
+
 np.seterr(all='warn')
-BetaC = 0.4
+BetaC = 0.43
 N = sys.argv[1]
-files = glob.glob('corr_row_N%s*.dat'%(N))	
+files_tmp = glob.glob('corr_row_N%s*.dat'%(N))	
 beta = []
 xi =  []
 
 l_ord = []
-for f in files:
+files = []
+for f in files_tmp:
 	beta_temp= float(f[-9:-4])
 #	print(beta_temp) 
-	if beta_temp > BetaC:
-		files.remove(f)
+	if 0.39<beta_temp < BetaC:
+		files.append(f)
 
 for f in files:
 	beta_temp= float(f[-9:-4])
@@ -52,22 +56,27 @@ for l in l_ord:
 beta_np = np.asarray(beta,dtype='float64')
 xi_np = np.asarray(xi,dtype='float64')
 #print (beta_np)
-beta_np = (beta_np + -1*BetaC)/BetaC
 #print (beta_np)
 
 #AErr = math.sqrt(pcov[0][0])
 #tauErr = math.sqrt(pcov[1][1])
-#x = np.linspace(np.amin(beta_np),np.amax(beta_np),100)
+x = np.linspace(np.amin(beta_np),np.amax(beta_np),100)
 AErr = 1
 tauErr =1
 fig = plt.figure()
 fig.suptitle("Lunghezza di Correlazione")
 ax = fig.add_subplot(111)
 ax.grid(True)
+guess = [1,-1,1]
+popt,pcov = curve_fit(fit_fun_xi,beta_np,xi_np, p0=guess )
+#beta_np = (beta_np + -1*popt[2])/popt[2]
+
+print(popt)
+print(pcov)
 #Mette le griglie su asse x
 #plt.xticks([i for i in range(0,lungh)])
 #ax.text(10.2,0.4,r'Funzione di fit: $C(t) = A e^{-t/ \tau }$' '\n' r'$A=%lf \pm %lf$' '\n' r'$\; \tau=%lf\pm %lf$'%(popt[0],AErr,-1/popt[1],tauErr) , bbox={'facecolor':'green', 'alpha':0.5, 'pad':10})
-plt.plot(beta_np, xi_np ,'ro',label='Original data')
-plt.plot(beta,xi,label ='fitted curve')
+plt.plot(beta_np,xi_np,'ro',label='Original data')
+plt.plot(x, fit_fun_xi(x,*popt) ,label ='fitted curve')
 plt.legend()
 plt.show()
