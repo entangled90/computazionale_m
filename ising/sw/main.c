@@ -143,9 +143,11 @@ int main ( int argc, char * argv[]) {
 
 	for ( i = 0; i<N;i++){
 		S_xt[i] += S_yt[i];
-		S_xt[i]/=(double)2.0*ITERATION_MAX;
+		S_xt[i] += S_xt[N-1-i];
+		S_xt[i] += S_yt[N-1-i];
+		S_xt[i]/=3.0*ITERATION_MAX;
 	}
-	for ( i = 0; i<N/2;i++){
+	for ( i = 0; i<N/3;i++){
 		fprintf(f_corr_row, "%d\t%lf\n",i,S_xt[i] );
 	}
 

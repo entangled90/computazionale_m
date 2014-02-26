@@ -16,7 +16,7 @@ def loop (iter,index):
 	start = time.time()
 	f = open("log/core" + index + ".log", "w")
 	for l in iter:
-		print ("Starting ising sw with Beta*J="+ str(l[0])+' ' + str(l[1]))
+		print ("  Starting ising sw with Beta*J="+ str(l[0])+' ' + str(l[1]))
 		command = []
 		command.append("./ising")
 		for i in l:
