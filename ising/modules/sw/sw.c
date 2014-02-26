@@ -201,16 +201,34 @@ void evolve( Spin * matrix, Node * nodes, int N, float BETA){
 	reset_cluster(matrix,nodes,N);
 }
 
-inline double hamiltoniana( Spin * configuration, int N){
+inline double hamiltoniana( Spin * s, int N){
 	double ham=0;
 	int a,b;
 	for (a = 0; a<N ; a++){
 		for ( b= 0; b<N; b++){
-			ham += -( configuration[ ((a+1+N)%N)*N + b].spin+ configuration[((a-1+N)%N)*N+b].spin
-				+ configuration[a*N+(b+1+N)%N].spin+configuration[a*N + (b-1+N)%N].spin)*(configuration[a*N +b].spin); 
+			ham += -( s[ ((a+1+N)%N)*N + b].spin+ s[((a-1+N)%N)*N+b].spin
+				+ s[a*N+(b+1+N)%N].spin+s[a*N + (b-1+N)%N].spin)*(s[a*N +b].spin); 
 		}
 	}
 	return (ham/2.0);
+}
+
+double sum_row(Spin * s, int row, int N){
+	double sum = 0;
+	int j = 0;
+	for (j = 0; j<N ;j++){
+		sum += s[row*N+j].spin;
+	}
+	return sum /= ((double) N) ;
+}
+
+double sum_col(Spin * s, int col, int N){
+	double sum = 0;
+	int j = 0;
+	for (j = 0; j<N ;j++){
+		sum += s[j*N+col].spin;
+	}
+	return sum /= ((double) N) ;
 }
 
 #endif

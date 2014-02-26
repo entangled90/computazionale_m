@@ -17,5 +17,8 @@ void print_data (Spin * m, int N);
 void evolve_therm (Spin * matrix, Node * nodes,int , float);
 void evolve( Spin * matrix, Node * nodes, int, float);
 double hamiltoniana(Spin * configuration, int N);
+double sum_row(Spin * s, int row, int N);
+double sum_col(Spin * s, int col, int N);
+
 //#endif
 #endif

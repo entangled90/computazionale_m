@@ -20,7 +20,7 @@ int main ( int argc, char * argv[]) {
 	double chi = 0;
 	int iteration = 0;
 	mt_seed();
-	int i;
+	int i,j;
 	/*Check for command line arguments*/
 	if (argc>1){
 		BETA = atof(argv[1]);
@@ -30,14 +30,21 @@ int main ( int argc, char * argv[]) {
 		printf("Inserire il valore di Beta e N\n");
 		exit(1);
 	}
+	double * X_n= malloc(sizeof(double)*N);
+	double * Y_n=malloc(sizeof(double)*N);
+		// init vettore
+	for ( i = 0; i<N;i++){
+		X_n[i]=0;
+		Y_n[i]=0;
+	}
 	Spin * matrix = (Spin *) malloc(sizeof(Spin)*N*N);
 	Node * nodes= (Node *) malloc(sizeof(Node)*N*N);
 	/*Check for allocation*/
-	if(!matrix || !nodes){
+	if( !matrix || !nodes){
 		printf("Cannot call malloc || MAIN \n");
 		exit(1);
 	}
-	float index_simulation = mt_drand();
+//	float index_simulation = mt_drand();
 	/***** FILENAMES AND FILE OPENING ******/
 /* ------------------MAGN*/
 	char mag_filename[64] = "";
@@ -58,6 +65,10 @@ int main ( int argc, char * argv[]) {
 	char en_temp_filename[64] = "data/en_temp.dat";
 	char cv_filename[64]="";
 	snprintf(cv_filename,64,"data/cv%d.dat",N);
+
+	char corr_row_filename[64]="";
+	snprintf(corr_row_filename,64,"data/corr_row/corr_row_N%dB%.4lf.dat",N,BETA);
+
 /*** I File sono chiamati: f_$(Nomestringa) ****/
 	FILE * f_mag = fopen(mag_filename,"a");
 	FILE * f_chi = fopen(chi_filename,"a");	
@@ -71,12 +82,16 @@ int main ( int argc, char * argv[]) {
 	FILE * f_en_temp = fopen(en_temp_filename,"w");
 	FILE * f_cv = fopen(cv_filename,"a");
 
-	FILE * f_corr_row = fopen("data/corr_row.dat","w");
+	FILE * f_corr_row = fopen(corr_row_filename,"w");
 
 
 	/*Start*/
 	spin_init(matrix,nodes,N);
+
+	/* TERMALIZZA*/
 	evolve_therm(matrix,nodes,N,BETA);
+	/***************/
+
 	double mag_tmp;
 	double en_tmp;
 	double en_mean =0;
@@ -86,10 +101,20 @@ int main ( int argc, char * argv[]) {
 	double * mag_vet_binnato;
 	double * en_vet_dati;
 	double * en_vet_binnato;
+	int larghezza_bin;
 	double * en_autocorr = malloc(sizeof(double)*CORR_MAX);
 	double * mag_autocorr = malloc(sizeof(double)*CORR_MAX);
+	double * S_xt = malloc(sizeof(double)*N);
+	double * S_yt = malloc(sizeof(double)*N);
 	en_vet_dati = malloc(sizeof(double)*ITERATION_MAX);
 	mag_vet_dati = malloc(sizeof(double)*ITERATION_MAX);
+	/*** Calcolo correlazione su righe e colonne*/
+	for (i = 0; i < N;i++){
+		S_xt[i]=0;
+		S_yt[i]=0;
+	}
+
+	/****** CICLO DI EVOLUZIONE: PRENDERE MISURE QUI */
 	for ( iteration=0;iteration<ITERATION_MAX; iteration++){
 		evolve(matrix,nodes,N,BETA);
 		mag_tmp = magnetization(matrix,N);
@@ -100,8 +125,30 @@ int main ( int argc, char * argv[]) {
 		mag_mean += fabs(mag_tmp);
 		en_mean+=en_tmp;
 		en2_mean += en_tmp*en_tmp;
-
+		for ( i = 0; i<N;i++){
+		X_n[i] = sum_row(matrix,i,N);
+		Y_n[i] = sum_col(matrix,i,N);
+		}
+		for (j = 0; j < N; ++j){
+			for (i = 0; i < N;i++){
+				S_xt[i]+= X_n[j]*X_n[(i+j)%N];
+				S_yt[i]+= Y_n[j]*Y_n[(i+j)%N];
+			}
+		}
 	}
+	for (i = 0; i < N;i++){
+		S_xt[i]/=(double)N;
+		S_yt[i]/=(double)N;
+	}
+
+	for ( i = 0; i<N;i++){
+		S_xt[i] += S_yt[i];
+		S_xt[i]/=(double)2.0*ITERATION_MAX;
+	}
+	for ( i = 0; i<N/2;i++){
+		fprintf(f_corr_row, "%d\t%lf\n",i,S_xt[i] );
+	}
+
 	mag_mean /= (double)(ITERATION_MAX);
 	mag2_mean /= (double)(ITERATION_MAX);
 	en_mean /= (double)(ITERATION_MAX);
@@ -111,15 +158,16 @@ int main ( int argc, char * argv[]) {
 	cv = (en2_mean - en_mean*en_mean)/(double)(N*N);
 	mag_mean /= (double)(N*N);
 	en_mean /= (double)(N*N);
-
 /* Scrivo su file i dati calcolati*/
 	fprintf(f_mag,"%.14e\t%.14e\n",BETA,mag_mean);
 	fprintf(f_chi,"%.14e\t%.14e\n",BETA,chi);
 	fprintf(f_en,"%.14e\t%.14e\n",BETA,en_mean);
 	fprintf(f_cv,"%lf\t%lf\n",BETA,cv);
 
-	// BINNING E DATI VARI
-	int larghezza_bin;
+/**** BINNING E AUTOCORRELAZIONI */
+	divideByScalar(mag_vet_dati,N*N,ITERATION_MAX);
+	divideByScalar(en_vet_dati,N*N,ITERATION_MAX);
+
 	mag_vet_binnato = malloc(sizeof(double)*(ITERATION_MAX));
 	en_vet_binnato = malloc(sizeof(double)*(ITERATION_MAX));
 	for ( larghezza_bin = 1; larghezza_bin < CORR_MAX ; larghezza_bin+=1){

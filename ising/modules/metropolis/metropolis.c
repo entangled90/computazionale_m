@@ -91,5 +91,15 @@ double sum_row(short int * configuration, int row, int N){
 	for (j = 0; j<N ;j++){
 		sum += configuration[row*N+j];
 	}
-	return sum /= (double) N ;
+	return sum /= (double)N ;
 }
+
+double sum_col(short int * configuration, int col, int N){
+	double sum = 0;
+	int j = 0;
+	for (j = 0; j<N ;j++){
+		sum += configuration[j*N+col];
+	}
+	return sum /= (double)N ;
+}
+

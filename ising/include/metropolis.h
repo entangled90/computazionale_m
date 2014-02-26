@@ -9,7 +9,7 @@ void spin_init (short int * configuration, int N);
 inline void savePPM(short int * x, int N);
 inline double magnetization(short int *x, int N);
 double sum_row(short int * configuration, int row, int N);
-
+double sum_col(short int * configuration, int col, int N);
 #endif
 
 #endif
