@@ -49,13 +49,12 @@ void autocorrelation (double * dati, double * risultato, int N, int corr_max){
 	int i,j;
 	double mean = meanOfDoubleArray(dati,N);
 	double var = varianceOfDoubleArray(dati,N);
-	// i è il tempo
-	// j è dove parte -> x_j * x_(j+i) -> C(i)
+	printf("Media: %lf \t, Varianza: %lf\n",mean,var);
 	for (j = 0; j < corr_max;j++){
 		risultato[j] = 0;
 	}
 	for ( j= 0; j < corr_max;j++){
-		for (i =0; i< N ;i++){
+		for (i =0; i< N-j ;i++){
 			risultato[j] += dati[i]*dati[i+j] / (double)(N-j);
 		}
 	}
@@ -64,6 +63,11 @@ void autocorrelation (double * dati, double * risultato, int N, int corr_max){
 			risultato[j] /= var;
 	}
 }
-
+void divideByScalar(double * v, double scalar, int N){
+	int i;
+	for ( i = 0; i<N;i++){
+		v[i] /= scalar;
+	}
+}
 
 #endif
