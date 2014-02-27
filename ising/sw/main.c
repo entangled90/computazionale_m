@@ -14,9 +14,6 @@
 int main ( int argc, char * argv[]) {
 	float BETA = 1;
 	int N = 40;
-	double mag2_mean=0; // Valor medio di magnetizzazione al quadrato
-	double mag_mean = 0; // valor medio di magnetizzazione
-	double chi = 0;
 	int iteration = 0;
 	mt_seed();
 	int i,j;
@@ -95,9 +92,6 @@ int main ( int argc, char * argv[]) {
 	evolve_therm(matrix,nodes,N,BETA);
 	/***************/
 
-	double en_mean =0;
-	double en2_mean=0;
-	double cv=0;
 /* Vettori per il binning*/
 	double * mag_vet_dati ;
 	double * mag_vet_binnato;
@@ -133,21 +127,12 @@ int main ( int argc, char * argv[]) {
 	vec_zeros(S_fin,N_CORR);
 	vec_zeros(S_var_fin,N_CORR);
 
-
-	double mag_tmp;
-	double en_tmp;
-
 	/****** CICLO DI EVOLUZIONE: PRENDERE MISURE QUI */
 	for ( iteration=0;iteration<ITERATION_MAX; iteration++){
 		evolve(matrix,nodes,N,BETA);
-		mag_tmp = magnetization(matrix,N);
-		en_tmp = hamiltoniana(matrix,N);
-		mag_vet_dati[iteration] = fabs(mag_tmp);
-		en_vet_dati[iteration] = en_tmp;
-		mag2_mean += mag_tmp*mag_tmp;
-		mag_mean += fabs(mag_tmp);
-		en_mean+=en_tmp;
-		en2_mean += en_tmp*en_tmp;
+
+		mag_vet_dati[iteration] = fabs(magnetization(matrix,N));
+		en_vet_dati[iteration] = hamiltoniana(matrix,N);
 		/* Correlazione righe e colonne*/
 		for ( i = 0; i<N;i++){
 			X_n[i] = sum_row(matrix,i,N);
@@ -259,8 +244,6 @@ int main ( int argc, char * argv[]) {
 		fprintf(f_en_bin,"%d\t%.14e\n", i,
 			sqrt(varianceOfDoubleArray(en_vet_binnato,ITERATION_MAX/i)));//(double)(n_bin)));
 	}
-
-
  	/* Chiusura file */
 	fclose(f_mag_bin);
 	fclose(f_en_bin);
