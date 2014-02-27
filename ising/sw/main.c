@@ -213,18 +213,6 @@ int main ( int argc, char * argv[]) {
 		fprintf(f_corr_row, "%d\t%.14e\t%.14e\n",i,S_fin[i],S_var_fin[i]);
 	}
 
-
-
-/* Calcolo necessario per stimare cosa scegliere come larghezza del bin!*/
-	for ( larghezza_bin = 1; larghezza_bin < CORR_MAX ; larghezza_bin+=1){
-		binning(mag_vet_dati,mag_vet_binnato,ITERATION_MAX,larghezza_bin);
-		binning(en_vet_dati,en_vet_binnato,ITERATION_MAX,larghezza_bin);
-		fprintf(f_mag_bin,"%d\t%.14e\n", larghezza_bin,
-			sqrt(varianceOfDoubleArray(mag_vet_binnato,n_bin)/(double)(n_bin)));
-		fprintf(f_en_bin,"%d\t%.14e\n", larghezza_bin,
-			sqrt(varianceOfDoubleArray(en_vet_binnato,n_bin)/(double)(n_bin)));
-	}
-
 	/* Binning osservabili scalari*/
 	binning(mag_vet_dati,mag_vet_binnato,ITERATION_MAX,larghezza_bin);
 	binning(en_vet_dati,en_vet_binnato,ITERATION_MAX,larghezza_bin);
@@ -254,6 +242,15 @@ int main ( int argc, char * argv[]) {
 		fprintf(f_mag_temp,"%.14e\n",mag_vet_dati[i]);
 	}
 */
+/* Calcolo necessario per stimare cosa scegliere come larghezza del bin!*/
+	for ( i = 1; i < CORR_MAX ; i+=1){
+		binning(mag_vet_dati,mag_vet_binnato,ITERATION_MAX,i);
+		binning(en_vet_dati,en_vet_binnato,ITERATION_MAX,i);
+		fprintf(f_mag_bin,"%d\t%.14e\n", i,
+			sqrt(varianceOfDoubleArray(mag_vet_binnato,ITERATION_MAX/i))); //(double)(n_bin)));
+		fprintf(f_en_bin,"%d\t%.14e\n", i,
+			sqrt(varianceOfDoubleArray(en_vet_binnato,ITERATION_MAX/i)));//(double)(n_bin)));
+	}
 
 
  	/* Chiusura file */
