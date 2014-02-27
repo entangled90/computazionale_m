@@ -177,7 +177,7 @@ int main ( int argc, char * argv[]) {
 
 
 	}
-
+/*
 	mag_mean /= (double)(ITERATION_MAX);
 	mag2_mean /= (double)(ITERATION_MAX);
 	en_mean /= (double)(ITERATION_MAX);
@@ -187,12 +187,13 @@ int main ( int argc, char * argv[]) {
 	cv = (en2_mean - en_mean*en_mean)/(double)(N*N);
 	mag_mean /= (double)(N*N);
 	en_mean /= (double)(N*N);
+*/
 /* Scrivo su file i dati calcolati*/
-	fprintf(f_mag,"%.14e\t%.14e\n",BETA,mag_mean);
+/*	fprintf(f_mag,"%.14e\t%.14e\n",BETA,mag_mean);
 	fprintf(f_chi,"%.14e\t%.14e\n",BETA,chi);
 	fprintf(f_en,"%.14e\t%.14e\n",BETA,en_mean);
 	fprintf(f_cv,"%lf\t%lf\n",BETA,cv);
-
+*/
 /**** BINNING E AUTOCORRELAZIONI */
 	divideByScalar(mag_vet_dati,N*N,ITERATION_MAX);
 	divideByScalar(en_vet_dati,N*N,ITERATION_MAX);
@@ -216,10 +217,17 @@ int main ( int argc, char * argv[]) {
 	/* Binning osservabili scalari*/
 	binning(mag_vet_dati,mag_vet_binnato,ITERATION_MAX,larghezza_bin);
 	binning(en_vet_dati,en_vet_binnato,ITERATION_MAX,larghezza_bin);
+	binning_deriv(mag_vet_dati,chi_vet_binnato,ITERATION_MAX,larghezza_bin);
+	binning_deriv(en_vet_dati,cv_vet_binnato,ITERATION_MAX,larghezza_bin);
+
 	fprintf(f_mag,"%.14e\t%.14e\t%.14e\n", BETA, meanOfDoubleArray(mag_vet_binnato,n_bin),
 		sqrt(varianceOfDoubleArray(mag_vet_binnato,n_bin)));
 	fprintf(f_en,"%.14e\t%.14e\t%.14e\n", BETA,meanOfDoubleArray(en_vet_binnato,n_bin),
 		sqrt(varianceOfDoubleArray(en_vet_binnato,n_bin)));
+	fprintf(f_cv,"%.14e\t%.14e\t%.14e\n", BETA,meanOfDoubleArray(cv_vet_binnato,n_bin),
+		sqrt(varianceOfDoubleArray(cv_vet_binnato,n_bin)));
+	fprintf(f_chi,"%.14e\t%.14e\t%.14e\n", BETA,meanOfDoubleArray(chi_vet_binnato,n_bin),
+		sqrt(varianceOfDoubleArray(chi_vet_binnato,n_bin)));
 
 	/* Calcolo autocorrelazione per le due grandezze */
 	autocorrelation(en_vet_dati,en_autocorr,ITERATION_MAX,CORR_MAX);

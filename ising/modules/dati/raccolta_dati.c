@@ -4,6 +4,7 @@
 
 #include "raccolta_dati.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 void vec_zeros(double * v, int N){
 	int i;
@@ -51,6 +52,30 @@ void binning ( double * old_vec, double * new_vec, int sizeold, int m){
 		}
 	}
 }
+
+// new_vec deve esser già allocato
+void binning_deriv ( double * old_vec, double * new_vec, int sizeold, int m){
+	int i,j ;
+	double * tmp = malloc(sizeof(double)*(sizeold/m));
+	for ( j = 0 ; j< sizeold/m;j++){
+			new_vec[j] = 0;
+			tmp[j]=0;
+		}
+
+	for ( j = 0 ; j< m;j++){
+		for (i = 0; i < sizeold/m ; i++ ){
+			new_vec[i] += old_vec[i*m+j]*old_vec[i*m+j];
+			tmp[j] += old_vec[i*m+j];
+		}
+	tmp[j] /= (double)(m);
+	new_vec[j] /= (double)(m);
+	new_vec[j] -= tmp[j]*tmp[j];
+	}
+
+}
+
+
+
 /** Fa il binning di dati vettoriali, come la correlazione S_t
 n_vec è la lunghezza del vettor
 n_data è il numero di iterazioni -> insieme di vettori indipendenti
@@ -72,6 +97,8 @@ void binning_mat ( double * old_vec, double * new_vec, int n_vec ,int n_data, in
 		}
 	}
 }
+
+
 
 
 void autocorrelation (double * dati, double * risultato, int N, int corr_max){
