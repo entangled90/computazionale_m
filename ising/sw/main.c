@@ -65,7 +65,7 @@ int main ( int argc, char * argv[]) {
 	snprintf(en_filename,64,"data/en_N%d.dat",N);
 	char en_autocorr_filename[64] = "";
 	snprintf(en_autocorr_filename,64,"data/en_corr/en_autocorrN%d_B%.4lf.dat",N,BETA);
-	char en_temp_filename[64] = "data/en_temp.dat";
+//	char en_temp_filename[64] = "data/en_temp.dat";
 	char cv_filename[64]="";
 	snprintf(cv_filename,64,"data/cv%d.dat",N);
 
@@ -77,12 +77,12 @@ int main ( int argc, char * argv[]) {
 	FILE * f_chi = fopen(chi_filename,"a");	
 	FILE * f_mag_bin = fopen(mag_binning_filename,"w");
 	FILE * f_mag_autocorr = fopen(mag_autocorr_filename,"w");
-	FILE * f_mag_temp = fopen("data/mag_temp.dat","w");
+//	FILE * f_mag_temp = fopen("data/mag_temp.dat","w");
 
 	FILE * f_en_bin = fopen(en_binning_filename,"w");
 	FILE * f_en_autocorr = fopen(en_autocorr_filename,"w");
 	FILE * f_en = fopen(en_filename,"a");
-	FILE * f_en_temp = fopen(en_temp_filename,"w");
+//	FILE * f_en_temp = fopen(en_temp_filename,"w");
 	FILE * f_cv = fopen(cv_filename,"a");
 
 	FILE * f_corr_row = fopen(corr_row_filename,"w");
@@ -101,23 +101,19 @@ int main ( int argc, char * argv[]) {
 /* Vettori per il binning*/
 	double * mag_vet_dati ;
 	double * mag_vet_binnato;
-	mag_vet_binnato = malloc(sizeof(double)*(n_bin));
+	mag_vet_binnato = malloc(sizeof(double)*(ITERATION_MAX));
 	mag_vet_dati = malloc(sizeof(double)*ITERATION_MAX);
 
 	double * en_vet_dati;
 	double * en_vet_binnato;
-	en_vet_binnato = malloc(sizeof(double)*(n_bin));
+	en_vet_binnato = malloc(sizeof(double)*(ITERATION_MAX));
 	en_vet_dati = malloc(sizeof(double)*ITERATION_MAX);
 
-	double * chi_vet_dati;
 	double * chi_vet_binnato;
 	chi_vet_binnato = malloc(sizeof(double)*(n_bin));
-	chi_vet_dati = malloc(sizeof(double)*ITERATION_MAX);
 
-	double * cv_vet_dati;
 	double * cv_vet_binnato;
 	cv_vet_binnato = malloc(sizeof(double)*(n_bin));
-	cv_vet_dati = malloc(sizeof(double)*ITERATION_MAX);
 
 	double * en_autocorr = malloc(sizeof(double)*CORR_MAX);
 	double * mag_autocorr = malloc(sizeof(double)*CORR_MAX);
@@ -140,8 +136,6 @@ int main ( int argc, char * argv[]) {
 
 	double mag_tmp;
 	double en_tmp;
-	double cv_tmp;
-	double chi_tmp;
 
 	/****** CICLO DI EVOLUZIONE: PRENDERE MISURE QUI */
 	for ( iteration=0;iteration<ITERATION_MAX; iteration++){
@@ -150,12 +144,11 @@ int main ( int argc, char * argv[]) {
 		en_tmp = hamiltoniana(matrix,N);
 		mag_vet_dati[iteration] = fabs(mag_tmp);
 		en_vet_dati[iteration] = en_tmp;
-		chi_vet_dati[iteration] = chi_tmp;
-		cv_vet_dati[iteration] = cv_tmp;
 		mag2_mean += mag_tmp*mag_tmp;
 		mag_mean += fabs(mag_tmp);
 		en_mean+=en_tmp;
 		en2_mean += en_tmp*en_tmp;
+		/* Correlazione righe e colonne*/
 		for ( i = 0; i<N;i++){
 			X_n[i] = sum_row(matrix,i,N);
 			Y_n[i] = sum_col(matrix,i,N);
@@ -220,17 +213,10 @@ int main ( int argc, char * argv[]) {
 		fprintf(f_corr_row, "%d\t%.14e\t%.14e\n",i,S_fin[i],S_var_fin[i]);
 	}
 
-	/* Binning osservabili scalari*/
-	binning(mag_vet_dati,mag_vet_binnato,ITERATION_MAX,larghezza_bin);
-	binning(en_vet_dati,en_vet_binnato,ITERATION_MAX,larghezza_bin);
-	fprintf(f_mag,"%.14e\t%.14e\t%.14e\n", BETA, meanOfDoubleArray(mag_vet_binnato,n_bin),
-		sqrt(varianceOfDoubleArray(mag_vet_binnato,n_bin)));
-	fprintf(f_en,"%.14e\t%.14e\t%.14e\n", BETA,meanOfDoubleArray(en_vet_binnato,n_bin),
-		sqrt(varianceOfDoubleArray(en_vet_binnato,n_bin)));
 
 
 /* Calcolo necessario per stimare cosa scegliere come larghezza del bin!*/
-/*	for ( larghezza_bin = 1; larghezza_bin < CORR_MAX ; larghezza_bin+=1){
+	for ( larghezza_bin = 1; larghezza_bin < CORR_MAX ; larghezza_bin+=1){
 		binning(mag_vet_dati,mag_vet_binnato,ITERATION_MAX,larghezza_bin);
 		binning(en_vet_dati,en_vet_binnato,ITERATION_MAX,larghezza_bin);
 		fprintf(f_mag_bin,"%d\t%.14e\n", larghezza_bin,
@@ -238,7 +224,14 @@ int main ( int argc, char * argv[]) {
 		fprintf(f_en_bin,"%d\t%.14e\n", larghezza_bin,
 			sqrt(varianceOfDoubleArray(en_vet_binnato,n_bin)/(double)(n_bin)));
 	}
-*/
+
+	/* Binning osservabili scalari*/
+	binning(mag_vet_dati,mag_vet_binnato,ITERATION_MAX,larghezza_bin);
+	binning(en_vet_dati,en_vet_binnato,ITERATION_MAX,larghezza_bin);
+	fprintf(f_mag,"%.14e\t%.14e\t%.14e\n", BETA, meanOfDoubleArray(mag_vet_binnato,n_bin),
+		sqrt(varianceOfDoubleArray(mag_vet_binnato,n_bin)));
+	fprintf(f_en,"%.14e\t%.14e\t%.14e\n", BETA,meanOfDoubleArray(en_vet_binnato,n_bin),
+		sqrt(varianceOfDoubleArray(en_vet_binnato,n_bin)));
 
 	/* Calcolo autocorrelazione per le due grandezze */
 	autocorrelation(en_vet_dati,en_autocorr,ITERATION_MAX,CORR_MAX);
@@ -270,12 +263,10 @@ int main ( int argc, char * argv[]) {
 	fclose(f_mag);
 	fclose(f_chi);
 	fclose(f_en);
-	fclose(f_en_temp);
+	//fclose(f_en_temp);
 	fclose(f_mag_autocorr);
 	/* Free della memoria */
-	free(chi_vet_dati);
 	free(chi_vet_binnato);
-	free(cv_vet_dati);
 	free(cv_vet_binnato);
 	free(mag_vet_dati) ;
 	free(mag_vet_binnato);
