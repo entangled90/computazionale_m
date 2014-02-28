@@ -11,9 +11,9 @@ from operator import itemgetter
 
 def fit_fun(x,*p):
 	return p[0]*(np.exp(x*p[1]))
+def fit_fun_corr(x,*p):
+	return p[0]*(-1*(x + -1*p[2])/p[2])**p[1]
 
-def fit_fun_xi(x,*p):
-	return p[0]*( ( (p[2] + -1*x) /p[2])**p[1])
 
 np.seterr(all='warn')
 BetaC = 0.44
@@ -24,7 +24,6 @@ beta = []
 xi =  []
 files = []
 l_ord = []
-
 for f in file_temp:
 	beta_temp= float(f[-9:-4])
 #	print(beta_temp) 
@@ -60,12 +59,6 @@ beta_np = np.asarray(beta,dtype='float64')
 xi_np = np.asarray(xi,dtype='float64')
 error_np = np.asarray(error,dtype='float64')
 #print (beta_np)
-
-#AErr = math.sqrt(pcov[0][0])
-#tauErr = math.sqrt(pcov[1][1])
-x = np.linspace(np.amin(beta_np),np.amax(beta_np),100)
-AErr = 1
-tauErr =1
 out_file = open('xi_corrN%s.dat'%(N),"w")
 for i in range(len(beta)):
 	out_file.write('%.14e\t%.14e\t%.14e\n'%(beta_np[i],xi_np[i],error[i]))
@@ -86,11 +79,6 @@ fig = plt.figure()
 fig.suptitle('Lunghezza di Correlazione N=%s'%(N))
 ax = fig.add_subplot(111)
 ax.grid(True)
-popt,pcov = curve_fit(fit_fun_xi,beta_np,xi_np, p0=guess )
-#beta_np = (beta_np + -1*popt[2])/popt[2]
-
-print(popt)
-print(pcov)
 #parameter_plot = [popt[0],popt[1],0]
 #Mette le griglie su asse x
 #plt.xticks([i for i in range(0,lungh)])
