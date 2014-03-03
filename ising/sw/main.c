@@ -17,9 +17,14 @@ int main ( int argc, char * argv[]) {
 	int iteration = 0;
 	mt_seed();
 	int i,j;
-	int tau_corr=20;
-	int larghezza_bin = 5*tau_corr;
+	int tau_corr=30;
+	int larghezza_bin = 15*tau_corr;
 	int n_bin = ITERATION_MAX/larghezza_bin;
+	printf("%d\n",n_bin);
+	if (n_bin ==0){
+		printf("Numero BIN = 0\n");
+		exit(1);
+	}
 	/*Check for command line arguments*/
 	if (argc>1){
 		BETA = atof(argv[1]);
@@ -52,22 +57,22 @@ int main ( int argc, char * argv[]) {
 	char chi_filename[64] = "";
 	snprintf(chi_filename,64,"data/chi%d.dat",N); 
 	char mag_binning_filename[64] = "";
-	snprintf(mag_binning_filename,64,"data/binning/mag_N%d__B%.4lf.dat",N,BETA); 
+	snprintf(mag_binning_filename,64,"data/binning/mag_N%d__B%.8lf.dat",N,BETA); 
 	char mag_autocorr_filename[64] = "";
-	snprintf(mag_autocorr_filename,64,"data/mag_corr/mag_autocorrN%d_B%.4lf.dat",N,BETA);
+	snprintf(mag_autocorr_filename,64,"data/mag_corr/mag_autocorrN%d_B%.8lf.dat",N,BETA);
 /*----------------------_ENergia*/
 	char en_binning_filename[64] = "";
-	snprintf(en_binning_filename,64,"data/binning/en_N%d__B%.4lf.dat",N,BETA);
+	snprintf(en_binning_filename,64,"data/binning/en_N%d__B%.8lf.dat",N,BETA);
 	char en_filename[64] = "";
 	snprintf(en_filename,64,"data/en_N%d.dat",N);
 	char en_autocorr_filename[64] = "";
-	snprintf(en_autocorr_filename,64,"data/en_corr/en_autocorrN%d_B%.4lf.dat",N,BETA);
+	snprintf(en_autocorr_filename,64,"data/en_corr/en_autocorrN%d_B%.8lf.dat",N,BETA);
 //	char en_temp_filename[64] = "data/en_temp.dat";
 	char cv_filename[64]="";
 	snprintf(cv_filename,64,"data/cv%d.dat",N);
 
 	char corr_row_filename[64]="";
-	snprintf(corr_row_filename,64,"data/corr_row/corr_row_N%dB%.4lf.dat",N,BETA);
+	snprintf(corr_row_filename,64,"data/corr_row/corr_row_N%dB%.8lf.dat",N,BETA);
 
 /*** I File sono chiamati: f_$(Nomestringa) ****/
 	FILE * f_mag = fopen(mag_filename,"a");
@@ -162,23 +167,7 @@ int main ( int argc, char * argv[]) {
 
 
 	}
-/*
-	mag_mean /= (double)(ITERATION_MAX);
-	mag2_mean /= (double)(ITERATION_MAX);
-	en_mean /= (double)(ITERATION_MAX);
-	en2_mean /= (double)(ITERATION_MAX);
-	//mag_mean /= (double)(ITERATION_MAX);
-	chi = (mag2_mean - mag_mean*mag_mean)/(double)(N*N);
-	cv = (en2_mean - en_mean*en_mean)/(double)(N*N);
-	mag_mean /= (double)(N*N);
-	en_mean /= (double)(N*N);
-*/
-/* Scrivo su file i dati calcolati*/
-/*	fprintf(f_mag,"%.14e\t%.14e\n",BETA,mag_mean);
-	fprintf(f_chi,"%.14e\t%.14e\n",BETA,chi);
-	fprintf(f_en,"%.14e\t%.14e\n",BETA,en_mean);
-	fprintf(f_cv,"%lf\t%lf\n",BETA,cv);
-*/
+
 /**** BINNING E AUTOCORRELAZIONI */
 	divideByScalar(mag_vet_dati,N*N,ITERATION_MAX);
 	divideByScalar(en_vet_dati,N*N,ITERATION_MAX);
@@ -205,13 +194,13 @@ int main ( int argc, char * argv[]) {
 	binning_deriv(mag_vet_dati,chi_vet_binnato,ITERATION_MAX,larghezza_bin);
 	binning_deriv(en_vet_dati,cv_vet_binnato,ITERATION_MAX,larghezza_bin);
 
-	fprintf(f_mag,"%.14e\t%.14e\t%.14e\n", BETA, meanOfDoubleArray(mag_vet_binnato,n_bin),
+	fprintf(f_mag,"%.8lf\t%.14e\t%.14e\n", BETA, meanOfDoubleArray(mag_vet_binnato,n_bin),
 		sqrt(varianceOfDoubleArray(mag_vet_binnato,n_bin)));
-	fprintf(f_en,"%.14e\t%.14e\t%.14e\n", BETA,meanOfDoubleArray(en_vet_binnato,n_bin),
+	fprintf(f_en,"%.8lf\t%.14e\t%.14e\n", BETA,meanOfDoubleArray(en_vet_binnato,n_bin),
 		sqrt(varianceOfDoubleArray(en_vet_binnato,n_bin)));
-	fprintf(f_cv,"%.14e\t%.14e\t%.14e\n", BETA,meanOfDoubleArray(cv_vet_binnato,n_bin),
+	fprintf(f_cv,"%.8lf\t%.14e\t%.14e\n", BETA,meanOfDoubleArray(cv_vet_binnato,n_bin),
 		sqrt(varianceOfDoubleArray(cv_vet_binnato,n_bin)));
-	fprintf(f_chi,"%.14e\t%.14e\t%.14e\n", BETA,meanOfDoubleArray(chi_vet_binnato,n_bin),
+	fprintf(f_chi,"%.8lf\t%.14e\t%.14e\n", BETA,meanOfDoubleArray(chi_vet_binnato,n_bin),
 		sqrt(varianceOfDoubleArray(chi_vet_binnato,n_bin)));
 
 	/* Calcolo autocorrelazione per le due grandezze */

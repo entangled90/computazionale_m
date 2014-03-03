@@ -17,13 +17,13 @@ np.seterr(all='warn')
 BetaC = 0.44
 BetaMin = 0.3
 N = sys.argv[1]
-files = glob.glob('en_autocorrN%s_*.dat'%(N))	
+files = glob.glob('mag_autocorrN%s_*.dat'%(N))	
 beta = []
 tau =  []
 l_ord = []
 for f in files:
-	if (os.stat(f)[6]!= 0):
-		beta_temp= float(f[-9:-4])
+	beta_temp= float(f[-9:-4])
+	if (os.stat(f)[6]!= 0)&(beta_temp>0):
 		temp = np.loadtxt(f,dtype='float64')
 			#= np.loadtxt('en_')
 		xs= []
@@ -36,7 +36,7 @@ for f in files:
 		x_points = np.asarray(xs,dtype='float64')
 		y_points = np.asarray(ys,dtype='float64')
 		#x_points = (-1)*(x_points + (-BetaC))/BetaC
-		guess = [1,-1]
+		guess = [1,-3]
 		popt,pcov = curve_fit(fit_fun,x_points,y_points, p0=guess )
 		if not (any( math.isnan(i) for i in popt) or any(math.isinf(i) for i in popt)):
 			l_ord.append([beta_temp,-1/popt[1], math.sqrt(pcov[1][1])])
@@ -50,7 +50,7 @@ for l in l_ord:
 beta_np = np.asarray(beta,dtype='float64')
 tau_np = np.asarray(tau,dtype='float64')
 error_np = np.asarray(error,dtype='float64')
-#print (beta_np)
+print (beta_np)
 out_file = open('tau_corrN%s.dat'%(N),"w")
 for i in range(len(beta)):
 	out_file.write('%.14e\t%.14e\t%.14e\n'%(beta_np[i],tau_np[i],error[i]))
@@ -58,7 +58,7 @@ out_file.close()
 
 x = np.linspace(BetaMin,np.amax(beta_np),100)
 fig = plt.figure()
-fig.suptitle('Tempo di Correlazione N=%s'%(N))
+fig.suptitle('Tempo di Correlazione (magnetizzazione) N=%s'%(N))
 ax = fig.add_subplot(111)
 ax.grid(True)
 #parameter_plot = [popt[0],popt[1],0]

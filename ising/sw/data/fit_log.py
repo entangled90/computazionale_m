@@ -8,14 +8,14 @@ import sys
 
 
 def fit_fun(x,*p):
-	return p[0]*(np.power((-1)*(x+(-p[2]))/p[2],p[1]))
+	return p[0]*np.power(np.absolute(np.log((-1)*(x+(-p[1]))/p[1])),p[2])
 
 
 
 filename = sys.argv[1]
 np.seterr(all='warn')
 lungh=20
-BetaC = 0.43
+BetaC = 0.435
 BetaMin = 0.3
 temp = np.loadtxt(filename,dtype='float64')
 		#= np.loadtxt('en_')
@@ -30,7 +30,7 @@ x_points = np.asarray(xs,dtype='float64')
 y_points = np.asarray(ys,dtype='float64')
 
 #x_points = (-1)*(x_points + (-BetaC))/BetaC
-guess = [1,-1,BetaC]
+guess = [1,BetaC,1.3]
 popt,pcov = curve_fit(fit_fun,x_points,y_points, p0=guess )
 print(popt)
 print(pcov)
@@ -45,7 +45,7 @@ ax = fig.add_subplot(111)
 ax.grid(True)
 #Mette le griglie su asse x
 #plt.xticks([i for i in range(0,lungh)])
-ax.text(BetaMin,np.amax(y_points)/2.0+np.amin(y_points)/2.0,r'Funzione di fit: $C(t) = A x^{-\gamma} }$' '\n' r'$A=%lf \pm %lf$' '\n' r'$\; \gamma=%lf\pm %lf$'%(popt[0],AErr,-popt[1],tauErr) , bbox={'facecolor':'green', 'alpha':0.5, 'pad':10})
+ax.text(BetaMin,6,r'Funzione di fit: $C(t) = A log^{\gamma}(x)} }$' '\n' r'$A=%lf \pm %lf$' '\n' r'$\; \gamma=%lf\pm %lf$'%(popt[0],AErr,popt[2],tauErr) , bbox={'facecolor':'green', 'alpha':0.5, 'pad':10})
 plt.plot(x_points,y_points,'ko',label='Original data')
 plt.plot(x,fit_fun(x,*popt),label ='fitted curve')
 plt.legend(loc='upper left')

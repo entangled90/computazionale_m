@@ -7,16 +7,20 @@ import math
 import sys
 import glob
 from operator import itemgetter
-
+import os
 
 def fit_fun(x,*p):
 	return p[0]*(np.exp(x*p[1]))
 def fit_fun_corr(x,*p):
-	return p[0]*(-1*(x + -1*p[2])/p[2])**p[1]
+#	print(x)
+	return p[0]*(-1*(x + -1*p[2])/x)**p[1]
+
+def fit_fun_corr_fitted(x,*p):
+	return p[0]*(-1*x)**p[1]
 
 
 np.seterr(all='warn')
-BetaC = 0.44
+BetaC = 0.43
 BetaMin = 0.3
 N = sys.argv[1]
 file_temp = glob.glob('corr_row_N%s*.dat'%(N))	
@@ -25,13 +29,13 @@ xi =  []
 files = []
 l_ord = []
 for f in file_temp:
-	beta_temp= float(f[-9:-4])
+	beta_temp= float(f[-13:-4])
 #	print(beta_temp) 
-	if BetaMin <beta_temp < BetaC:
+	if (BetaMin <beta_temp < BetaC) & (os.stat(f)[6]!= 0):
 		files.append(f)
 
 for f in files:
-	beta_temp= float(f[-9:-4])
+	beta_temp= float(f[-13:-4])
 	temp = np.loadtxt(f,dtype='float64')
 		#= np.loadtxt('en_')
 	xs= []
@@ -54,27 +58,28 @@ for l in l_ord:
 	beta.append(l[0])
 	xi.append(l[1])
 	error.append(l[2])
-
 beta_np = np.asarray(beta,dtype='float64')
 xi_np = np.asarray(xi,dtype='float64')
 error_np = np.asarray(error,dtype='float64')
-#print (beta_np)
-out_file = open('xi_corrN%s.dat'%(N),"w")
-for i in range(len(beta)):
-	out_file.write('%.14e\t%.14e\t%.14e\n'%(beta_np[i],xi_np[i],error[i]))
-out_file.close()
 
 
 guess = [1, -1 , 0.44]
 popt,pcov = curve_fit(fit_fun_corr,beta_np,xi_np, sigma=error, p0=guess )
+out_file = open('../xi_corrN%s.dat'%(N),"w")
+for i in range(len(beta)):
+	out_file.write('%.8lf\t%.14e\t%.14e\n'%(beta_np[i],xi_np[i],error[i]))
+out_file.close()
 
+print(beta_np)
 print(popt,pcov)
-#beta_np = (beta_np + -1*popt[2])/popt[2]
+#RISCALO BETA!
+beta_np = (beta_np + -1*popt[2])/beta_np
+
 #print (beta_np)
 Aerr = math.sqrt(pcov[0][0])
 ExpErr= math.sqrt(pcov[1][1])
-BetaErr = math.sqrt(pcov[2][2]) 
-x = np.linspace(BetaMin,np.amax(beta_np),100)
+BetaErr = math.sqrt(pcov[2][2])
+x = np.linspace(np.amin(beta_np),np.amax(beta_np),100)
 fig = plt.figure()
 fig.suptitle('Lunghezza di Correlazione N=%s'%(N))
 ax = fig.add_subplot(111)
@@ -82,10 +87,12 @@ ax.grid(True)
 #parameter_plot = [popt[0],popt[1],0]
 #Mette le griglie su asse x
 #plt.xticks([i for i in range(0,lungh)])
+midplot = np.amin(xi_np)/2.0  + np.amax(xi_np)/2.0
+pPlot=popt[:2]
 plt.xlabel(r'$\beta$',fontsize='15')
 plt.ylabel(r'$\xi_{corr}$',fontsize='15')
-ax.text(BetaMin+0.05,20,r'Funzione di fit: $C(t) = A \xi^{-\nu}$' '\n' r'$\nu=%lf \pm %lf$' '\n' r'$\; \beta_c=%lf\pm %lf$'%(-1/popt[1],ExpErr,popt[2],BetaErr) , bbox={'facecolor':'green', 'alpha':0.5, 'pad':10})
-ax.errorbar(beta_np, xi_np ,yerr=error_np,ecolor='r',label='original data')
-ax.plot(x,fit_fun_corr(x,*popt),label ='fitted curve')
+ax.text(np.amin(beta_np)+0.01,midplot,r'Funzione di fit: $C(t) = A \xi^{-\nu}$' '\n' r'$\nu=%lf \pm %lf$' '\n' r'$\; \beta_c=%lf\pm %lf$'%(-popt[1],ExpErr,popt[2],BetaErr) , bbox={'facecolor':'green', 'alpha':0.5, 'pad':10})
+ax.errorbar(beta_np, xi_np ,yerr=error_np,fmt='o',ecolor='r',label='original data')
+ax.plot(x,fit_fun_corr_fitted(x,*pPlot),label ='fitted curve')
 plt.legend(loc='upper left')
 plt.show()

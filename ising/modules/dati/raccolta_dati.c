@@ -61,15 +61,15 @@ void binning_deriv ( double * old_vec, double * new_vec, int sizeold, int m){
 			new_vec[j] = 0;
 			tmp[j]=0;
 		}
-
-	for ( j = 0 ; j< m;j++){
-		for (i = 0; i < sizeold/m ; i++ ){
+		printf("sizeold/m = %d\n",sizeold/m);
+	for (i = 0; i < sizeold/m ; i++ ){
+		for ( j = 0 ; j< m;j++){
 			new_vec[i] += old_vec[i*m+j]*old_vec[i*m+j];
-			tmp[j] += old_vec[i*m+j];
+			tmp[i] += old_vec[i*m+j];
 		}
-	tmp[j] /= (double)(m);
-	new_vec[j] /= (double)(m);
-	new_vec[j] -= tmp[j]*tmp[j];
+	tmp[i] /= (double)(m);
+	new_vec[i] /= (double)(m);
+	new_vec[i] -= tmp[i]*tmp[i];
 	}
 
 }
