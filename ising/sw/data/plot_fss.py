@@ -32,6 +32,6 @@ ax.grid(True)
 #plt.xticks([i for i in range(0,lungh)])
 ax.text(x_min,10, 'Legenda',bbox={'facecolor':'green', 'alpha':0.5, 'pad':10})
 for d in all_datas:
-	plt.plot(d[0],d[1],'o',label ='N = %d'%(d[2]))
+	plt.plot(d[0],d[1],'p',label ='N = %d'%(d[2]))
 plt.legend(loc='upper left')
 plt.show()

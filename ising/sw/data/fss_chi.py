@@ -10,21 +10,21 @@ from operator import itemgetter
 import os
 
 np.seterr(all='warn')
-
+xmin=0.43
+xmax=0.44
 def par(x,*p):
 	return p[0]*x**2 + p[1]*x + p[2] 
 
 def fit_par(filename):
-	guess = [-1,2*0.44,0]
-	x_points,y_points = load_file(filename,0.35,0.5)
+	guess = [-100,100,0]
+	x_points,y_points = load_file(filename,xmin,xmax)
 	popt,pcov = curve_fit(par,x_points,y_points, p0=guess )
 	print(popt)
 	print(pcov)
 	print("Beta critico è %lf"%(-popt[1]/(2.0*popt[0])))
-	return ( -popt[1]/(2.0*popt[0]))
+	return ( -popt[1]/(2.0*popt[0]),popt)
 
 def load_file(filename, betamin, betamax):
-	lungh=20
 	temp = np.loadtxt(filename,dtype='float64')
 	xs= []
 	ys= []
@@ -45,7 +45,7 @@ chi_data = np.loadtxt(chi_file,dtype='float64',usecols=(0,1))
 chi_data = sorted(chi_data, key=itemgetter(0))
 gamma = 7.0/4.0
 #fit_exp(chi_file)
-BETA_CRIT = fit_par(chi_file)
+BETA_CRIT ,popt= fit_par(chi_file)
 xs= []
 ys= []
 for i in range(len(chi_data)):
@@ -54,9 +54,14 @@ for i in range(len(chi_data)):
 	ys.append(t[1])
 x_chi = np.asarray(xs,dtype='float64')
 y_chi = np.asarray(ys,dtype='float64')
-
 del xs[:]
 del ys[:]
+
+
+x = np.linspace(xmin,xmax,100)
+plt.plot(x,par(x,*popt))
+plt.plot(x_chi,y_chi,'ro')
+plt.show()
 x_chi = (x_chi + -BETA_CRIT)/x_chi
 x_chi *= N**(1/nu_corr)
 y_chi /= N**(gamma/nu_corr)
@@ -65,5 +70,5 @@ out_file = open('./chifssN%d.dat'%(N),"w")
 for i in range(len(x_chi)):
 	out_file.write('%.8lf\t%.14e\n'%(x_chi[i],y_chi[i]))
 out_file.close()
-plt.plot(x_chi,y_chi,'ro')
-plt.show()
+
+
