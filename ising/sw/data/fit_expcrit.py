@@ -8,7 +8,7 @@ import sys
 
 
 def fit_fun(x,*p):
-	return p[0]*(np.power((-1)*(x+(-p[2]))/p[2],p[1]))
+	return p[0]*(np.power(np.absolute((x+(-p[2]))/x),p[1]))
 
 
 
@@ -45,7 +45,7 @@ ax = fig.add_subplot(111)
 ax.grid(True)
 #Mette le griglie su asse x
 #plt.xticks([i for i in range(0,lungh)])
-ax.text(BetaMin,np.amax(y_points)/2.0+np.amin(y_points)/2.0,r'Funzione di fit: $C(t) = A x^{-\gamma} }$' '\n' r'$A=%lf \pm %lf$' '\n' r'$\; \gamma=%lf\pm %lf$'%(popt[0],AErr,-popt[1],tauErr) , bbox={'facecolor':'green', 'alpha':0.5, 'pad':10})
+ax.text(BetaMin,np.amax(y_points)/2.0+np.amin(y_points)/2.0,r'Funzione di fit: $C(t) = A x^{-\gamma} }$' '\n' r'$A=%lf \pm %lf$' '\n' r'$\; \gamma=%lf\pm %lf$' ' \n' r'$\beta = %lf $'%(popt[0],AErr,-popt[1],tauErr,popt[2]) , bbox={'facecolor':'green', 'alpha':0.5, 'pad':10})
 plt.plot(x_points,y_points,'ko',label='Original data')
 plt.plot(x,fit_fun(x,*popt),label ='fitted curve')
 plt.legend(loc='upper left')

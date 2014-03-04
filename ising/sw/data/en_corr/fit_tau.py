@@ -23,7 +23,7 @@ tau =  []
 l_ord = []
 for f in files:
 	if (os.stat(f)[6]!= 0):
-		beta_temp= float(f[-9:-4])
+		beta_temp= float(f[-13:-4])
 		temp = np.loadtxt(f,dtype='float64')
 			#= np.loadtxt('en_')
 		xs= []

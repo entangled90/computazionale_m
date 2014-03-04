@@ -81,19 +81,19 @@ n_vec è la lunghezza del vettor
 n_data è il numero di iterazioni -> insieme di vettori indipendenti
 bin_width è la larghezza dela bin
 */
-void binning_mat ( double * old_vec, double * new_vec, int n_vec ,int n_data, int bin_width){
+void binning_mat ( double * old_vec, double * new_vec, int vec_len ,int n_data, int bin_width){
 	int i,j ;
-	for ( j = 0 ; j< (n_data/bin_width)*n_vec;j++){
+	for ( j = 0 ; j< (n_data/bin_width)*vec_len;j++){
 		new_vec[j] = 0;
 	}
 	for(i = 0; i<n_data - n_data%bin_width;i++){
-		for(j = 0; j<n_vec;j++){
-			new_vec[(i%bin_width)*n_vec+j] += old_vec[i*(n_vec)+j];
+		for(j = 0; j<vec_len;j++){
+			new_vec[(i%bin_width)*vec_len+j] += old_vec[i*(vec_len)+j];
 		}
 	}
 	for(i = 0;i< n_data/bin_width;i++){
-		for(j=0;j<n_vec;j++){
-			new_vec[i*n_vec+j]/=(double)bin_width;
+		for(j=0;j<vec_len;j++){
+			new_vec[i*vec_len+j]/=(double)bin_width;
 		}
 	}
 }
