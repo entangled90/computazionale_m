@@ -17,8 +17,8 @@ int main ( int argc, char * argv[]) {
 	int iteration = 0;
 	mt_seed();
 	int i,j;
-	int tau_corr=30;
-	int larghezza_bin = 10*tau_corr;
+	int tau_corr=5;
+	int larghezza_bin = 15*tau_corr;
 	int n_bin = ITERATION_MAX/larghezza_bin;
 	printf("%d\n",n_bin);
 	if (n_bin ==0){
@@ -78,10 +78,9 @@ int main ( int argc, char * argv[]) {
 	FILE * f_mag = fopen(mag_filename,"a");
 	FILE * f_chi = fopen(chi_filename,"a");	
 	FILE * f_mag_bin = fopen(mag_binning_filename,"w");
-	FILE * f_mag_autocorr = fopen(mag_autocorr_filename,"w");
-//	FILE * f_mag_temp = fopen("data/mag_temp.dat","w");
 
-	FILE * f_en_bin = fopen(en_binning_filename,"w");
+	FILE * f_mag_autocorr = fopen(mag_autocorr_filename,"w");
+	FILE * f_mag_temp = fopen("data/mag_temp.dat","w");	FILE * f_en_bin = fopen(en_binning_filename,"w");
 	FILE * f_en_autocorr = fopen(en_autocorr_filename,"w");
 	FILE * f_en = fopen(en_filename,"a");
 //	FILE * f_en_temp = fopen(en_temp_filename,"w");
@@ -249,10 +248,11 @@ int main ( int argc, char * argv[]) {
 	for ( i=0;i<ITERATION_MAX;i++){
 		fprintf(f_en_temp,"%.14e\n",en_vet_dati[i]);
 	}
-	for ( i=0;i<ITERATION_MAX;i++){
-		fprintf(f_mag_temp,"%.14e\n",mag_vet_dati[i]);
-	}
 */
+	for ( i=0;i<ITERATION_MAX;i++){
+		fprintf(f_mag_temp,"%.14e\n",mag_vet_dati[i]/(double)(N*N));
+	}
+
 /* Calcolo necessario per stimare cosa scegliere come larghezza del bin!*/
 	for ( i = 1; i < CORR_MAX ; i+=1){
 		binning(mag_vet_dati,mag_vet_binnato,ITERATION_MAX,i);
@@ -269,6 +269,7 @@ int main ( int argc, char * argv[]) {
 	fclose(f_mag);
 	fclose(f_chi);
 	fclose(f_en);
+	fclose(f_mag_temp);
 	//fclose(f_en_temp);
 	fclose(f_mag_autocorr);
 	/* Free della memoria */

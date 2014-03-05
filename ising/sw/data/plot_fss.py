@@ -18,10 +18,11 @@ for n in range(N_MAX):
 all_datas=[]
 for i in file_list:
 	f = i[1]
-	x,y = np.loadtxt(f,dtype='float64',unpack=True)
+	print(f)
+	x,y,err= np.loadtxt(f,dtype='float64',unpack=True)
 	f = str(f)
 	N= i[0]
-	all_datas.append([x,y,N])
+	all_datas.append([x,y,err,N])
 x_min = -10
 x_max = 10
 fig = plt.figure()
@@ -32,6 +33,6 @@ ax.grid(True)
 #plt.xticks([i for i in range(0,lungh)])
 ax.text(x_min,10, 'Legenda',bbox={'facecolor':'green', 'alpha':0.5, 'pad':10})
 for d in all_datas:
-	plt.plot(d[0],d[1],'p',label ='N = %d'%(d[2]))
+	plt.errorbar(d[0],d[1], fmt='*',yerr=d[2],label ='N = %d'%(int(d[3])))
 plt.legend(loc='upper left')
 plt.show()
