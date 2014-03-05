@@ -182,7 +182,6 @@ int main ( int argc, char * argv[]) {
 		S_xt[i]/=(double)N;
 		S_yt[i]/=(double)N;
 	}
-	
 	for ( i = 0; i<N;i++){
 		S_xt[i] += S_yt[i]+S_xt[N-1-i] + S_yt[N-1-i];
 		S_xt[i]/=4.0*ITERATION_MAX;

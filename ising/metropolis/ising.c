@@ -15,10 +15,12 @@ int main (int argc, char *argv[]){
 	double BETA = 1;
 	int N ;
 	int iteration = 0;
-	double mag2_mean=0; // Valor medio di magnetizzazione al quadrato
-	double mag_mean = 0; // valor medio di modulo magnetizzazione
-	double chi = 0;
 	int i,j ;
+	int tau_corr=5;
+	int larghezza_bin = 15*tau_corr;
+	int n_bin = ITERATION_MAX/larghezza_bin;
+	printf("%d\n",n_bin);
+
 	if (argc>1){
 		BETA = atof(argv[1]);
 		N = atoi(argv[2]);
@@ -27,6 +29,7 @@ int main (int argc, char *argv[]){
 		printf("Inserire il valore di Beta\n");
 		return 0;
 	}
+	int N_CORR = N/4;
 	double * X_n= malloc(sizeof(double)*N);
 	double * Y_n=malloc(sizeof(double)*N);
 
@@ -37,10 +40,11 @@ int main (int argc, char *argv[]){
 	}
 
 //	double mag_prevista = ( 1 - pow(sinh(2*BETA*J),-4));
-	short int  * configuration;
+	short int  * matrix;
 	srand(time(NULL));
-	configuration = malloc(N*N*sizeof(short int));
-	spin_init(configuration,N);
+	matrix = malloc(N*N*sizeof(short int));
+	spin_init(matrix,N);
+	/***** FILENAMES AND FILE OPENING ******/
 	/***** FILENAMES AND FILE OPENING ******/
 /* ------------------MAGN*/
 	char mag_filename[64] = "";
@@ -48,37 +52,37 @@ int main (int argc, char *argv[]){
 	char chi_filename[64] = "";
 	snprintf(chi_filename,64,"data/chi%d.dat",N); 
 	char mag_binning_filename[64] = "";
-	snprintf(mag_binning_filename,64,"data/binning/mag_N%d__B%.4lf.dat",N,BETA); 
+	snprintf(mag_binning_filename,64,"data/binning/mag_N%d__B%.8lf.dat",N,BETA); 
 	char mag_autocorr_filename[64] = "";
-	snprintf(mag_autocorr_filename,64,"data/mag_corr/mag_autocorrN%d_B%.4lf.dat",N,BETA);
+	snprintf(mag_autocorr_filename,64,"data/mag_corr/mag_autocorrN%d_B%.8lf.dat",N,BETA);
 /*----------------------_ENergia*/
 	char en_binning_filename[64] = "";
-	snprintf(en_binning_filename,64,"data/binning/en_N%d__B%.4lf.dat",N,BETA);
+	snprintf(en_binning_filename,64,"data/binning/en_N%d__B%.8lf.dat",N,BETA);
 	char en_filename[64] = "";
 	snprintf(en_filename,64,"data/en_N%d.dat",N);
 	char en_autocorr_filename[64] = "";
-	snprintf(en_autocorr_filename,64,"data/en_corr/en_autocorrN%d_B%.4lf.dat",N,BETA);
-	char en_temp_filename[64] = "data/en_temp.dat";
+	snprintf(en_autocorr_filename,64,"data/en_corr/en_autocorrN%d_B%.8lf.dat",N,BETA);
+//	char en_temp_filename[64] = "data/en_temp.dat";
 	char cv_filename[64]="";
 	snprintf(cv_filename,64,"data/cv%d.dat",N);
 
 	char corr_row_filename[64]="";
-	snprintf(corr_row_filename,64,"data/corr_row/corr_row_N%dB%.4lf.dat",N,BETA);
+	snprintf(corr_row_filename,64,"data/corr_row/corr_row_N%dB%.8lf.dat",N,BETA);
+
+
 /*** I File sono chiamati: f_$(Nomestringa) ****/
 	FILE * f_mag = fopen(mag_filename,"a");
 	FILE * f_chi = fopen(chi_filename,"a");	
 	FILE * f_mag_bin = fopen(mag_binning_filename,"w");
-	FILE * f_mag_autocorr = fopen(mag_autocorr_filename,"w");
-	FILE * f_mag_temp = fopen("data/mag_temp.dat","w");
 
-	FILE * f_en_bin = fopen(en_binning_filename,"w");
+	FILE * f_mag_autocorr = fopen(mag_autocorr_filename,"w");
+	FILE * f_mag_temp = fopen("data/mag_temp.dat","w");	FILE * f_en_bin = fopen(en_binning_filename,"w");
 	FILE * f_en_autocorr = fopen(en_autocorr_filename,"w");
 	FILE * f_en = fopen(en_filename,"a");
-	FILE * f_en_temp = fopen(en_temp_filename,"w");
+//	FILE * f_en_temp = fopen(en_temp_filename,"w");
 	FILE * f_cv = fopen(cv_filename,"a");
 
 	FILE * f_corr_row = fopen(corr_row_filename,"w");
-
 
 
 /**********************************************************************
@@ -86,42 +90,55 @@ int main (int argc, char *argv[]){
  **********************************************************************/
 
 	while(iteration < ITERATION_THERM){
-		metropolis_ising(configuration,N,BETA);
+		metropolis_ising(matrix,N,BETA);
 		iteration++;
 	}
-
-	iteration = 0;	
-	double mag_tmp;
-	double en_tmp;
-	double en_mean =0;
-	double en2_mean=0;
-	double cv=0;
+/* Vettori per il binning*/
 	double * mag_vet_dati ;
 	double * mag_vet_binnato;
+	mag_vet_binnato = malloc(sizeof(double)*(ITERATION_MAX));
+	mag_vet_dati = malloc(sizeof(double)*ITERATION_MAX);
+
 	double * en_vet_dati;
 	double * en_vet_binnato;
+	en_vet_binnato = malloc(sizeof(double)*(ITERATION_MAX));
+	en_vet_dati = malloc(sizeof(double)*ITERATION_MAX);
+
+	double * chi_vet_binnato;
+	chi_vet_binnato = malloc(sizeof(double)*(n_bin));
+
+	double * cv_vet_binnato;
+	cv_vet_binnato = malloc(sizeof(double)*(n_bin));
+
 	double * en_autocorr = malloc(sizeof(double)*CORR_MAX);
 	double * mag_autocorr = malloc(sizeof(double)*CORR_MAX);
+
 	double * S_xt = malloc(sizeof(double)*N);
 	double * S_yt = malloc(sizeof(double)*N);
-	en_vet_dati = malloc(sizeof(double)*ITERATION_MAX);
-	mag_vet_dati = malloc(sizeof(double)*ITERATION_MAX);
-	int larghezza_bin;
+	double * S_med_temp = malloc(sizeof(double)*N_CORR);
+	double * S_dati = malloc(sizeof(double)*ITERATION_MAX*N_CORR);
+	double * S_dati_binnati= malloc(sizeof(double)*(n_bin)*N_CORR);
+	double * S_fin = malloc(sizeof(double)*N_CORR);
+	double * S_var_fin=malloc(sizeof(double)*N_CORR);
+	double S_test[N_CORR];
+
+	/*** Calcolo correlazione su righe e colonne*/
+	vec_zeros(S_xt,N);
+	vec_zeros(S_yt,N);
+	vec_zeros(S_med_temp,N_CORR);
+// Non serve, annullo già in binning:	vec_zeros(S_dati_binnati,(n_bin)*N_CORR);
+	vec_zeros(S_fin,N_CORR);
+	vec_zeros(S_var_fin,N_CORR);
+	vec_zeros(S_test,N_CORR);
 
 	while(iteration < ITERATION_MAX){
-		metropolis_ising(configuration,N,BETA);
-		mag_tmp = magnetization(configuration,N);
-		en_tmp = hamiltoniana(configuration,N);
-		mag_vet_dati[iteration] = fabs(mag_tmp);
-		en_vet_dati[iteration] = en_tmp;
-		mag2_mean += mag_tmp*mag_tmp;
-		mag_mean += fabs(mag_tmp);
-		en_mean+=en_tmp;
-		en2_mean += en_tmp*en_tmp;
-		iteration++;
+		metropolis_ising(matrix,N,BETA);
+		mag_vet_dati[iteration] = fabs(magnetization(matrix,N));
+		en_vet_dati[iteration] = hamiltoniana(matrix,N);
+	iteration++;
 		for ( i = 0; i<N;i++){
-			X_n[i] = sum_row(configuration,i,N);
-			Y_n[i] = sum_col(configuration,i,N);
+			X_n[i] = sum_row(matrix,i,N);
+			Y_n[i] = sum_col(matrix,i,N);
 		}
 		for (j = 0; j < N; ++j){
 			for (i = 0; i < N;i++){
@@ -139,42 +156,52 @@ int main (int argc, char *argv[]){
 		S_xt[i] += S_yt[i];
 		S_xt[i] += S_xt[N-1-i];
 		S_xt[i] += S_yt[N-1-i];
-		S_xt[i]/=3.0*ITERATION_MAX;
+		S_xt[i]/=4.0*ITERATION_MAX;
 	}
 	for ( i = 0; i<N/3;i++){
 		fprintf(f_corr_row, "%d\t%lf\n",i,S_xt[i] );
 	}
-
-	mag_mean /= (double)(ITERATION_MAX);
-	mag2_mean /= (double)(ITERATION_MAX);
-	en_mean /= (double)(ITERATION_MAX);
-	en2_mean /= (double)(ITERATION_MAX);
-	//mag_mean /= (double)(ITERATION_MAX);
-	chi = (mag2_mean - mag_mean*mag_mean)/(double)(N*N);
-	cv = (en2_mean - en_mean*en_mean)/(double)(N*N);
-	mag_mean /= (double)(N*N);
-	en_mean /= (double)(N*N);
-/* Scrivo su file i dati calcolati*/
-	fprintf(f_mag,"%lf\t%lf\n",BETA,mag_mean);
-	fprintf(f_chi,"%lf\t%lf\n",BETA,chi);
-	fprintf(f_en,"%.14e\t%.14e\n",BETA,en_mean);
-	fprintf(f_cv,"%lf\t%lf\n",BETA,cv);
-
+	divideByScalar(S_test,ITERATION_MAX,N_CORR);
 /**** BINNING E AUTOCORRELAZIONI */
-	divideByScalar(mag_vet_dati,N*N,ITERATION_MAX);
-	divideByScalar(en_vet_dati,N*N,ITERATION_MAX);
-	mag_vet_binnato = malloc(sizeof(double)*(ITERATION_MAX));
-	en_vet_binnato = malloc(sizeof(double)*(ITERATION_MAX));
-	for ( larghezza_bin = 1; larghezza_bin < 100 ; larghezza_bin+=1){
-		binning(mag_vet_dati,mag_vet_binnato,ITERATION_MAX,larghezza_bin);
-		binning(en_vet_dati,en_vet_binnato,ITERATION_MAX,larghezza_bin);
-		fprintf(f_mag_bin,"%d\t%.14e\n", larghezza_bin,
-			sqrt(varianceOfDoubleArray(mag_vet_binnato,ITERATION_MAX/larghezza_bin)));
-		fprintf(f_en_bin,"%d\t%.14e\n", larghezza_bin,
-			sqrt(varianceOfDoubleArray(en_vet_binnato,ITERATION_MAX/larghezza_bin)));
+/* tutto il BINNING della Correlazione fra righe e colonne*/
+	binning_mat(S_dati,S_dati_binnati,N_CORR,ITERATION_MAX,larghezza_bin);
+
+	for(j=0;j<N_CORR;j++){
+		for(i = 0; i< n_bin;i++){
+			S_fin[j] += S_dati_binnati[i*N_CORR+j];
+			S_var_fin[j] += S_dati_binnati[i*N_CORR+j]*S_dati_binnati[i*N_CORR+j];
+		}
+		S_var_fin[j] -= S_fin[j]*S_fin[j]/(double)(n_bin);
+		S_fin[j]/= (double)(n_bin);
+		S_var_fin[j] /=(double)(n_bin);
+		S_var_fin[j] = sqrt((S_var_fin[j]/(n_bin)));
+	}
+	for ( i = 0; i<N_CORR;i++){
+	//	fprintf(f_corr_row, "%d\t%.14e\t%.14e\n",i,S_fin[i],S_var_fin[i]);
+	//	fprintf(f_corr_row,"%d\t%.14e\t%.14e\n",i,S_test[i],0.000001);
 	}
 
-	/** Autocorrelazioni **/
+	/* Binning osservabili scalari*/
+	binning(mag_vet_dati,mag_vet_binnato,ITERATION_MAX,larghezza_bin);
+	binning(en_vet_dati,en_vet_binnato,ITERATION_MAX,larghezza_bin);
+	binning_deriv(mag_vet_dati,chi_vet_binnato,ITERATION_MAX,larghezza_bin);
+	binning_deriv(en_vet_dati,cv_vet_binnato,ITERATION_MAX,larghezza_bin);
+
+	divideByScalar(mag_vet_binnato,N*N,n_bin);
+	divideByScalar(en_vet_binnato,N*N,n_bin);
+	divideByScalar(chi_vet_binnato,N*N,n_bin);
+	divideByScalar(cv_vet_binnato,N*N,n_bin);
+
+	fprintf(f_mag,"%.8lf\t%.14e\t%.14e\n", BETA, meanOfDoubleArray(mag_vet_binnato,n_bin),
+		sqrt(varianceOfDoubleArray(mag_vet_binnato,n_bin)/n_bin));
+	fprintf(f_en,"%.8lf\t%.14e\t%.14e\n", BETA,meanOfDoubleArray(en_vet_binnato,n_bin),
+		sqrt(varianceOfDoubleArray(en_vet_binnato,n_bin)/n_bin));
+	fprintf(f_cv,"%.8lf\t%.14e\t%.14e\n", BETA,meanOfDoubleArray(cv_vet_binnato,n_bin),
+		sqrt(varianceOfDoubleArray(cv_vet_binnato,n_bin)/n_bin));
+	fprintf(f_chi,"%.8lf\t%.14e\t%.14e\n", BETA,meanOfDoubleArray(chi_vet_binnato,n_bin),
+		sqrt(varianceOfDoubleArray(chi_vet_binnato,n_bin)/n_bin));
+
+	/* Calcolo autocorrelazione per le due grandezze */
 	autocorrelation(en_vet_dati,en_autocorr,ITERATION_MAX,CORR_MAX);
 	if(f_en_autocorr){
 		for (i = 0; i<CORR_MAX;i++){
@@ -187,14 +214,23 @@ int main (int argc, char *argv[]){
 			fprintf(f_mag_autocorr,"%d\t%.14e\n",i,mag_autocorr[i]);
 		}
 	}
-
-
-
+/*
 	for ( i=0;i<ITERATION_MAX;i++){
 		fprintf(f_en_temp,"%.14e\n",en_vet_dati[i]);
 	}
+*/
 	for ( i=0;i<ITERATION_MAX;i++){
-		fprintf(f_mag_temp,"%.14e\n",mag_vet_dati[i]);
+		fprintf(f_mag_temp,"%.14e\n",mag_vet_dati[i]/(double)(N*N));
+	}
+
+/* Calcolo necessario per stimare cosa scegliere come larghezza del bin!*/
+	for ( i = 1; i < CORR_MAX ; i+=1){
+		binning(mag_vet_dati,mag_vet_binnato,ITERATION_MAX,i);
+		binning(en_vet_dati,en_vet_binnato,ITERATION_MAX,i);
+		fprintf(f_mag_bin,"%d\t%.14e\n", i,
+			sqrt(varianceOfDoubleArray(mag_vet_binnato,ITERATION_MAX/i))); //(double)(n_bin)));
+		fprintf(f_en_bin,"%d\t%.14e\n", i,
+			sqrt(varianceOfDoubleArray(en_vet_binnato,ITERATION_MAX/i)));//(double)(n_bin)));
 	}
 /* Chiusura file */
 	fclose(f_mag_bin);
@@ -204,7 +240,7 @@ int main (int argc, char *argv[]){
 	fclose(f_chi);
 
 	fclose(f_en);
-	fclose(f_en_temp);
+	//fclose(f_en_temp);
 	fclose(f_en_bin);
 	fclose(f_en_autocorr);
 	fclose(f_cv);
@@ -218,7 +254,7 @@ int main (int argc, char *argv[]){
 	free(en_vet_binnato);
 	free(en_autocorr);
 	free(mag_autocorr);
-	free(configuration);
+	free(matrix);
 	//printf("Magnetizzazione media: %lf\n",sum/((double) ITERATION_MAX));
 	exit(EXIT_SUCCESS);
 }
