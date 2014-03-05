@@ -21,7 +21,7 @@ beta = []
 tau =  []
 l_ord = []
 for f in files:
-	beta_temp= float(f[-9:-4])
+	beta_temp= float(f[-13:-4])
 	if (os.stat(f)[6]!= 0)&(beta_temp>0):
 		temp = np.loadtxt(f,dtype='float64')
 			#= np.loadtxt('en_')
@@ -54,7 +54,7 @@ for i in range(len(beta)):
 	out_file.write('%.14e\t%.14e\t%.14e\n'%(beta_np[i],tau_np[i],error[i]))
 out_file.close()
 
-x = np.linspace(BetaMin,np.amax(beta_np),100)
+x = np.linspace(0,np.amax(beta_np),100)
 fig = plt.figure()
 fig.suptitle('Tempo di Correlazione (magnetizzazione) N=%s'%(N))
 ax = fig.add_subplot(111)

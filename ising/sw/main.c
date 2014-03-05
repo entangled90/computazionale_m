@@ -10,7 +10,7 @@
 #include "mtwist.h"
 #include "raccolta_dati.h"
 
-#define CORR_MAX 30
+#define CORR_MAX 200
 int main ( int argc, char * argv[]) {
 	float BETA = 1;
 	int N = 40;
@@ -174,7 +174,7 @@ int main ( int argc, char * argv[]) {
 		for (j = 0; j < N; ++j){
 			for (i = 0; i < N;i++){
 				S_xt[i]+= X_n[j]*X_n[(i+j)%N];
-				S_yt[i]+= Y_n[j]*Y_n[(i+j)%N];
+				S_yt[i]+= Y_n[j]*Y_n[(i+j)%N]; 
 			}
 		}
 	}
@@ -210,6 +210,7 @@ int main ( int argc, char * argv[]) {
 	//	fprintf(f_corr_row,"%d\t%.14e\t%.14e\n",i,S_test[i],0.000001);
 	}
 
+
 	/* Binning osservabili scalari*/
 	binning(mag_vet_dati,mag_vet_binnato,ITERATION_MAX,larghezza_bin);
 	binning(en_vet_dati,en_vet_binnato,ITERATION_MAX,larghezza_bin);
@@ -229,6 +230,24 @@ int main ( int argc, char * argv[]) {
 		sqrt(varianceOfDoubleArray(cv_vet_binnato,n_bin)/n_bin));
 	fprintf(f_chi,"%.8lf\t%.14e\t%.14e\n", BETA,meanOfDoubleArray(chi_vet_binnato,n_bin),
 		sqrt(varianceOfDoubleArray(chi_vet_binnato,n_bin)/n_bin));
+
+	divideByScalar(mag_vet_dati,N*N,n_bin);
+	divideByScalar(en_vet_dati,N*N,n_bin);
+//	divideByScalar(chi_vet_dati,N*N,n_bin);
+//	divideByScalar(cv_vet_dati,N*N,n_bin);
+
+
+
+/* Calcolo necessario per stimare cosa scegliere come larghezza del bin!*/
+	for ( i = 1; i < CORR_MAX ; i+=1){
+		binning(mag_vet_dati,mag_vet_binnato,ITERATION_MAX,i);
+		binning(en_vet_dati,en_vet_binnato,ITERATION_MAX,i);
+		fprintf(f_mag_bin,"%d\t%.14e\n", i,
+			sqrt(varianceOfDoubleArray(mag_vet_binnato,ITERATION_MAX/i)/(double)(ITERATION_MAX/i)));
+		fprintf(f_en_bin,"%d\t%.14e\n", i,
+			sqrt(varianceOfDoubleArray(en_vet_binnato,ITERATION_MAX/i)/(double)(ITERATION_MAX/i)));
+	}
+
 
 	/* Calcolo autocorrelazione per le due grandezze */
 	autocorrelation(en_vet_dati,en_autocorr,ITERATION_MAX,CORR_MAX);
@@ -250,16 +269,6 @@ int main ( int argc, char * argv[]) {
 */
 	for ( i=0;i<ITERATION_MAX;i++){
 		fprintf(f_mag_temp,"%.14e\n",mag_vet_dati[i]/(double)(N*N));
-	}
-
-/* Calcolo necessario per stimare cosa scegliere come larghezza del bin!*/
-	for ( i = 1; i < CORR_MAX ; i+=1){
-		binning(mag_vet_dati,mag_vet_binnato,ITERATION_MAX,i);
-		binning(en_vet_dati,en_vet_binnato,ITERATION_MAX,i);
-		fprintf(f_mag_bin,"%d\t%.14e\n", i,
-			sqrt(varianceOfDoubleArray(mag_vet_binnato,ITERATION_MAX/i))); //(double)(n_bin)));
-		fprintf(f_en_bin,"%d\t%.14e\n", i,
-			sqrt(varianceOfDoubleArray(en_vet_binnato,ITERATION_MAX/i)));//(double)(n_bin)));
 	}
  	/* Chiusura file */
 	fclose(f_mag_bin);

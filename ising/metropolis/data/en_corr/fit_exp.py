@@ -24,14 +24,14 @@ temp = np.loadtxt(f,dtype='float64')
 xs= []
 ys= []
 for i in range(len(temp)):
-	t=temp[i]
-	if t[0]<5:
+	t = temp[i]
+	if t[0]<10:
 		xs.append(t[0])
 		ys.append(t[1])
 x_points = np.asarray(xs,dtype='float64')
 y_points = np.asarray(ys,dtype='float64')
 #x_points = (-1)*(x_points + (-BetaC))/BetaC
-guess = [1,-0.5]
+guess = [1,-1]
 popt,pcov = curve_fit(fit_fun,x_points,y_points, p0=guess )
 print('l\'expcritico è : %f'%(-1/popt[1]))
 x = np.linspace(np.amin(x_points),np.amax(x_points),100)
