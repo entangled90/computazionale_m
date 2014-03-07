@@ -133,7 +133,7 @@ int main ( int argc, char * argv[]) {
 	/****** CICLO DI EVOLUZIONE: PRENDERE MISURE QUI */
 	for ( iteration=0;iteration<ITERATION_MAX; iteration++){
 		evolve(matrix,nodes,N,BETA);
-		mag_vet_dati[iteration] = fabs(magnetization(matrix,N));
+		mag_vet_dati[iteration] = magnetization(matrix,N);
 		en_vet_dati[iteration] = hamiltoniana(matrix,N);
 		/* Correlazione righe e colonne*/
 		for ( i = 0; i<N;i++){
@@ -164,6 +164,9 @@ int main ( int argc, char * argv[]) {
 		}
 
 	}
+	savePPM(matrix,N,"dopoevoluzione.ppm");
+
+	printf("Fine simulazione. Inizio elaborazione dati\n");
 /*	for ( i = 0; i<N;i++){
 		S_xt[i] += S_yt[i]+S_xt[N-1-i] + S_yt[N-1-i];
 		S_xt[i]/=4.0*ITERATION_MAX;

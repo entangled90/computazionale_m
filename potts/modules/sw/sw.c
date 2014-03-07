@@ -10,6 +10,9 @@
 #include "mtwist.h"
 #include "cnum.h"
 
+#define PI atan(1)
+
+
 int cluster_max = -1;
 
 void spin_init ( Spin * matrix, Node * n, int N){
@@ -18,10 +21,10 @@ void spin_init ( Spin * matrix, Node * n, int N){
 	for ( i = 0; i< N; i++){
 		for ( j = 0; j<N ; j++){
 			tmp = mt_drand();
-			if ( tmp < 0.33333333){
+			if ( tmp < 1/3.0){
 				matrix[i*N+j].spin = cNum_create(0);
 			}
-			else if (tmp < 0.6666667){
+			else if (tmp < 2/3.0){
 				matrix[i*N+j].spin = cNum_create(1);
 			}
 			else{
@@ -138,31 +141,7 @@ inline void savePPM(Spin * s, int N, char * filename)
         }
     fclose(f);
 }
-/*
-void drawCluster(Spin * s, int N){
-	int i,j;
-	for ( i = 0; i<N;i++){
-		for ( j = 0; j<N;j++){
-			printf("|\t%d\t", s[i*N+j].cluster);
-		}
-		printf("|\n");
-	}
-}
 
-void drawSpin(Spin * s, int N){
-	int i,j;
-	for ( i = 0; i<N;i++){
-		for ( j = 0; j<N;j++){
-			if(s[i*N+j].spin == 1){
-				printf("|\t+\t");				
-			}
-			else
-				printf("|\t0\t");
-		}
-		printf("|\n");
-	}
-}
-*/
 void flip_spin ( Spin * m, int N){
 	int i,j;
 	int * flipper;
@@ -184,21 +163,15 @@ void flip_spin ( Spin * m, int N){
 	}
 	for (i=0;i<N;i++){
 		for(j = 0; j<N;j++){
-			m[i*N+j].spin =  cNum_create(flipper[ m[i*N+j].cluster ]);
+//			m[i*N+j].spin =  cNum_create(flipper[ m[i*N+j].cluster ]);
+		m[i*N+j].spin.r =cos(2*PI*flipper[ m[i*N+j].cluster ]/3.0);
+		m[i*N+j].spin.i = sin(2*PI*flipper[ m[i*N+j].cluster ]/3.0);
+		m[i*N+j].spin.index = flipper[ m[i*N+j].cluster ];
 		}
 	}
 	free(flipper);
 }
-/*
-void print_data (Spin * m,int N){
-		drawCluster(m,N);
-		printf("---------------------------------------------------------------------------\n");
-		drawSpin(m,N);		
-		printf("---------------------------------------------------------------------------\n\n");
 
-}
-
-*/
 void evolve_therm (Spin * matrix, Node * nodes, int N, float BETA){
 	int iteration = 0;
 	for ( iteration = 0 ; iteration < ITERATION_TEMP ; iteration++){
