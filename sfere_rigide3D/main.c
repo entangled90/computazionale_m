@@ -15,7 +15,7 @@ altrimenti eta viene impostato di default a eta = 0.1 (fraz_imp)
 #define MAX_COLLISION 2e5
 #define TIME_MAX 30
 /*Numero particelle */
-int NUMBER_OF_PARTICLES = 256;
+int NUMBER_OF_PARTICLES = 128;
 /* Diametro sfere */
 double SIGMA =  0;
 /*Tavola delle collisioni */

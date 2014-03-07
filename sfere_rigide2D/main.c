@@ -559,7 +559,8 @@ char * press_file = "data/press.dat";
 char * tc_file = "data/tc.dat";
 char tcpdf_file[64] = "";
 snprintf(tcpdf_file, 64, "data/pdf_tc/%2f__%s.dat", fraz_imp,date_buffer);
-char * mfp_file = "data/mfp.dat";
+char  mfp_file[64] = "";
+snprintf(mfp_file,64,"data/mfp/mfp%.6lf.dat",fraz_imp);
 snprintf(header_file, 256, "#header: N=%d\t eta=%f\tTIME_MAX=%d\tTERM_TIME=%d\tTEMP=%f\n",N,fraz_imp,TIME_MAX,TERM_TIME,temperature);
 /****FINE GESTIONE FILE***/
 
@@ -611,7 +612,7 @@ FILE *f_mean_mfp = fopen( "data/mfp_eta.dat","a");
 for ( i = 0; i<number_of_particles;i++){
 	dist_tot += particleList[i].distance;
 }
-dist_tot /= (double) numOfCollisions;
+dist_tot /= (double) (numOfCollisions*number_of_particles);
 fprintf(f_mean_mfp,"%e\t%e\n",fraz_imp, dist_tot);
 fclose(f_mean_mfp);
 fclose(f_mean_path);
