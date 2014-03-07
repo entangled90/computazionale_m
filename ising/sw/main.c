@@ -19,7 +19,7 @@ int main ( int argc, char * argv[]) {
 	mt_seed();
 	int i,j;
 	int tau_corr=5;
-	int larghezza_bin = 20;
+	int larghezza_bin = 500;
 	int n_bin = ITERATION_MAX/larghezza_bin;
 	printf("%d\n",n_bin);
 	if (n_bin ==0){
