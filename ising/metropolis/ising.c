@@ -9,6 +9,7 @@
 #include "raccolta_dati.h"
 
 #define CORR_MAX 50
+#define BIN_WIDTH_MAX 500
 
 int main (int argc, char *argv[]){	
 	mt_seed();
@@ -224,13 +225,17 @@ int main (int argc, char *argv[]){
 	}
 
 /* Calcolo necessario per stimare cosa scegliere come larghezza del bin!*/
-	for ( i = 1; i < CORR_MAX ; i+=1){
-		binning(mag_vet_dati,mag_vet_binnato,ITERATION_MAX,i);
-		binning(en_vet_dati,en_vet_binnato,ITERATION_MAX,i);
-		fprintf(f_mag_bin,"%d\t%.14e\n", i,
-			sqrt(varianceOfDoubleArray(mag_vet_binnato,ITERATION_MAX/i))); //(double)(n_bin)));
-		fprintf(f_en_bin,"%d\t%.14e\n", i,
-			sqrt(varianceOfDoubleArray(en_vet_binnato,ITERATION_MAX/i)));//(double)(n_bin)));
+	divideByScalar(mag_vet_dati,N*N,ITERATION_MAX);
+	divideByScalar(en_vet_dati,N*N,ITERATION_MAX);
+	mag_vet_binnato = malloc(sizeof(double)*(ITERATION_MAX));
+	en_vet_binnato = malloc(sizeof(double)*(ITERATION_MAX));
+	for ( larghezza_bin = 1; larghezza_bin < BIN_WIDTH_MAX ; larghezza_bin+=1){
+		binning(mag_vet_dati,mag_vet_binnato,ITERATION_MAX,larghezza_bin);
+		binning(en_vet_dati,en_vet_binnato,ITERATION_MAX,larghezza_bin);
+		fprintf(f_mag_bin,"%d\t%.14e\n", larghezza_bin,
+			sqrt(varianceOfDoubleArray(mag_vet_binnato,ITERATION_MAX/larghezza_bin)/(double)(ITERATION_MAX/larghezza_bin)));
+		fprintf(f_en_bin,"%d\t%.14e\n", larghezza_bin,
+			sqrt(varianceOfDoubleArray(en_vet_binnato,ITERATION_MAX/larghezza_bin)/(double)(ITERATION_MAX/larghezza_bin)));
 	}
 /* Chiusura file */
 	fclose(f_mag_bin);

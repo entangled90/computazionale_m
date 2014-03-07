@@ -11,6 +11,7 @@
 #include "raccolta_dati.h"
 
 #define CORR_MAX 200
+
 int main ( int argc, char * argv[]) {
 	float BETA = 1;
 	int N = 40;
@@ -18,7 +19,7 @@ int main ( int argc, char * argv[]) {
 	mt_seed();
 	int i,j;
 	int tau_corr=5;
-	int larghezza_bin = 15*tau_corr;
+	int larghezza_bin = 20;
 	int n_bin = ITERATION_MAX/larghezza_bin;
 	printf("%d\n",n_bin);
 	if (n_bin ==0){
@@ -139,34 +140,6 @@ int main ( int argc, char * argv[]) {
 		mag_vet_dati[iteration] = fabs(magnetization(matrix,N));
 		en_vet_dati[iteration] = hamiltoniana(matrix,N);
 		/* Correlazione righe e colonne*/
-	/*	for ( i = 0; i<N;i++){
-			X_n[i] = sum_row(matrix,i,N);
-			Y_n[i] = sum_col(matrix,i,N);
-		}
-		for (j = 0; j < N_CORR; ++j){
-			for (i = 0; i < N;i++){
-				S_xt[j]+= X_n[j]*X_n[(i+j)%N];
-				S_yt[j]+= Y_n[j]*Y_n[(i+j)%N];
-			}
-		}
-	for (i = 0; i < N;i++){
-			S_xt[i]/=(double)N;
-			S_yt[i]/=(double)N;
-		}
-
-		for (i=0;i<N_CORR;i++){
-			S_med_temp[i] = S_xt[i]+S_yt[i];//+S_xt[N-1-i]+ S_yt[N-1-i];
-			S_med_temp[i] /=(2.0);
-			S_test[i] += S_med_temp[i];
-		}
-		for (i = 0; i < N;i++){
-			S_xt[i]=0;
-			S_yt[i]=0;
-		}
-		for(j = 0;j<N_CORR;j++){
-			S_dati[iteration*N_CORR+j] = S_med_temp[j];
-		}
-*/
 		for ( i = 0; i<N;i++){
 			X_n[i] = sum_row(matrix,i,N);
 			Y_n[i] = sum_col(matrix,i,N);
@@ -177,19 +150,32 @@ int main ( int argc, char * argv[]) {
 				S_yt[i]+= Y_n[j]*Y_n[(i+j)%N]; 
 			}
 		}
-	}
-	for (i = 0; i < N;i++){
+		for (i = 0; i < N;i++){
 		S_xt[i]/=(double)N;
 		S_yt[i]/=(double)N;
+		}	
+		for (i=0;i<N_CORR;i++){
+			S_med_temp[i] = S_xt[i]+S_yt[i]+S_xt[N-1-i]+ S_yt[N-1-i];
+			S_med_temp[i] /=(4.0);
+	//		S_test[i] += S_med_temp[i];
+		}
+		for(j = 0;j<N_CORR;j++){
+			S_dati[iteration*N_CORR+j] = S_med_temp[j];
+		}
+		for (i = 0; i < N;i++){
+			S_xt[i]=0;
+			S_yt[i]=0;
+		}
+
 	}
-	for ( i = 0; i<N;i++){
+/*	for ( i = 0; i<N;i++){
 		S_xt[i] += S_yt[i]+S_xt[N-1-i] + S_yt[N-1-i];
 		S_xt[i]/=4.0*ITERATION_MAX;
 	}
 	for ( i = 0; i<N/2;i++){
 		fprintf(f_corr_row, "%d\t%lf\n",i,S_xt[i] );
 		}
-
+*/
 	divideByScalar(S_test,ITERATION_MAX,N_CORR);
 /**** BINNING E AUTOCORRELAZIONI */
 /* tutto il BINNING della Correlazione fra righe e colonne*/
@@ -200,13 +186,13 @@ int main ( int argc, char * argv[]) {
 			S_fin[j] += S_dati_binnati[i*N_CORR+j];
 			S_var_fin[j] += S_dati_binnati[i*N_CORR+j]*S_dati_binnati[i*N_CORR+j];
 		}
-		S_var_fin[j] -= S_fin[j]*S_fin[j]/(double)(n_bin);
 		S_fin[j]/= (double)(n_bin);
 		S_var_fin[j] /=(double)(n_bin);
+		S_var_fin[j] -= S_fin[j]*S_fin[j];
 		S_var_fin[j] = sqrt((S_var_fin[j]/(n_bin)));
 	}
 	for ( i = 0; i<N_CORR;i++){
-	//	fprintf(f_corr_row, "%d\t%.14e\t%.14e\n",i,S_fin[i],S_var_fin[i]);
+		fprintf(f_corr_row, "%d\t%.14e\t%.14e\n",i,S_fin[i],S_var_fin[i]);
 	//	fprintf(f_corr_row,"%d\t%.14e\t%.14e\n",i,S_test[i],0.000001);
 	}
 
@@ -231,21 +217,17 @@ int main ( int argc, char * argv[]) {
 	fprintf(f_chi,"%.8lf\t%.14e\t%.14e\n", BETA,meanOfDoubleArray(chi_vet_binnato,n_bin),
 		sqrt(varianceOfDoubleArray(chi_vet_binnato,n_bin)/n_bin));
 
-	divideByScalar(mag_vet_dati,N*N,n_bin);
-	divideByScalar(en_vet_dati,N*N,n_bin);
-//	divideByScalar(chi_vet_dati,N*N,n_bin);
-//	divideByScalar(cv_vet_dati,N*N,n_bin);
-
-
-
-/* Calcolo necessario per stimare cosa scegliere come larghezza del bin!*/
-	for ( i = 1; i < CORR_MAX ; i+=1){
-		binning(mag_vet_dati,mag_vet_binnato,ITERATION_MAX,i);
-		binning(en_vet_dati,en_vet_binnato,ITERATION_MAX,i);
-		fprintf(f_mag_bin,"%d\t%.14e\n", i,
-			sqrt(varianceOfDoubleArray(mag_vet_binnato,ITERATION_MAX/i)/(double)(ITERATION_MAX/i)));
-		fprintf(f_en_bin,"%d\t%.14e\n", i,
-			sqrt(varianceOfDoubleArray(en_vet_binnato,ITERATION_MAX/i)/(double)(ITERATION_MAX/i)));
+	divideByScalar(mag_vet_dati,N*N,ITERATION_MAX);
+	divideByScalar(en_vet_dati,N*N,ITERATION_MAX);
+//	mag_vet_binnato = malloc(sizeof(double)*(ITERATION_MAX));
+//	en_vet_binnato = malloc(sizeof(double)*(ITERATION_MAX));
+	for ( larghezza_bin = 1; larghezza_bin < 100 ; larghezza_bin+=1){
+		binning(mag_vet_dati,mag_vet_binnato,ITERATION_MAX,larghezza_bin);
+		binning(en_vet_dati,en_vet_binnato,ITERATION_MAX,larghezza_bin);
+		fprintf(f_mag_bin,"%d\t%.14e\n", larghezza_bin,
+			sqrt(varianceOfDoubleArray(mag_vet_binnato,ITERATION_MAX/larghezza_bin)/(double)(ITERATION_MAX/larghezza_bin)));
+		fprintf(f_en_bin,"%d\t%.14e\n", larghezza_bin,
+			sqrt(varianceOfDoubleArray(en_vet_binnato,ITERATION_MAX/larghezza_bin)/(double)(ITERATION_MAX/larghezza_bin)));
 	}
 
 
