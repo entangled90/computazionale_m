@@ -71,7 +71,18 @@ void print_speed (){
 	}
 	fclose(f);
 	}
-	
+	/*Calcola energia cinetica*/
+double kin_en ( void) {
+	int i = 0;
+	double  sum = 0;
+	for ( i = 0; i< number_of_particles ; i++){
+		sum += scalar_prod(particleList[i].speed, particleList[i].speed);
+		if ( scalar_prod(particleList[i].speed, particleList[i].speed) < 0){
+			printf("Vx = %e Vy = %e V^2 = %e\n",particleList[i].speed[0],particleList[i].speed[1],scalar_prod(particleList[i].speed, particleList[i].speed) );
+		}
+	}
+	return sum;
+	}
 	
 inline void boltzmann_file_save ( void ){
 	int i = 0;
@@ -84,17 +95,78 @@ inline void boltzmann_file_save ( void ){
 	fclose(f);
 }
 /*******************************************************************************************/
-// n deve esser maggiore di 0
-int min_square ( int n) {
-	int i = 1;
-	int result = 1;	
-	while ( i*i <= n){
-		result = i;
-		i++;
-	}
-	return result;
-}
+
 /* Inizializzazione delle particelle */
+//Genera un reticolo quadrato a partire dal punto rx
+void genere_sottoreticolo(int rx_in, int ry_in, int q, double passo, double * speed_cm){
+	int p = 0; 
+	int c=0;
+	int d=0;
+	double rx=rx_in;
+	double ry=ry_in;
+	while (p < N && d<q-1) { 
+		while (p < N && c<q-1) {
+			particleList[p].distance=0;
+			particleList[p].n_collision=0;
+			particleList[p].last_time_collision=0;
+			particleList[p].speed[0] =2*(rand()/(RAND_MAX*1.0)) -1.0 ;
+			particleList[p].speed[1] = 2*(rand()/(RAND_MAX*1.0)) -1.0 ;
+			speed_cm[0] += particleList[p].speed[0];
+			speed_cm[1] += particleList[p].speed[1];
+			particleList[p].position[0]=rx;
+			particleList[p].position[1]=ry;
+			rx = rx + passo;
+			p = p + 1;
+			c++; 
+			printf("PD %lf \t %lf\n", particleList[p].position[0],particleList[p].position[1]);
+		} 
+		rx = 0;
+		c=0;
+		ry = ry + passo;
+		d++;
+	} 
+
+}
+
+void reticolo () { 
+	double passo = 0;//passo del reticolo 
+	//contatori 
+	double rx = 0;
+	double ry = 0; 
+	double q=0;
+    double m=0;
+    int i,j;
+    double speed_cm[2]={0.0,0.0};
+     //Definisco il passo del reticolo cercando il minimo doppio di un quadrato: m >= n.
+      //Questa procedura permette di sfruttare l'intero spazio a disposizione per la creazione del reticolo.
+     for (q = 0; m < N; q ++){
+    	m = 2*q*q;
+    	printf("m= %lf\n", m);     	
+    }
+    passo = sqrt(2/m);
+      	 //printf("passo %lf\n", passo);
+      	  //creazione reticolo
+    genere_sottoreticolo(rx,ry,q,passo,speed_cm);
+    printf("ciao\n");
+	rx = passo/2;
+	ry = passo/2;
+    genere_sottoreticolo(ry,ry,q,passo,speed_cm);
+	for ( i= 0; i<number_of_particles;i++){
+		for(j=0;j<N;j++){
+			particleList[i].speed[j] -= speed_cm[j]/((double) number_of_particles);
+		}
+	}
+	for ( i= 0; i<number_of_particles;i++){
+		for(j=0;j<N;j++){
+			particleList[i].speed[j] /= sqrt(kin_en());
+		}
+	}
+	print_coordinate();
+	print_speed();
+	fflush(stdout);
+}
+
+
 void particle_init (){
 	int i_part= 0;
 	int i,j;
@@ -330,18 +402,7 @@ void fix_boundaries (){
 	}
 }
 
-/*Calcola energia cinetica*/
-double kin_en ( void) {
-	int i = 0;
-	double  sum = 0;
-	for ( i = 0; i< number_of_particles ; i++){
-		sum += scalar_prod(particleList[i].speed, particleList[i].speed);
-		if ( scalar_prod(particleList[i].speed, particleList[i].speed) < 0){
-			printf("Vx = %e Vy = %e V^2 = %e\n",particleList[i].speed[0],particleList[i].speed[1],scalar_prod(particleList[i].speed, particleList[i].speed) );
-		}
-	}
-	return sum;
-	}
+
 
 /*Calcola momento totale (in norma)*/
 double total_momentum (){
@@ -546,7 +607,7 @@ printf("Frazione di impacchettamento: %e\n", fraz_imp);
 collTable = malloc (number_of_particles*number_of_particles*sizeof(double));
 particleList = malloc ( number_of_particles * sizeof(particle_s));
 time_list = malloc (NUM_TEMPI_SALVATI*number_of_particles * sizeof(particle_s));
-particle_init ( particleList);
+reticolo ();
 fix_boundaries();
 temperature = 2*kin_en()/((double) N)/(double) number_of_particles/K_BOLTZ;
 printf(" K = %e \t P= %e \t", kin_en(), total_momentum());
@@ -569,6 +630,7 @@ if ( check_distance() != 0){
 	printf("Sfere troppo vicine tra loro. Avvio annullato\n");
 	exit(EXIT_FAILURE);
 }
+
 print_coordinate();
 printf("#Collisions: %d \n", numOfCollisions);
 

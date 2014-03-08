@@ -85,6 +85,8 @@ inline void boltzmann_file_save ( void ){
 }
 /*******************************************************************************************/
 
+
+
 void particle_init ( particle_s *particleList ){
 	int i_part= 0;
 	int i,j;
