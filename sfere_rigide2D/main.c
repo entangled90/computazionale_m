@@ -15,7 +15,7 @@ altrimenti eta viene impostato di default a eta = 0.1 (fraz_imp)
 #define MAX_COLLISION 2e5
 #define TIME_MAX 30
 /*Numero particelle */
-int number_of_particles = 256;
+int number_of_particles = 288;
 /* Diametro sfere */
 double SIGMA =  0;
 /*Tavola delle collisioni */
@@ -98,29 +98,31 @@ inline void boltzmann_file_save ( void ){
 
 /* Inizializzazione delle particelle */
 //Genera un reticolo quadrato a partire dal punto rx
-void genere_sottoreticolo(int rx_in, int ry_in, int q, double passo, double * speed_cm){
-	int p = 0; 
+void genera_sottoreticolo(double rx_in, double ry_in, int q,int start, double passo, double * speed_cm){
+	int p = start; 
 	int c=0;
 	int d=0;
-	double rx=rx_in;
-	double ry=ry_in;
-	while (p < N && d<q-1) { 
-		while (p < N && c<q-1) {
+	double rx;
+	double ry;
+	rx=rx_in;
+	ry=ry_in;
+	while (p < number_of_particles && d<q-1) { 
+		while (p < number_of_particles && c<q-1) {
 			particleList[p].distance=0;
 			particleList[p].n_collision=0;
 			particleList[p].last_time_collision=0;
 			particleList[p].speed[0] =2*(rand()/(RAND_MAX*1.0)) -1.0 ;
 			particleList[p].speed[1] = 2*(rand()/(RAND_MAX*1.0)) -1.0 ;
-			speed_cm[0] += particleList[p].speed[0];
-			speed_cm[1] += particleList[p].speed[1];
 			particleList[p].position[0]=rx;
 			particleList[p].position[1]=ry;
+//			printf("P %d %lf \t %lf\n", p,particleList[p].position[0],particleList[p].position[1]);
+			speed_cm[0] += particleList[p].speed[0];
+			speed_cm[1] += particleList[p].speed[1];
 			rx = rx + passo;
-			p = p + 1;
+			p++;
 			c++; 
-			printf("PD %lf \t %lf\n", particleList[p].position[0],particleList[p].position[1]);
 		} 
-		rx = 0;
+		rx = rx_in;
 		c=0;
 		ry = ry + passo;
 		d++;
@@ -129,28 +131,28 @@ void genere_sottoreticolo(int rx_in, int ry_in, int q, double passo, double * sp
 }
 
 void reticolo () { 
-	double passo = 0;//passo del reticolo 
+	double passo = 0.0;//passo del reticolo 
 	//contatori 
-	double rx = 0;
-	double ry = 0; 
-	double q=0;
-    double m=0;
+	double rx = 0.0;
+	double ry = 0.0; 
+	int q=0;
+    int m=0;
     int i,j;
     double speed_cm[2]={0.0,0.0};
      //Definisco il passo del reticolo cercando il minimo doppio di un quadrato: m >= n.
       //Questa procedura permette di sfruttare l'intero spazio a disposizione per la creazione del reticolo.
-     for (q = 0; m < N; q ++){
+     for (q = 0; m < number_of_particles; q++){
     	m = 2*q*q;
-    	printf("m= %lf\n", m);     	
     }
-    passo = sqrt(2/m);
-      	 //printf("passo %lf\n", passo);
+    passo = sqrt(2/(double)m);
+	printf("passo %lf\n", passo);
       	  //creazione reticolo
-    genere_sottoreticolo(rx,ry,q,passo,speed_cm);
-    printf("ciao\n");
-	rx = passo/2;
-	ry = passo/2;
-    genere_sottoreticolo(ry,ry,q,passo,speed_cm);
+	rx=0;
+	ry=0;
+    genera_sottoreticolo(rx,ry,q,0,passo,speed_cm);
+	rx = passo/2.0;
+	ry = passo/2.0;
+    genera_sottoreticolo(ry,ry,q,number_of_particles/2, passo,speed_cm);
 	for ( i= 0; i<number_of_particles;i++){
 		for(j=0;j<N;j++){
 			particleList[i].speed[j] -= speed_cm[j]/((double) number_of_particles);
@@ -158,7 +160,7 @@ void reticolo () {
 	}
 	for ( i= 0; i<number_of_particles;i++){
 		for(j=0;j<N;j++){
-			particleList[i].speed[j] /= sqrt(kin_en());
+			particleList[i].speed[j] /= sqrt(kin_en()/(double)number_of_particles);
 		}
 	}
 	print_coordinate();
@@ -642,8 +644,9 @@ collision_table();
 while ( numOfCollisions < TERM_TIME){
 	evolve_therm();
 }
+boltzmann_file_save();
 total_time = 0;
-printf("Termalizzato: %d urti\n",numOfCollisions);
+printf("Termalizzato: %d urti ---- kin_en = %lf\n",numOfCollisions,kin_en());
 while (total_time < TIME_MAX){
 	evolve();
 	/*if( numOfCollisions % 10000 == 0 ){
