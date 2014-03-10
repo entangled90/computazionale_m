@@ -27,7 +27,7 @@ int main ( int argc, char * argv[]) {
 		exit(1);
 	}
 	/*Check for command line arguments*/
-	if (argc>1){
+	if (argc !=2){
 		BETA = atof(argv[1]);
 		N = atoi(argv[2]);
 	}
@@ -165,7 +165,27 @@ int main ( int argc, char * argv[]) {
 
 	}
 	savePPM(matrix,N,"dopoevoluzione.ppm");
-
+	int r=0;
+	int g =0;
+	int b=0;
+	int other=0;
+	double rd,gd,bd,otherd;
+	for (i = 0;i<N*N;i++){
+	//	printf("(%lf,%lf)\n",matrix[i].spin.r,matrix[i].spin.i );
+		if (matrix[i].spin.index == 0)
+			r++;
+		else if(matrix[i].spin.index == 1)
+			g++;
+		else if(matrix[i].spin.index == 2)
+			b++;
+		else
+			other++;
+	}
+	rd = r / (double)(N*N);
+	gd = g / (double)(N*N);
+	bd = b / (double)(N*N);
+	otherd = other/(double)(N*N);
+	printf(" r:%lf g:%lf b:%lf other:%lf\n",rd,gd,bd,otherd);
 	printf("Fine simulazione. Inizio elaborazione dati\n");
 /*	for ( i = 0; i<N;i++){
 		S_xt[i] += S_yt[i]+S_xt[N-1-i] + S_yt[N-1-i];

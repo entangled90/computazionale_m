@@ -10,7 +10,7 @@
 #include "mtwist.h"
 #include "cnum.h"
 
-#define PI atan(1)
+#define PI M_PI
 
 
 int cluster_max = -1;
@@ -27,8 +27,11 @@ void spin_init ( Spin * matrix, Node * n, int N){
 			else if (tmp < 2/3.0){
 				matrix[i*N+j].spin = cNum_create(1);
 			}
-			else{
+			else if (tmp <1.0){
 				matrix[i*N+j].spin = cNum_create(2);
+			}
+			else{
+				printf("Errore nei numeri casuali\n");
 			}
 			matrix[i*N+j].i = i;
 			matrix[i*N+j].j = j;
@@ -145,7 +148,7 @@ inline void savePPM(Spin * s, int N, char * filename)
 void flip_spin ( Spin * m, int N){
 	int i,j;
 	int * flipper;
-	float tmp;
+	double tmp;
 	flipper = (int *) malloc(sizeof(int)*(cluster_max+1));
 	if (!flipper){
 		printf("errore in flip spin: cluster_max = %d\n",cluster_max+1);
@@ -153,9 +156,9 @@ void flip_spin ( Spin * m, int N){
 	}
 	for (i=0 ; i<cluster_max+1 ; i++){
 		tmp = mt_drand();
-		if (  tmp < 1/3.0)
+		if (  tmp <= 1.0/(double)3.0)
 			flipper[i] = 0;
-		else if ( tmp < 2/3.0)
+		else if ( tmp <= 2.0/(double)3.0)
 			flipper[i] = 1;
 		else {
 			flipper[i] = 2;
@@ -164,9 +167,9 @@ void flip_spin ( Spin * m, int N){
 	for (i=0;i<N;i++){
 		for(j = 0; j<N;j++){
 //			m[i*N+j].spin =  cNum_create(flipper[ m[i*N+j].cluster ]);
-		m[i*N+j].spin.r =cos(2*PI*flipper[ m[i*N+j].cluster ]/3.0);
-		m[i*N+j].spin.i = sin(2*PI*flipper[ m[i*N+j].cluster ]/3.0);
-		m[i*N+j].spin.index = flipper[ m[i*N+j].cluster ];
+		m[i*N+j].spin.r =cos((double)2*PI*flipper[m[i*N+j].cluster]/3.0);
+		m[i*N+j].spin.i = sin((double)2*PI*flipper[m[i*N+j].cluster]/3.0);
+		m[i*N+j].spin.index = flipper[m[i*N+j].cluster];
 		}
 	}
 	free(flipper);
@@ -174,12 +177,15 @@ void flip_spin ( Spin * m, int N){
 
 void evolve_therm (Spin * matrix, Node * nodes, int N, float BETA){
 	int iteration = 0;
+//	FILE * f = fopen("data/mag_therm.dat","w");
 	for ( iteration = 0 ; iteration < ITERATION_TEMP ; iteration++){
 		startClustering(matrix,nodes,N,BETA);
 		flip_spin(matrix,N);
 		reset_cluster(matrix,nodes,N);
-	}
+//		fprintf(f,"%d\t%e\n",iteration,magnetization(matrix,N)/(double)(N*N));
 
+	}
+	//flcose(f);
 }
 
 void evolve( Spin * matrix, Node * nodes, int N, float BETA){
