@@ -9,11 +9,13 @@ altrimenti eta viene impostato di default a eta = 0.1 (fraz_imp)
 #include <time.h>
 #include <float.h>
 #include "vect2d.h"
+#include "raccolta_dati.h"
 /*Numero di dimensioni */
 #define N 2
 #define TERM_TIME 20000
 #define MAX_COLLISION 2e5
 #define TIME_MAX 30
+#define N_BIN_PRESS 30
 /*Numero particelle */
 int number_of_particles = 288;
 /* Diametro sfere */
@@ -28,6 +30,7 @@ double total_time = 0;
 double temperature = 0;
 double K_BOLTZ=1;
 double pression = 0;
+double pression_var=0;
 double D_speed_norm = 0;
 double DIST_RET = 0;
 
@@ -464,6 +467,7 @@ inline void evolve ( ) {
 	numOfCollisions +=1;
 	total_time+=time_collision;
 	pression+= sqrt(scalar_prod(deltaV,deltaV));
+	pression_var +=scalar_prod(deltaV,deltaV);
 	}
 
 /* Evolve ma utilizzata solo in fase di termalizzazione, senza alcuna presa dati*/
@@ -595,7 +599,7 @@ unsigned int i ;
 srand(time(NULL));
 double dist_tot=0;
 double fraz_imp=0.1;
-
+double pression_bin[N_BIN_PRESS];
 if (argc > 1){
 	fraz_imp = atof(argv[1]);
 }
@@ -648,11 +652,7 @@ boltzmann_file_save();
 total_time = 0;
 printf("Termalizzato: %d urti ---- kin_en = %lf\n",numOfCollisions,kin_en());
 while (total_time < TIME_MAX){
-	evolve();
-	/*if( numOfCollisions % 10000 == 0 ){
-		printf("#Collisions: %d  Total Time: %e\n", numOfCollisions, total_time);
-	}
-	*/
+	evolve();	
 	fprintf(pdf_time_coll_fileindex,"%f\n",time_collision);
 }
 fclose(pdf_time_coll_fileindex);
@@ -660,10 +660,10 @@ if (time_counted > NUM_TEMPI_SALVATI){
 	printf("ERROR \n");
 }
 r_squared_save(r2_file);
-pression*=SIGMA/total_time/3.0/kin_en();
+pression*=SIGMA/3.0/kin_en();
 pression+=1.0;
 pression*=fraz_imp/M_PI*2*sqrt(3.00);
-pression *= number_of_particles*temperature;
+//pression *= number_of_particles*temperature;
 FILE *f_collision=fopen(tc_file,"a");
 fprintf(f_collision,"%e\t%e\n",fraz_imp,total_time/(2*numOfCollisions/(double)number_of_particles));
 FILE *f_pression=fopen(press_file,"a");

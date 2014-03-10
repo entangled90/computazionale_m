@@ -21,12 +21,12 @@ all: rmxeq mkdep mkxeq rmpmk
 
 MAIN =  main
 
-#MODULES = module
+MODULES = raccolta_dati
 #$(EXTRAS) # search path for modules
 
-#MDIR = ../../modules
+MDIR = ../modules
 
-#VPATH = $(MDIR)/random:$(MDIR)/start:
+VPATH = $(MDIR)/dati
 #$(MDIR)/extras
 
 
