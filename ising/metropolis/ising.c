@@ -22,13 +22,16 @@ int main (int argc, char *argv[]){
 	int n_bin = ITERATION_MAX/larghezza_bin;
 	printf("%d\n",n_bin);
 
-	if (argc>1){
+	if (argc > 2 ){
 		BETA = atof(argv[1]);
 		N = atoi(argv[2]);
 	}
 	else{
-		printf("Inserire il valore di Beta\n");
+		printf("Inserire il valore di Beta e N\n");
 		return 0;
+	}
+	if (argc == 4){
+		larghezza_bin = atoi(argv[3]);
 	}
 	int N_CORR = N/4;
 	double * X_n= malloc(sizeof(double)*N);
@@ -56,6 +59,9 @@ int main (int argc, char *argv[]){
 	snprintf(mag_binning_filename,64,"data/binning/mag_N%d__B%.8lf.dat",N,BETA); 
 	char mag_autocorr_filename[64] = "";
 	snprintf(mag_autocorr_filename,64,"data/mag_corr/mag_autocorrN%d_B%.8lf.dat",N,BETA);
+	char mag_tau_filename[64] = "";
+	snprintf(mag_tau_filename,64,"data/tau_magN%d.dat",N);
+
 /*----------------------_ENergia*/
 	char en_binning_filename[64] = "";
 	snprintf(en_binning_filename,64,"data/binning/en_N%d__B%.8lf.dat",N,BETA);
@@ -66,6 +72,8 @@ int main (int argc, char *argv[]){
 //	char en_temp_filename[64] = "data/en_temp.dat";
 	char cv_filename[64]="";
 	snprintf(cv_filename,64,"data/cv%d.dat",N);
+	char en_tau_filename[64] = "";
+	snprintf(en_tau_filename,64,"data/tau_enN%d.dat",N);
 
 	char corr_row_filename[64]="";
 	snprintf(corr_row_filename,64,"data/corr_row/corr_row_N%dB%.8lf.dat",N,BETA);
@@ -77,23 +85,31 @@ int main (int argc, char *argv[]){
 	FILE * f_mag_bin = fopen(mag_binning_filename,"w");
 
 	FILE * f_mag_autocorr = fopen(mag_autocorr_filename,"w");
+	FILE * f_mag_tau = fopen(mag_tau_filename,"a");
 	FILE * f_mag_temp = fopen("data/mag_temp.dat","w");	FILE * f_en_bin = fopen(en_binning_filename,"w");
 	FILE * f_en_autocorr = fopen(en_autocorr_filename,"w");
 	FILE * f_en = fopen(en_filename,"a");
 //	FILE * f_en_temp = fopen(en_temp_filename,"w");
 	FILE * f_cv = fopen(cv_filename,"a");
-
+	FILE * f_en_tau = fopen(en_tau_filename,"a");
 	FILE * f_corr_row = fopen(corr_row_filename,"w");
 
+	FILE * f_en_therm = fopen("data/en_therm.dat","w");
+	FILE * f_mag_therm = fopen("data/mag_therm.dat","w");
 
 /**********************************************************************
  TERMALIZZAZIONE
  **********************************************************************/
-
+	//savePPM(matrix,N);
+	//printf("immagine stampata\n");
 	while(iteration < ITERATION_THERM){
+		fprintf(f_en_therm, "%d\t%.10e\n",iteration, hamiltoniana(matrix,N)/(double)(N*N) );
+		fprintf(f_mag_therm, "%d\t%.10e\n",iteration, magnetization(matrix,N)/(double)(N*N) );
 		metropolis_ising(matrix,N,BETA);
 		iteration++;
 	}
+	fclose(f_en_therm);
+	fclose(f_mag_therm);
 /* Vettori per il binning*/
 	double * mag_vet_dati ;
 	double * mag_vet_binnato;
@@ -209,12 +225,24 @@ int main (int argc, char *argv[]){
 			fprintf(f_en_autocorr,"%d\t%.14e\n",i,en_autocorr[i]);
 		}
 	}
+	double tau_en = 0.5;
+	for (i=0;i<CORR_MAX;i++){
+		tau_en+=en_autocorr[i];
+	}
+	fprintf(f_en_tau, "%.14e\t%.14e\n",BETA,tau_en);
 	autocorrelation(mag_vet_dati,mag_autocorr,ITERATION_MAX,CORR_MAX);
 	if(f_mag_autocorr){
 		for (i = 0; i<CORR_MAX;i++){
 			fprintf(f_mag_autocorr,"%d\t%.14e\n",i,mag_autocorr[i]);
 		}
 	}
+	double tau_mag = 0.5;
+	for (i=0;i<CORR_MAX;i++){
+		tau_mag+=mag_autocorr[i];
+	}
+	fprintf(f_mag_tau, "%.14e\t%.14e\n",BETA,tau_mag);
+
+
 /*
 	for ( i=0;i<ITERATION_MAX;i++){
 		fprintf(f_en_temp,"%.14e\n",en_vet_dati[i]);
@@ -243,8 +271,9 @@ int main (int argc, char *argv[]){
 	fclose(f_mag_temp);
 	fclose(f_mag_autocorr);
 	fclose(f_chi);
-
+	fclose(f_mag_tau);
 	fclose(f_en);
+	fclose(f_en_tau);
 	//fclose(f_en_temp);
 	fclose(f_en_bin);
 	fclose(f_en_autocorr);

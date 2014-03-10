@@ -86,7 +86,7 @@ void fillCluster( Spin * matrix, Node * nodes, List * l, int N, float BETA){
 }
 
 
-void startClustering (Spin * matrix, Node * nodes, int N, float BETA){
+void startClustering (Spin * matrix, Node * nodes, int N, double BETA){
 	int i,j;
 	List * cluster = malloc(sizeof(List));
 	for ( i = 0; i< N; i++){
@@ -186,19 +186,26 @@ void print_data (Spin * m,int N){
 }
 void evolve_therm (Spin * matrix, Node * nodes, int N, float BETA){
 	int iteration = 0;
+	FILE * f_en_therm = fopen("data/en_therm.dat","w");
+	FILE * f_mag_therm = fopen("data/mag_therm.dat","w");
 	for ( iteration = 0 ; iteration < ITERATION_TEMP ; iteration++){
 		startClustering(matrix,nodes,N,BETA);
+		fprintf(f_en_therm, "%d\t%.10e\n",iteration, hamiltoniana(matrix,N)/(double)(N*N) );
+		fprintf(f_mag_therm, "%d\t%.10e\n",iteration, magnetization(matrix,N)/(double)(N*N) );
 		flip_spin(matrix,N);
 		reset_cluster(matrix,nodes,N);
 	}
+	fclose(f_en_therm);
+	fclose(f_mag_therm);
+
 
 }
 
 void evolve( Spin * matrix, Node * nodes, int N, float BETA){
+	reset_cluster(matrix,nodes,N);
 	startClustering(matrix,nodes,N,BETA);
 	flip_spin(matrix,N);
 	//PRENDERE DATI QUI
-	reset_cluster(matrix,nodes,N);
 }
 
 inline double hamiltoniana( Spin * s, int N){
@@ -229,6 +236,26 @@ double sum_col(Spin * s, int col, int N){
 		sum += s[j*N+col].spin;
 	}
 	return sum /= ((double) N) ;
+}
+
+double mag_improved(Spin *s , int N){
+	int i;
+	int max=0;
+	int spin_in_cluster[cluster_max+1];
+	for (i=0; i<cluster_max+1;i++){
+		spin_in_cluster[i]=0;
+	}
+	for(i=0;i<N*N;i++){
+		spin_in_cluster[s[i].cluster]++;
+	}
+
+	for (i=0; i<cluster_max+1;i++){
+		if (spin_in_cluster[i]>max)
+			max = spin_in_cluster[i];
+	}
+
+	return max;
+
 }
 
 #endif

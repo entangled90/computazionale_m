@@ -5,8 +5,32 @@
 \input{title.tex}
 
 
-\section{Studio delle transizioni di fase: modello di Ising e Potts}
-\subsection{Modello di Ising}
+\section{Modello di Ising}
+Il modello è stato implementato su un reticolo bidimensione di larghezza N e inizializzando gli spin al valore $\pm 1 $  con uguale probabilità.
+Sono stati implementati due algoritmi: Metropolis e Swendsen-Wang.\\
+
+\subsection{Algoritmo Metropolis}
+\subsubsection{Termalizzazione}
+Possiamo valutare quando avviene la corretta termalizzazione del sistema analizzando l'andamento della magnetizzazione e dell'energia in funzione del tempo markoviano.
+Di seguito è riportato l'andamento dell'energia durante la termalizzazione a due diverse temperature, di cui una è la temperatura critica:\\
+\begin{figure}[h]
+\includegraphics[scale=0.35]{metropolis/en_therm.png}
+\includegraphics[scale=0.35]{metropolis/en_therm_crit.png}
+\caption{Energia a $\beta=0.3$ e $\beta=0.43$}
+\end{figure}
+\\
+Di seguito la magnetizzazione:\\
+\begin{figure}[h]
+\includegraphics[scale=0.35]{metropolis/mag_therm.png}
+\includegraphics[scale=0.35]{metropolis/mag_therm_crit.png}
+\caption{Magnetizzazione a $\beta=0.3$ e $\beta=0.43$}
+\end{figure}
+Come si può vedere dal grafico relativo alla magnetizzazione a $\beta=0.43$, vicino al punto critico il tempo di termalizzazione cresce di molto. Esso rimane comunque intorno a 100 alla temperatura critica.
+Dopo l'analisi di questi dati si è deciso di fissare il tempo di termalizzazione a 1000 passi temporali.
+
+\subsubsection{Autocorrelazione fra le configurazioni}
+
+
 
 
 \end{document}

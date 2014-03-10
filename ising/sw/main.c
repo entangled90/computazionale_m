@@ -10,7 +10,7 @@
 #include "mtwist.h"
 #include "raccolta_dati.h"
 
-#define CORR_MAX 200
+#define CORR_MAX 50
 
 int main ( int argc, char * argv[]) {
 	float BETA = 1;
@@ -19,7 +19,7 @@ int main ( int argc, char * argv[]) {
 	mt_seed();
 	int i,j;
 	int tau_corr=5;
-	int larghezza_bin = 500;
+	int larghezza_bin = 30;
 	int n_bin = ITERATION_MAX/larghezza_bin;
 	printf("%d\n",n_bin);
 	if (n_bin ==0){
@@ -61,6 +61,9 @@ int main ( int argc, char * argv[]) {
 	snprintf(mag_binning_filename,64,"data/binning/mag_N%d__B%.8lf.dat",N,BETA); 
 	char mag_autocorr_filename[64] = "";
 	snprintf(mag_autocorr_filename,64,"data/mag_corr/mag_autocorrN%d_B%.8lf.dat",N,BETA);
+	char mag_tau_filename[64] = "";
+	snprintf(mag_tau_filename,64,"data/tau_magN%d.dat",N);
+
 /*----------------------_ENergia*/
 	char en_binning_filename[64] = "";
 	snprintf(en_binning_filename,64,"data/binning/en_N%d__B%.8lf.dat",N,BETA);
@@ -71,9 +74,12 @@ int main ( int argc, char * argv[]) {
 //	char en_temp_filename[64] = "data/en_temp.dat";
 	char cv_filename[64]="";
 	snprintf(cv_filename,64,"data/cv%d.dat",N);
+	char en_tau_filename[64] = "";
+	snprintf(en_tau_filename,64,"data/tau_enN%d.dat",N);
 
 	char corr_row_filename[64]="";
 	snprintf(corr_row_filename,64,"data/corr_row/corr_row_N%dB%.8lf.dat",N,BETA);
+
 
 /*** I File sono chiamati: f_$(Nomestringa) ****/
 	FILE * f_mag = fopen(mag_filename,"a");
@@ -81,14 +87,14 @@ int main ( int argc, char * argv[]) {
 	FILE * f_mag_bin = fopen(mag_binning_filename,"w");
 
 	FILE * f_mag_autocorr = fopen(mag_autocorr_filename,"w");
+	FILE * f_mag_tau = fopen(mag_tau_filename,"a");
 	FILE * f_mag_temp = fopen("data/mag_temp.dat","w");	FILE * f_en_bin = fopen(en_binning_filename,"w");
 	FILE * f_en_autocorr = fopen(en_autocorr_filename,"w");
 	FILE * f_en = fopen(en_filename,"a");
 //	FILE * f_en_temp = fopen(en_temp_filename,"w");
 	FILE * f_cv = fopen(cv_filename,"a");
-
+	FILE * f_en_tau = fopen(en_tau_filename,"a");
 	FILE * f_corr_row = fopen(corr_row_filename,"w");
-
 
 	/*Start*/
 	spin_init(matrix,nodes,N);
@@ -137,7 +143,7 @@ int main ( int argc, char * argv[]) {
 	/****** CICLO DI EVOLUZIONE: PRENDERE MISURE QUI */
 	for ( iteration=0;iteration<ITERATION_MAX; iteration++){
 		evolve(matrix,nodes,N,BETA);
-		mag_vet_dati[iteration] = fabs(magnetization(matrix,N));
+		mag_vet_dati[iteration] = fabs(mag_improved(matrix,N));
 		en_vet_dati[iteration] = hamiltoniana(matrix,N);
 		/* Correlazione righe e colonne*/
 		for ( i = 0; i<N;i++){
@@ -238,12 +244,24 @@ int main ( int argc, char * argv[]) {
 			fprintf(f_en_autocorr,"%d\t%.14e\n",i,en_autocorr[i]);
 		}
 	}
+	double tau_en = 0.5;
+	for (i=0;i<CORR_MAX;i++){
+		tau_en+=en_autocorr[i];
+	}
+	fprintf(f_en_tau, "%.14e\t%.14e\n",BETA,tau_en);
+
 	autocorrelation(mag_vet_dati,mag_autocorr,ITERATION_MAX,CORR_MAX);
 	if(f_mag_autocorr){
 		for (i = 0; i<CORR_MAX;i++){
 			fprintf(f_mag_autocorr,"%d\t%.14e\n",i,mag_autocorr[i]);
 		}
 	}
+
+	double tau_mag = 0.5;
+	for (i=0;i<CORR_MAX;i++){
+		tau_mag+=mag_autocorr[i];
+	}
+	fprintf(f_mag_tau, "%.14e\t%.14e\n",BETA,tau_mag);
 /*
 	for ( i=0;i<ITERATION_MAX;i++){
 		fprintf(f_en_temp,"%.14e\n",en_vet_dati[i]);
@@ -260,6 +278,8 @@ int main ( int argc, char * argv[]) {
 	fclose(f_chi);
 	fclose(f_en);
 	fclose(f_mag_temp);
+	fclose(f_mag_tau);
+	fclose(f_en_tau);
 	//fclose(f_en_temp);
 	fclose(f_mag_autocorr);
 	/* Free della memoria */

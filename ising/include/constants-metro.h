@@ -3,6 +3,6 @@
 
 
 #define J  1
-#define ITERATION_THERM 3000
+#define ITERATION_THERM 1000
 #define ITERATION_MAX	50000
 #endif
