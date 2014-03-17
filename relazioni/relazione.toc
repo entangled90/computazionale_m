@@ -1,0 +1,5 @@
+\select@language {italian}
+\select@language {italian}
+\contentsline {section}{\numberline {0.1}Modello di Ising}{2}{section.0.1}
+\contentsline {subsection}{\numberline {0.1.1}Termalizzazione}{2}{subsection.0.1.1}
+\contentsline {subsection}{\numberline {0.1.2}Autocorrelazione fra le configurazioni}{3}{subsection.0.1.2}

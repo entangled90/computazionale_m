@@ -8,7 +8,8 @@
 #include "metropolis.h"
 #include "raccolta_dati.h"
 
-#define CORR_MAX 50
+#define CORR_MAX 100
+#define CORR_ESTREMO 50
 #define BIN_WIDTH_MAX 500
 
 int main (int argc, char *argv[]){	
@@ -69,7 +70,7 @@ int main (int argc, char *argv[]){
 	snprintf(en_filename,64,"data/en_N%d.dat",N);
 	char en_autocorr_filename[64] = "";
 	snprintf(en_autocorr_filename,64,"data/en_corr/en_autocorrN%d_B%.8lf.dat",N,BETA);
-//	char en_temp_filename[64] = "data/en_temp.dat";
+	char en_temp_filename[64] = "data/en_temp.dat";
 	char cv_filename[64]="";
 	snprintf(cv_filename,64,"data/cv%d.dat",N);
 	char en_tau_filename[64] = "";
@@ -89,7 +90,7 @@ int main (int argc, char *argv[]){
 	FILE * f_mag_temp = fopen("data/mag_temp.dat","w");	FILE * f_en_bin = fopen(en_binning_filename,"w");
 	FILE * f_en_autocorr = fopen(en_autocorr_filename,"w");
 	FILE * f_en = fopen(en_filename,"a");
-//	FILE * f_en_temp = fopen(en_temp_filename,"w");
+	FILE * f_en_temp = fopen(en_temp_filename,"w");
 	FILE * f_cv = fopen(cv_filename,"a");
 	FILE * f_en_tau = fopen(en_tau_filename,"a");
 	FILE * f_corr_row = fopen(corr_row_filename,"w");
@@ -147,12 +148,12 @@ int main (int argc, char *argv[]){
 	vec_zeros(S_fin,N_CORR);
 	vec_zeros(S_var_fin,N_CORR);
 	vec_zeros(S_test,N_CORR);
-
+	iteration =0;
 	while(iteration < ITERATION_MAX){
 		metropolis_ising(matrix,N,BETA);
 		mag_vet_dati[iteration] = fabs(magnetization(matrix,N));
 		en_vet_dati[iteration] = hamiltoniana(matrix,N);
-	iteration++;
+		iteration++;
 		for ( i = 0; i<N;i++){
 			X_n[i] = sum_row(matrix,i,N);
 			Y_n[i] = sum_col(matrix,i,N);
@@ -218,6 +219,10 @@ int main (int argc, char *argv[]){
 	fprintf(f_chi,"%.8lf\t%.14e\t%.14e\n", BETA,meanOfDoubleArray(chi_vet_binnato,n_bin),
 		sqrt(varianceOfDoubleArray(chi_vet_binnato,n_bin)/n_bin));
 
+
+	divideByScalar(mag_vet_dati,N*N,ITERATION_MAX);
+	divideByScalar(en_vet_dati,N*N,ITERATION_MAX);
+
 	/* Calcolo autocorrelazione per le due grandezze */
 	autocorrelation(en_vet_dati,en_autocorr,ITERATION_MAX,CORR_MAX);
 	if(f_en_autocorr){
@@ -226,10 +231,12 @@ int main (int argc, char *argv[]){
 		}
 	}
 	double tau_en = 0.5;
-	for (i=0;i<CORR_MAX;i++){
+	for (i=0;i<CORR_ESTREMO;i++){
 		tau_en+=en_autocorr[i];
 	}
 	fprintf(f_en_tau, "%.14e\t%.14e\n",BETA,tau_en);
+
+
 	autocorrelation(mag_vet_dati,mag_autocorr,ITERATION_MAX,CORR_MAX);
 	if(f_mag_autocorr){
 		for (i = 0; i<CORR_MAX;i++){
@@ -237,17 +244,17 @@ int main (int argc, char *argv[]){
 		}
 	}
 	double tau_mag = 0.5;
-	for (i=0;i<CORR_MAX;i++){
+	for (i=0;i<CORR_ESTREMO;i++){
 		tau_mag+=mag_autocorr[i];
 	}
 	fprintf(f_mag_tau, "%.14e\t%.14e\n",BETA,tau_mag);
 
 
-/*
+
 	for ( i=0;i<ITERATION_MAX;i++){
 		fprintf(f_en_temp,"%.14e\n",en_vet_dati[i]);
 	}
-*/
+
 	for ( i=0;i<ITERATION_MAX;i++){
 		fprintf(f_mag_temp,"%.14e\n",mag_vet_dati[i]/(double)(N*N));
 	}
@@ -274,7 +281,7 @@ int main (int argc, char *argv[]){
 	fclose(f_mag_tau);
 	fclose(f_en);
 	fclose(f_en_tau);
-	//fclose(f_en_temp);
+	fclose(f_en_temp);
 	fclose(f_en_bin);
 	fclose(f_en_autocorr);
 	fclose(f_cv);

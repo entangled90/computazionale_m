@@ -11,6 +11,8 @@
 #include "raccolta_dati.h"
 
 #define CORR_MAX 50
+#define CORR_ESTREMO 15
+
 
 int main ( int argc, char * argv[]) {
 	float BETA = 1;
@@ -95,6 +97,7 @@ int main ( int argc, char * argv[]) {
 	FILE * f_cv = fopen(cv_filename,"a");
 	FILE * f_en_tau = fopen(en_tau_filename,"a");
 	FILE * f_corr_row = fopen(corr_row_filename,"w");
+
 
 	/*Start*/
 	spin_init(matrix,nodes,N);
@@ -245,7 +248,7 @@ int main ( int argc, char * argv[]) {
 		}
 	}
 	double tau_en = 0.5;
-	for (i=0;i<CORR_MAX;i++){
+	for (i=0;i<CORR_ESTREMO;i++){
 		tau_en+=en_autocorr[i];
 	}
 	fprintf(f_en_tau, "%.14e\t%.14e\n",BETA,tau_en);
@@ -258,7 +261,7 @@ int main ( int argc, char * argv[]) {
 	}
 
 	double tau_mag = 0.5;
-	for (i=0;i<CORR_MAX;i++){
+	for (i=0;i<CORR_ESTREMO;i++){
 		tau_mag+=mag_autocorr[i];
 	}
 	fprintf(f_mag_tau, "%.14e\t%.14e\n",BETA,tau_mag);

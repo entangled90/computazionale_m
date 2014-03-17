@@ -9,7 +9,7 @@ filename = sys.argv[1]
 
 y = np.loadtxt(filename)
 # y = np.random.uniform(size=300)
-corr_max = 50
+corr_max = 100
 result = np.zeros(corr_max)
 mean = y.mean()
 for j in range(corr_max):	

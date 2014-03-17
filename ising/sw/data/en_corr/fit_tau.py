@@ -55,7 +55,7 @@ out_file = open('tau_corrN%s.dat'%(N),"w")
 for i in range(len(beta)):
 	out_file.write('%.14e\t%.14e\t%.14e\n'%(beta_np[i],tau_np[i],error[i]))
 out_file.close()
-
+beta_np = (beta_np + (- 0.4406868))/beta_np
 x = np.linspace(BetaMin,np.amax(beta_np),100)
 fig = plt.figure()
 fig.suptitle('Tempo di Correlazione N=%s'%(N))

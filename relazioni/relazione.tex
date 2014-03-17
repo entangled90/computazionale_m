@@ -3,33 +3,53 @@
 \begin{document}
 
 \input{title.tex}
-
-
+\tableofcontents 
+\newpage
 \section{Modello di Ising}
 Il modello è stato implementato su un reticolo bidimensione di larghezza N e inizializzando gli spin al valore $\pm 1 $  con uguale probabilità.
 Sono stati implementati due algoritmi: Metropolis e Swendsen-Wang.\\
 
-\subsection{Algoritmo Metropolis}
-\subsubsection{Termalizzazione}
+\subsection{Termalizzazione}
 Possiamo valutare quando avviene la corretta termalizzazione del sistema analizzando l'andamento della magnetizzazione e dell'energia in funzione del tempo markoviano.
-Di seguito è riportato l'andamento dell'energia durante la termalizzazione a due diverse temperature, di cui una è la temperatura critica:\\
+Di seguito è riportato l'andamento dell'energia e della magnetizzazione durante la termalizzazione a due diverse temperature.
+\subsubsection*{Metropolis}
 \begin{figure}[h]
 \includegraphics[scale=0.35]{metropolis/en_therm.png}
 \includegraphics[scale=0.35]{metropolis/en_therm_crit.png}
-\caption{Energia a $\beta=0.3$ e $\beta=0.43$}
+\caption{Energia (Metropolis) a $\beta=0.3$ e $\beta=0.43$}
 \end{figure}
-\\
-Di seguito la magnetizzazione:\\
 \begin{figure}[h]
 \includegraphics[scale=0.35]{metropolis/mag_therm.png}
 \includegraphics[scale=0.35]{metropolis/mag_therm_crit.png}
-\caption{Magnetizzazione a $\beta=0.3$ e $\beta=0.43$}
+\caption{Magnetizzazione  (Metropolis) a $\beta=0.3$ e $\beta=0.43$}
 \end{figure}
 Come si può vedere dal grafico relativo alla magnetizzazione a $\beta=0.43$, vicino al punto critico il tempo di termalizzazione cresce di molto. Esso rimane comunque intorno a 100 alla temperatura critica.
 Dopo l'analisi di questi dati si è deciso di fissare il tempo di termalizzazione a 1000 passi temporali.
+\subsubsection*{Swendsen-Wang}
+\begin{figure}[h]
+\includegraphics[scale=0.35]{sw/en_therm0-3.png}
+\includegraphics[scale=0.35]{sw/en_therm0-43.png}
+\caption{Energia (Swendsen-Wang) a $\beta=0.3$ e $\beta=0.43$}
+\end{figure}
 
-\subsubsection{Autocorrelazione fra le configurazioni}
+\begin{figure}[h]
+\includegraphics[scale=0.35]{sw/mag_therm0-3.png}
+\includegraphics[scale=0.35]{sw/mag_therm0-43.png}
+\caption{Magnetizzazione  (Swendsen-Wang) a $\beta=0.3$ e $\beta=0.43$}
+\end{figure}
+Anche con questo algoritmo, il tempo di termalizzazione è molto minore dei 1000 passi utilizzati per far termalizzare il sistema nel programma.
+La sostanziale differenza che si vede nei grafici relativi alla magnetizzazione vicino al punto critico è dovuta all'inefficienza dell'algoritmo Metropolis nell'estrarre configurazioni scorrelate vicino al punto critico, fenomeno solitamente chiamato \emph{critical slowing down}.
+Esso si manifesterà più chiaramente nello studio dell'autocorrelazione delle configurazioni.
 
+
+\subsection{Autocorrelazione fra le configurazioni}
+Come in ogni simulazione Monte Carlo, è necessario studiare l'autocorrelazione delle configurazione estratte attraverso l'algoritmo in modo da stimare l'efficienza dell'algoritmo ad estrarre configurazioni
+indipendenti. Si confronti l'autocorrelazione dell'energia in funzione della temperatura tra i due algoritmi:
+\begin{figure}[h]
+\includegraphics[scale=0.35]{sw/mag_therm0-3.png}
+\includegraphics[scale=0.35]{sw/en_tau.png}
+\caption{Autocorrelazione dell'energia. A sinistra Metropolis, a Destra Swendsen-Wang}
+\end{figure}
 
 
 

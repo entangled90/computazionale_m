@@ -191,7 +191,7 @@ void evolve_therm (Spin * matrix, Node * nodes, int N, float BETA){
 	for ( iteration = 0 ; iteration < ITERATION_TEMP ; iteration++){
 		startClustering(matrix,nodes,N,BETA);
 		fprintf(f_en_therm, "%d\t%.10e\n",iteration, hamiltoniana(matrix,N)/(double)(N*N) );
-		fprintf(f_mag_therm, "%d\t%.10e\n",iteration, magnetization(matrix,N)/(double)(N*N) );
+		fprintf(f_mag_therm, "%d\t%.10e\n",iteration, fabs(magnetization(matrix,N)/(double)(N*N)) );
 		flip_spin(matrix,N);
 		reset_cluster(matrix,nodes,N);
 	}
