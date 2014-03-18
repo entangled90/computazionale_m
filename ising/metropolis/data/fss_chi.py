@@ -10,7 +10,7 @@ from operator import itemgetter
 import os
 
 np.seterr(all='warn')
-xmin=0.43
+xmin=0.42
 xmax=0.44
 def par(x,*p):
 	return p[0]*x**2 + p[1]*x + p[2] 
@@ -65,7 +65,7 @@ x_lin = np.linspace(xmin,xmax,100)
 plt.plot(x_lin,par(x_lin,*popt))
 plt.err(x,y,'ro')
 plt.show()
-x = (x + -BETA_CRIT)/x
+x = (x + -BETA_CRIT)/BETA_CRIT
 x *= N**(1/nu_corr)
 y /= N**(gamma/nu_corr)
 er/= N**(gamma/nu_corr)

@@ -274,7 +274,7 @@ int main ( int argc, char * argv[]) {
 	}
 */
 	for ( i=0;i<ITERATION_MAX;i++){
-		fprintf(f_mag_temp,"%.14e\n",mag_vet_dati[i]/(double)(N*N));
+		fprintf(f_mag_temp,"%.14e\n",mag_vet_dati[i]);
 	}
  	/* Chiusura file */
 	fclose(f_mag_bin);

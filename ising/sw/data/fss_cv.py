@@ -13,8 +13,8 @@ np.seterr(all='warn')
 
 def par(x,*p):
 	return p[0]*x**2 + p[1]*x + p[2] 
-xmin=0.43
-xmax=0.445
+xmin=0.4
+xmax=0.45
 
 def fit_par(filename):
 	guess = [-100,100,-5]
@@ -47,7 +47,8 @@ f = "cv%s.dat"%(N)
 data = np.loadtxt(f,dtype='float64')
 data = sorted(data, key=itemgetter(0))
 #fit_exp(f)
-BETA_CRIT,popt = fit_par(f)
+#BETA_CRIT,popt = fit_par(f)
+BETA_CRIT = 0.4406868
 xs= []
 ys= []
 ers=[]
@@ -69,7 +70,7 @@ del ers[:]
 
 plt.errorbar(x,y,yerr=er,fmt='ro')
 x_lin= np.linspace(xmin,xmax,100)
-plt.plot(x_lin,par(x_lin,*popt))
+#plt.plot(x_lin,par(x_lin,*popt))
 plt.show()
 
 x = (x + -BETA_CRIT)/x

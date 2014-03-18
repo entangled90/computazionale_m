@@ -188,8 +188,102 @@ Si confrontino i tempi dei due algoritmi in un reticolo 100x100:
 \end{center}
 
 L'algoritmo Swendsen-Wang risulta così più efficiente di Metropolis.
-
 \newpage
+
+\subsection{Energia e Magnetizzazione}
+Energia e magnetizzazione sono le due principali osservabili di questo modello ed è possibile confrontare facilmente il loro andamento con la soluzione teorica di Onsager (valida però per un reticolo di taglia infinita).
+Per la magnetizzazione è stata utilizzata l'osservabile \emph{improved} per Swendsen-Wang, ossia la frazione degli spin nel cluster più grande.
+Nonostante i grafici siano stati fatti con un reticolo 100x100 l'accordo con la previsione teorica è eccellente per entrambe le osservabili e con entrambi gli algoritmi.
+Insieme ai dati raccolti è stata sovrapposta la soluzione analitica di Onsager per entrambe le osservabili.
+\begin{figure}[h]
+	\subfigure[Metropolis]{
+		\includegraphics[scale=0.35]{metropolis/en_beta.png}
+	}
+	\subfigure[Swendsen-Wang]{
+		\includegraphics[scale=0.35]{sw/en_beta.png}
+	}
+\caption{Energia in funzione di $\beta$, 100x100.}
+\end{figure}
+
+\begin{figure}[h]
+	\subfigure[Metropolis]{
+		\includegraphics[scale=0.35]{metropolis/mag100.png}
+	}
+	\subfigure[Swendsen-Wang]{
+		\includegraphics[scale=0.35]{sw/mag100.png}
+	}
+\caption{Magnetizzazione in funzione di $\beta$, 100x100.}
+
+\end{figure}
+
+Gli errori sono stati calcolati attraverso il binning delle osservabili.
+\subsection{Distribuzione di probabilità della magnetizzazione}
+Si studi ora la distribuzione di probabilità del modulo della magnetizzazione al variare della temperatura, confrontando fra loro i due algoritmi in questione.
+Si è deciso di studiare il modulo della magnetizzazione in quanto l'algoritmo Swendsen-Wang ad ogni step inverte i cluster (con probabilità $\frac{1}{2}$), mentre Metropolis, siccome inverte uno spin alla volta, tende a mantere costante il segno della magnetizzazione per temperature sotto il punto critico.
+
+
+\begin{figure}
+	\subfigure[ $\beta=0.3$]{
+		\includegraphics[scale=0.36]{metropolis/PDFM03.png}	
+	}
+	\subfigure[ $\beta=0.42$]{
+		\includegraphics[scale=0.36]{metropolis/PDFM042.png}	
+	}
+	\caption{Metropolis}
+\end{figure}
+\begin{figure}
+	\subfigure[ $\beta=0.43$]{
+		\includegraphics[scale=0.36]{metropolis/PDFM043.png}	
+	}
+	\subfigure[ $\beta=0.44$]{
+		\includegraphics[scale=0.36]{metropolis/PDFM044.png}	
+	}
+	\caption{Metropolis}
+\end{figure}
+
+\begin{figure}
+	\subfigure[ $\beta=0.46$]{
+		\includegraphics[scale=0.36]{metropolis/PDFM046.png}	
+	}
+	\subfigure[ $\beta=1$]{
+		\includegraphics[scale=0.36]{metropolis/PDFM1.png}	
+	}
+	\caption{Metropolis}
+\end{figure}
+
+
+\begin{figure}
+	\subfigure[ $\beta=0.3$]{
+		\includegraphics[scale=0.36]{sw/pdfM03.png}	
+	}
+	\subfigure[ $\beta=0.42$]{
+		\includegraphics[scale=0.36]{sw/pdfM042.png}	
+	}
+	\caption{Swendsen-Wang}
+\end{figure}
+\begin{figure}
+	\subfigure[ $\beta=0.43$]{
+		\includegraphics[scale=0.36]{sw/pdfM043.png}	
+	}
+	\subfigure[ $\beta=0.44$]{
+		\includegraphics[scale=0.36]{sw/pdfM044.png}	
+	}
+	\caption{Swendsen-Wang}
+\end{figure}
+
+\begin{figure}
+	\subfigure[ $\beta=0.46$]{
+		\includegraphics[scale=0.36]{sw/pdfM046.png}	
+	}
+	\subfigure[ $\beta=1$]{
+		\includegraphics[scale=0.36]{sw/pdfM1.png}	
+	}
+	\caption{Swendsen-Wang}
+\end{figure}
+
+
+
+
 \subsection{Lunghezza di correlazione}
 
 La lunghezza di correlazione è stata stimata dal calcolo di:
@@ -201,22 +295,23 @@ Si sfrutta l'invarianza per traslazione calcolando più precisamente la seguente
 $$
 	<S_0 S_t> = \frac{1}{L} \sum <S_i S_{t+i}>
 $$ 
+\begin{figure}[h]
+\centering
+	\includegraphics[scale=0.56]{metropolis/corrN100.png}
+\caption{Lunghezza di correlazione con algoritmo Metropolis.}
+\end{figure}
+\begin{figure}[h]
+\centering
+	\includegraphics[scale=0.56]{sw/corrN100.png}
+\caption{Lunghezza di correlazione con algoritmo Swendsen-Wang.}
+\end{figure}
 L'invarianza per rotazioni di $\frac{\pi}{2}$ è stata utilizzata mediando il calcolo fra righe e colonne. Inoltre è stata utilizzata anche l'invarianza per inversione  e la ciclicità del reticolo, le quali insieme comportano la validità di questa relazione:
 $$
 	< S_0 S_t> = < S_0 S_{L-t}>
 $$
 A questo punto si è calcolata osservabile e si sono stimati gli errori attraverso un binning come per le altre osservabili.
 I Valori della lunghezza di correlazione sono poi così stati stimati fittando con un esponenziale decrescente. I valori ottenuti dal fit (errori compresi) sono stati utilizzati per i grafici della lunghezza di correlazione in funzione della temperatura.
-\begin{figure}[t]
-\centering
-	\includegraphics[scale=0.56]{metropolis/corrN100.png}
-\caption{Lunghezza di correlazione con algoritmo Metropolis.}
-\end{figure}
-\begin{figure}[t]
-\centering
-	\includegraphics[scale=0.56]{sw/corrN100.png}
-\caption{Lunghezza di correlazione con algoritmo Swendsen-Wang.}
-\end{figure}
+
 Il risultato del fit è quindi:
 \begin{center}
 	\begin{tabular}{cc}
@@ -231,15 +326,77 @@ Il risultato del fit è quindi:
 
 Come si può vedere in entrambi i casi l'accordo con la previsione teorica che prevede $\nu = 1$ è ottima per un reticolo 100x100. Inoltre, grazie ad aver imposto un numero di intervalli di binning simile tra i due algoritmi permette di avere una precisione molto simile tra i due.
 
-\subsection{Esponenti Critici}
-Si studiano ora gli esponenti critici del modello. Essi sono ottenuti attraverso un fit delle osservabili a cui sono associati nella fase paramagnetica. Tutti i fit sono stati effettuati per reticoli 100x100.
-\subsubsection{Magnetizzazione}
-
-
-
+\newpage
 \subsection{Finite Size Scaling}
-Si andranno ora a valutare gli esponenti critici di alcune osservabili come magnetizzazione, suscettività e calore specifico. Per q
+Si andranno ora a fare uno studio di \emph{finite size scaling} per poter valutare l'accordo dei dati ottenuti per magnetizzazione, suscettività e calore specifico con gli esponenti critici esatti della soluzione di Onsager.
+Per fare uno studio di \emph{finite size scaling} è necessario raccogliere dati sulle osservabili in esame per varie taglie del reticolo. In questo caso sono state utilizzati i seguenti reticoli:
+\begin{itemize}
+\item 30x30 
+\item 50x50 
+\item 75x75 
+\item 100x100 
+\end{itemize}
+A questo punto, per suscettività e calore specifico è stato necessario calcolare per ognuno di essi la temperatura critica.
+Nel caso della suscettività essa è stata ottenuta facendo un fit con una parabola del picco, mentre per magnetizzazione e calore specifico è stata utilizzata la temperatura critica della soluzione analitica.
+Questa scelta è dovuta all'impossibilità di ricavare la temperatura critica in modo soddisfacente per il calore specifico attraverso il metodo della parabola.
+Per la magnetizzazione questo non è stato necessario in quanto presenta alcun picco.\\
+Dopo aver ricavato la temperatura critica, si fa una traslazione sulla temperatura portandola nella nuova variabile 
+$$
+	 t = \frac{\beta - \beta_{crit}}{\beta}
+$$ 
+Infine si effettua l'ultimo cambio di variabile, indicando con $L$ la taglia del reticolo e considerando la magnetizzazione si avrà:
+\begin{align}
+	t \longrightarrow L^{\frac{1}{\nu}} t = L t \\
+	M \longrightarrow \frac{M}{L^{\frac{-\beta}{\nu}}} = \frac{M}{L^{-\beta}}
+\end{align}
+Riguardo alla suscettività invece:
+$$
+	\chi \longrightarrow \frac{\chi}{L^{\frac{\gamma}{\nu}}} = \frac{\chi}{L^{\gamma}}
+$$
+Nel caso del calore specifico, la soluzione analitica prevede che abbia esponente $\alpha=0$ il che indica uno scaling di tipo logaritmo. Per esso l'equazione precedente viene modificata in:
+$$
+	c \longrightarrow \frac{c}{\log{L}}
+$$
+Gli esponenti critici della soluzione analitica sono i seguenti:
+\begin{center}
+	\begin{tabular}{|c|c|}
+		\toprule
+		Esponente & valore \\
+		\midrule
+		$\alpha$ & 0 \\
+		$\beta$ & $1/8$\\
+		$\gamma$ & $7/4$ \\
+		\bottomrule
+	\end{tabular}
+\end{center}
 
+\begin{center}
+	\begin{figure}[h]
+		\includegraphics[scale=0.56]{sw/fsschi.png}
+		\caption{Studio di Fss per $\chi = t^{-\gamma}$, con $\gamma = \frac{7}{4}$}
+	\end{figure}
+\end{center}
+\begin{center}
+	\begin{figure}[h]
+		\includegraphics[scale=0.56]{sw/fsscv.png}
+		\caption{Studio di Fss per $c$, con $\alpha=0$}
+	\end{figure}
+\end{center}
+\begin{center}
+	\begin{figure}[h!]
+		\includegraphics[scale=0.56]{sw/fssmag.png}
+		\caption{Studio di Fss per $M= t^{\beta}$, con $\beta=\frac{1}{8}$}
+	\end{figure}
+\end{center}
 
+A questo punto, ci si aspetta di vedere che le curve per ciascuna taglia, opportunamente scalate nella procedura descritta, collassino su un'unica curva \emph{universale}.
+Come si può vedere dai grafici per queste tre osservabili è proprio ciò che accade nella regione paramagnetica con $\beta < \beta_{crit}$.\\
+Siccome il \emph{finite size scaling} si basa sugli esponenti critici della soluzione esatta, dal risultato di questa analisi possiamo dire che le osservabili calcolate scalano in modo molto simile a ciò che ci si aspetterebbe teoricamente.
+Per questo, gli esponenti critici del modello simulato sembrano risultare simili a quelli previsti teoricamente.
+
+\newpage
+\section{Modello di Potts}
+Il modello di Potts è una generalizzazione del modello di Ising studiato nel capitolo precedente.
+Esso generalizza il modello di Ising aggiungendo un numero arbitrario di stati.
 
 \end{document}

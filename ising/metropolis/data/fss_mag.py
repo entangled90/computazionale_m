@@ -66,7 +66,7 @@ del ers[:]
 #plt.plot(x_lin,par(x_lin,*popt))
 plt.errorbar(x,y,yerr=er)
 plt.show()
-x = (x + -BETA_CRIT)/x
+x = (x + -BETA_CRIT)/BETA_CRIT
 x *= N**(1/nu_corr)
 y /= N**(-gamma/nu_corr)
 er/= N**(-gamma/nu_corr)
