@@ -18,8 +18,7 @@ int main (int argc, char *argv[]){
 	int N ;
 	int iteration = 0;
 	int i,j ;
-	int tau_corr=5;
-	int larghezza_bin = 15*tau_corr;
+	int larghezza_bin = 200;
 	int n_bin = ITERATION_MAX/larghezza_bin;
 	printf("%d\n",n_bin);
 
@@ -47,6 +46,7 @@ int main (int argc, char *argv[]){
 //	double mag_prevista = ( 1 - pow(sinh(2*BETA*J),-4));
 	short int  * matrix;
 	srand(time(NULL));
+	int rand_sig = (int) rand()/(double)(RAND_MAX)*9999;
 	matrix = malloc(N*N*sizeof(short int));
 	spin_init(matrix,N);
 	/***** FILENAMES AND FILE OPENING ******/
@@ -59,7 +59,7 @@ int main (int argc, char *argv[]){
 	char mag_binning_filename[64] = "";
 	snprintf(mag_binning_filename,64,"data/binning/mag_N%d__B%.8lf.dat",N,BETA); 
 	char mag_autocorr_filename[64] = "";
-	snprintf(mag_autocorr_filename,64,"data/mag_corr/mag_autocorrN%d_B%.8lf.dat",N,BETA);
+	snprintf(mag_autocorr_filename,64,"data/mag_corr/mag_autocorr%.4dN%d_B%.8lf.dat",rand_sig,N,BETA);
 	char mag_tau_filename[64] = "";
 	snprintf(mag_tau_filename,64,"data/tau_magN%d.dat",N);
 
@@ -69,7 +69,7 @@ int main (int argc, char *argv[]){
 	char en_filename[64] = "";
 	snprintf(en_filename,64,"data/en_N%d.dat",N);
 	char en_autocorr_filename[64] = "";
-	snprintf(en_autocorr_filename,64,"data/en_corr/en_autocorrN%d_B%.8lf.dat",N,BETA);
+	snprintf(en_autocorr_filename,64,"data/en_corr/en_autocorr%.4dN%d_B%.8lf.dat",rand_sig,N,BETA);
 	char en_temp_filename[64] = "data/en_temp.dat";
 	char cv_filename[64]="";
 	snprintf(cv_filename,64,"data/cv%d.dat",N);
@@ -158,27 +158,32 @@ int main (int argc, char *argv[]){
 			X_n[i] = sum_row(matrix,i,N);
 			Y_n[i] = sum_col(matrix,i,N);
 		}
+		//Invarianza per traslazioni
 		for (j = 0; j < N; ++j){
 			for (i = 0; i < N;i++){
 				S_xt[i]+= X_n[j]*X_n[(i+j)%N];
-				S_yt[i]+= Y_n[j]*Y_n[(i+j)%N];
+				S_yt[i]+= Y_n[j]*Y_n[(i+j)%N]; 
 			}
 		}
-	}
-	for (i = 0; i < N;i++){
+		for (i = 0; i < N;i++){
 		S_xt[i]/=(double)N;
 		S_yt[i]/=(double)N;
+		}	
+		// Invarianza per rotazioni e ciclicità+inversione
+		for (i=0;i<N_CORR;i++){
+			S_med_temp[i] = S_xt[i]+S_yt[i]+S_xt[N-1-i]+ S_yt[N-1-i];
+			S_med_temp[i] /=(4.0);
+	//		S_test[i] += S_med_temp[i];
+		}
+		for(j = 0;j<N_CORR;j++){
+			S_dati[iteration*N_CORR+j] = S_med_temp[j];
+		}
+		for (i = 0; i < N;i++){
+			S_xt[i]=0;
+			S_yt[i]=0;
+		}
 	}
-
-	for ( i = 0; i<N;i++){
-		S_xt[i] += S_yt[i];
-		S_xt[i] += S_xt[N-1-i];
-		S_xt[i] += S_yt[N-1-i];
-		S_xt[i]/=4.0*ITERATION_MAX;
-	}
-	for ( i = 0; i<N/3;i++){
-		fprintf(f_corr_row, "%d\t%lf\n",i,S_xt[i] );
-	}
+	
 	divideByScalar(S_test,ITERATION_MAX,N_CORR);
 /**** BINNING E AUTOCORRELAZIONI */
 /* tutto il BINNING della Correlazione fra righe e colonne*/
@@ -189,15 +194,16 @@ int main (int argc, char *argv[]){
 			S_fin[j] += S_dati_binnati[i*N_CORR+j];
 			S_var_fin[j] += S_dati_binnati[i*N_CORR+j]*S_dati_binnati[i*N_CORR+j];
 		}
-		S_var_fin[j] -= S_fin[j]*S_fin[j]/(double)(n_bin);
 		S_fin[j]/= (double)(n_bin);
 		S_var_fin[j] /=(double)(n_bin);
-		S_var_fin[j] = sqrt((S_var_fin[j]/(n_bin)));
+		S_var_fin[j] -= S_fin[j]*S_fin[j];
+		S_var_fin[j] = sqrt((S_var_fin[j]/ (double) n_bin));
 	}
 	for ( i = 0; i<N_CORR;i++){
-	//	fprintf(f_corr_row, "%d\t%.14e\t%.14e\n",i,S_fin[i],S_var_fin[i]);
+		fprintf(f_corr_row, "%d\t%.14e\t%.14e\n",i,S_fin[i],S_var_fin[i]);
 	//	fprintf(f_corr_row,"%d\t%.14e\t%.14e\n",i,S_test[i],0.000001);
 	}
+
 
 	/* Binning osservabili scalari*/
 	binning(mag_vet_dati,mag_vet_binnato,ITERATION_MAX,larghezza_bin);
@@ -260,10 +266,9 @@ int main (int argc, char *argv[]){
 	}
 
 /* Calcolo necessario per stimare cosa scegliere come larghezza del bin!*/
-	divideByScalar(mag_vet_dati,N*N,ITERATION_MAX);
-	divideByScalar(en_vet_dati,N*N,ITERATION_MAX);
-	mag_vet_binnato = malloc(sizeof(double)*(ITERATION_MAX));
-	en_vet_binnato = malloc(sizeof(double)*(ITERATION_MAX));
+//	divideByScalar(mag_vet_dati,N*N,ITERATION_MAX);
+//	divideByScalar(en_vet_dati,N*N,ITERATION_MAX);
+
 	for ( larghezza_bin = 1; larghezza_bin < BIN_WIDTH_MAX ; larghezza_bin+=1){
 		binning(mag_vet_dati,mag_vet_binnato,ITERATION_MAX,larghezza_bin);
 		binning(en_vet_dati,en_vet_binnato,ITERATION_MAX,larghezza_bin);

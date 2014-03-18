@@ -25,7 +25,7 @@ xs= []
 ys= []
 for i in range(len(temp)):
 	t = temp[i]
-	if t[0]<7:
+	if t[0]<50:
 		xs.append(t[0])
 		ys.append(t[1])
 x_points = np.asarray(xs,dtype='float64')

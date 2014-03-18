@@ -17,8 +17,9 @@ np.seterr(all='warn')
 BetaC = 0.4406868
 BetaMin = 0.3
 N = sys.argv[1]
-files = glob.glob('en_autocorrN%s_*.dat'%(N))	
-lungh_max = 40 #prima che si appiattica al punto critico
+file_out = str(sys.argv[2])
+files = glob.glob('en_autocor*N%s_*.dat'%(N))	
+lungh_max = 60 #prima che si appiattica al punto critico
 tau_temp = 0.0
 beta = []
 tau =  []
@@ -43,6 +44,8 @@ for f in files:
 		l_ord.append([beta_temp,tau_temp])
 
 l_ord = sorted(l_ord, key=itemgetter(0))
+
+
 for l in l_ord:
 	beta.append(l[0])
 	tau.append(l[1])
@@ -52,7 +55,7 @@ beta_np = np.asarray(beta,dtype='float64')
 tau_np = np.asarray(tau,dtype='float64')
 #error_np = np.asarray(error,dtype='float64')
 #print (beta_np)
-out_file = open('tau_corrN%s.dat'%(N),"w")
+out_file = open(file_out+'%s.dat'%(N),"w")
 for i in range(len(beta)):
 	out_file.write('%.14e\t%.14e\n'%(beta_np[i],tau_np[i]))
 out_file.close()

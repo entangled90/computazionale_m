@@ -52,7 +52,7 @@ beta_np = np.asarray(beta,dtype='float64')
 tau_np = np.asarray(tau,dtype='float64')
 #error_np = np.asarray(error,dtype='float64')
 #print (beta_np)
-out_file = open('tau_en_corrN%s.dat'%(N),"w")
+out_file = open('tau_corrN%s.dat'%(N),"w")
 for i in range(len(beta)):
 	out_file.write('%.14e\t%.14e\n'%(beta_np[i],tau_np[i]))
 out_file.close()

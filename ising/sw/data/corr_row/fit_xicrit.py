@@ -20,8 +20,8 @@ def fit_fun_corr_fitted(x,*p):
 
 
 np.seterr(all='warn')
-BetaC = 0.43
-BetaMin = 0.2
+BetaC = 0.44
+BetaMin = 0.35
 N = sys.argv[1]
 file_temp = glob.glob('corr_row_N%s*.dat'%(N))	
 beta = []
@@ -40,16 +40,20 @@ for f in files:
 		#= np.loadtxt('en_')
 	xs= []
 	ys= []
+	ers=[]
 	for i in range(len(temp)):
 		t = temp[i]
 		if t[0]<10:
 			xs.append(t[0])
 			ys.append(t[1])
+			ers.append(t[2])
 	x_points = np.asarray(xs,dtype='float64')
 	y_points = np.asarray(ys,dtype='float64')
+	er_points = np.asarray(ers,dtype='float64')
 	#x_points = (-1)*(x_points + (-BetaC))/BetaC
 	guess = [1,-1]
-	popt,pcov = curve_fit(fit_fun,x_points,y_points, p0=guess )
+	popt,pcov = curve_fit(fit_fun,x_points,y_points, sigma=er_points, p0=guess )
+	print(beta_temp,popt,pcov)
 	if not (any( math.isnan(i) for i in popt) or any(math.isinf(i) for i in popt)):
 		l_ord.append([beta_temp,-1/popt[1], math.sqrt(pcov[1][1])])
 error = []

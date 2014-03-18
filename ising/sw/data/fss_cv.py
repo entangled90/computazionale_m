@@ -14,7 +14,7 @@ np.seterr(all='warn')
 def par(x,*p):
 	return p[0]*x**2 + p[1]*x + p[2] 
 xmin=0.43
-xmax=0.44
+xmax=0.445
 
 def fit_par(filename):
 	guess = [-100,100,-5]
@@ -67,7 +67,7 @@ del xs[:]
 del ys[:]
 del ers[:]
 
-plt.plot(x,y,er,'ro')
+plt.errorbar(x,y,yerr=er,fmt='ro')
 x_lin= np.linspace(xmin,xmax,100)
 plt.plot(x_lin,par(x_lin,*popt))
 plt.show()

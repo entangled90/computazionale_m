@@ -14,28 +14,46 @@ Possiamo valutare quando avviene la corretta termalizzazione del sistema analizz
 Di seguito è riportato l'andamento dell'energia e della magnetizzazione durante la termalizzazione a due diverse temperature.
 \subsubsection*{Metropolis}
 \begin{figure}[h]
-\includegraphics[scale=0.35]{metropolis/en_therm.png}
-\includegraphics[scale=0.35]{metropolis/en_therm_crit.png}
-\caption{Energia (Metropolis) a $\beta=0.3$ e $\beta=0.43$}
+\subfigure[$\beta=0.3$]{
+\includegraphics[scale=0.45]{metropolis/en_therm.png}
+}
+\subfigure[$\beta=0.453$]{
+\includegraphics[scale=0.45]{metropolis/en_therm_crit.png}
+}
+\caption{Energia (Metropolis)}
 \end{figure}
 \begin{figure}[h]
-\includegraphics[scale=0.35]{metropolis/mag_therm.png}
-\includegraphics[scale=0.35]{metropolis/mag_therm_crit.png}
-\caption{Magnetizzazione  (Metropolis) a $\beta=0.3$ e $\beta=0.43$}
+\subfigure[$\beta=0.3$]{
+
+\includegraphics[scale=0.45]{metropolis/mag_therm.png}
+}
+\subfigure[$\beta=0.453$]{
+
+\includegraphics[scale=0.45]{metropolis/mag_therm_crit.png}
+}
+\caption{Magnetizzazione  (Metropolis)}
 \end{figure}
-Come si può vedere dal grafico relativo alla magnetizzazione a $\beta=0.43$, vicino al punto critico il tempo di termalizzazione cresce di molto. Esso rimane comunque intorno a 100 alla temperatura critica.
+Come si può vedere dal grafico relativo alla magnetizzazione a $\beta=0.453$, vicino al punto critico il tempo di termalizzazione cresce di molto. Esso rimane comunque intorno a 100 alla temperatura critica.
 Dopo l'analisi di questi dati si è deciso di fissare il tempo di termalizzazione a 1000 passi temporali.
 \subsubsection*{Swendsen-Wang}
 \begin{figure}[h]
-\includegraphics[scale=0.35]{sw/en_therm0-3.png}
-\includegraphics[scale=0.35]{sw/en_therm0-43.png}
-\caption{Energia (Swendsen-Wang) a $\beta=0.3$ e $\beta=0.43$}
+\subfigure[$\beta=0.3$]{
+	\includegraphics[scale=0.45]{sw/en_therm0-3.png}
+}
+\subfigure[$\beta=0.453$]{
+\includegraphics[scale=0.45]{sw/en_therm0-43.png}
+}
+\caption{Energia (Swendsen-Wang) }
 \end{figure}
 
 \begin{figure}[h]
-\includegraphics[scale=0.35]{sw/mag_therm0-3.png}
-\includegraphics[scale=0.35]{sw/mag_therm0-43.png}
-\caption{Magnetizzazione  (Swendsen-Wang) a $\beta=0.3$ e $\beta=0.43$}
+\subfigure[$\beta=0.3$]{
+	\includegraphics[scale=0.45]{sw/mag_therm0-3.png}
+	}
+\subfigure[$\beta=0.453$]{
+\includegraphics[scale=0.45]{sw/mag_therm0-43.png}
+}
+\caption{Magnetizzazione  (Swendsen-Wang)}
 \end{figure}
 Anche con questo algoritmo, il tempo di termalizzazione è molto minore dei 1000 passi utilizzati per far termalizzare il sistema nel programma.
 La sostanziale differenza che si vede nei grafici relativi alla magnetizzazione vicino al punto critico è dovuta all'inefficienza dell'algoritmo Metropolis nell'estrarre configurazioni scorrelate vicino al punto critico, fenomeno solitamente chiamato \emph{critical slowing down}.
@@ -44,12 +62,183 @@ Esso si manifesterà più chiaramente nello studio dell'autocorrelazione delle c
 
 \subsection{Autocorrelazione fra le configurazioni}
 Come in ogni simulazione Monte Carlo, è necessario studiare l'autocorrelazione delle configurazione estratte attraverso l'algoritmo in modo da stimare l'efficienza dell'algoritmo ad estrarre configurazioni
-indipendenti. Si confronti l'autocorrelazione dell'energia in funzione della temperatura tra i due algoritmi:
+indipendenti e quindi nel produrre statistica.\\
+Il tempo di autocorrelazione è stato calcolato utilizzando la formula:
+$$
+	\tau_{corr} = \frac{1}{2} + \sum_{t=1}^{t_{max}} \Gamma(t) \qquad \mbox{dove} \; \Gamma \; \mbox{è la funzione di autocorrelazione}
+$$
+Gli errori sono stati stimati ripetendo le misure (in questo grafico 12 volte).
+Non è stato possibile stimare il valore di $\tau_{corr}$ attraverso un fit con una funzione del tipo $e^{-\frac{t}{\tau_{c}}}$ in quanto vicino al punto critico l'autocorrezione smette di avere questo andamento esponenziale che ha lontano dal punto critico.
 \begin{figure}[h]
-\includegraphics[scale=0.35]{sw/mag_therm0-3.png}
-\includegraphics[scale=0.35]{sw/en_tau.png}
-\caption{Autocorrelazione dell'energia. A sinistra Metropolis, a Destra Swendsen-Wang}
+\includegraphics[scale=0.6]{compare.png}
+\caption{Tempo di autocorrelazione dell'energia con N=46.}
 \end{figure}
+Come si può vedere dai grafici, l'algoritmo Metropolis ha un tempo di autocorrelazione nettamente più elevato rispetto a Swendsen-Wang. Questo diverso comportamento è dovuto principalmente al fatto che Metropolis è un algoritmo locale, ossia l'inversione di ogni spin dipende esclusivamente dagli spin circostanti ad esso. L'algoritmo di Swendsen-Wang invece, è non-locale a causa della taglia estesa  che i cluster possono assumere.
+Questo permette a questo algoritmo di non avere difficoltà ad estrarre configurazioni statisticamente scorrelate più velocemente rispetto a Metropolis.
+
+\subsection{Binning}
+Prima di affrontare la misura di osservabili è necessario analizzare come affrontare la correlazione fra le configurazioni estratte dagli algoritmi.
+La tecnica migliore per ovviare a questo fatto è quella del \emph{binning}, ossia raggruppare misure in intervalli di larghezza abbastanza grande da diventare un gruppo di misure scorrelate tra loro.
+A questo punto si procede a fare la media in ogni intervallo e si hanno così $\frac{N}{m}$ misure statisticamente indipendenti fra loro, a partire da $N$ misure autocorrelate suddivise in intervalli di larghezza $m$.\\
+\'E fondamentale scegliere la larghezza corretta dell'intervallo. Ciò può essere fatto valutando l'andamento
+della deviazione standard della media del nuovo set di $\frac{N}{m}$ misure in funzione di $m$.
+Come si può immaginare, la larghezza del bin è associata al tempo di autocorellazione di cui si è parlato prima. 
+
+\subsubsection*{Metropolis}
+Si vedano ora alcuni grafici di questa quantità a diverse temperature e per due diverse osservabili.
+\begin{figure}[h!]
+\subfigure[Energia a $\beta=0.325$]{
+	\includegraphics[scale=0.45]{metropolis/bin_en_0325.png}
+}
+\subfigure[Energia $\beta=0.4508$]{
+\includegraphics[scale=0.45]{metropolis/bin_en_0408.png}
+}
+\caption{Deviazione standard dell'energia in funzione della larghezza dei \emph{bin} }
+\end{figure}
+\begin{figure}[h!]
+\subfigure[Energia a $\beta=0.453$]{
+	\includegraphics[scale=0.45]{metropolis/bin_en_043.png}
+}
+\subfigure[Energia $\beta=0.459$]{
+\includegraphics[scale=0.45]{metropolis/bin_en_049.png}
+}
+\caption{Deviazione standard dell'energia in funzione della larghezza dei \emph{bin} }
+\end{figure}
+
+\begin{figure}[h!]
+\subfigure[Magnetizzazione a $\beta=0.325$]{
+	\includegraphics[scale=0.45]{metropolis/bin_mag_0325.png}
+}
+\subfigure[Magnetizzazione $\beta=0.4508$]{
+\includegraphics[scale=0.45]{metropolis/bin_mag_0408.png}
+}
+\caption{Deviazione standard della magnetizzazione in funzione della larghezza dei \emph{bin} }
+\end{figure}
+\begin{figure}[h!]
+\subfigure[Magnetizzazione a $\beta=0.43$]{
+	\includegraphics[scale=0.45]{metropolis/bin_mag_043.png}
+}
+\subfigure[Magnetizzazione $\beta=0.49$]{
+\includegraphics[scale=0.45]{metropolis/bin_mag_049.png}
+}
+\caption{Deviazione standard della magnetizzazione in funzione della larghezza dei \emph{bin} }
+\end{figure}
+
+\newpage
+\subsubsection*{Swendsen-Wang}
+Si vedano anche per questo algoritmo le stesse osservabili alle stesse temperature di Metropolis. 
+\begin{figure}[h!]
+\subfigure[Energia a $\beta=0.325$]{
+	\includegraphics[scale=0.45]{sw/bin_en_0325.png}
+}
+\subfigure[Energia $\beta=0.4508$]{
+\includegraphics[scale=0.45]{sw/bin_en_0408.png}
+}
+\caption{Deviazione standard dell'energia in funzione della larghezza dei \emph{bin} }
+\end{figure}
+\begin{figure}[h!]
+\subfigure[Energia a $\beta=0.453$]{
+	\includegraphics[scale=0.45]{sw/bin_en_043.png}
+}
+\subfigure[Energia $\beta=0.459$]{
+\includegraphics[scale=0.45]{sw/bin_en_049.png}
+}
+\caption{Deviazione standard dell'energia  in funzione della larghezza dei \emph{bin} }
+\end{figure}
+
+
+\begin{figure}[h!]
+\subfigure[Magnetizzazione a $\beta=0.325$]{
+	\includegraphics[scale=0.45]{sw/bin_mag_0325.png}
+}
+\subfigure[Magnetizzazione $\beta=0.4508$]{
+\includegraphics[scale=0.45]{sw/bin_mag_0408.png}
+}
+\caption{Deviazione standard della magnetizzazione in funzione della larghezza dei \emph{bin} }
+\end{figure}
+\begin{figure}[h!]
+\subfigure[Magnetizzazione a $\beta=0.43$]{
+	\includegraphics[scale=0.45]{sw/bin_mag_043.png}
+}
+\subfigure[Magnetizzazione $\beta=0.49$]{
+\includegraphics[scale=0.45]{sw/bin_mag_049.png}
+}
+\caption{Deviazione standard della magnetizzazione in funzione della larghezza dei \emph{bin} }
+\end{figure}
+
+Come si può vedere da un confronto diretto dei grafici, analizzando il valore per cui la curva di appiattisce, si può notare che, come ci si poteva aspettare, nell'algoritmo Metropolis è necessario scegliere una larghezza dell'intervallo molto alta vicino al punto critico, addirittura un ordine di grandezza superiore rispetto a Swendsen-Wang.
+Si stima la larghezza ottimale dell'intervallo cercando il punto in cui la curva si appiattisce o inizia ad avere una derivata prima molto più piccola rispetto ai punti iniziali.
+Si può vedere inoltre, come avvicinandosi al punto critico sia necessario avere un intervallo più largo: ciò è una chiara conseguenza della crescita di $\tau_{corr}$ all'avvicinarsi al punto critico.\\
+Inoltre, prendiamo l'esempio del caso metropolis. Alla temperatura $\beta = 0.325$ possiamo prendere come larghezza del bin 20. Poco sotto il punto critico, avremo come larghezza bin ~ 150/200. Come nel caso dell'autocorrelazione avvicinandosi del punto critico la quantità in questione è aumentata di circa un fattore 10 in entrambi i casi.
+Ciò può far capire perchè tempo di autocorrelazione e larghezza del bin siano due quantità non indipendenti.\\
+A riprova di ciò, si può fare la stessa analisi con Swendsen-Wang: si passa da un larghezza del bin di circa 10 a una larghezza di circa 20. Esso è aumentato di un fattore simile al tempo di autocorrelazione, che è passato da 2.5 a 5.5 .\\
+In seguito a questa analisi è stata scelta come larghezza dei bin per Metropolis  200 e per Swendsen-Wang 30.\\
+Per via di questa grande differenza di larghezza dei bin il numero di passi temporali eseguiti con Metropolis è stato aumentato a 120000, mentre Swendsen-Wang rimane con 20000 passi in modo da avere errori più simili con i due algoritmi. In questo modo infatti si ha un numero di misure molto simile dopo il binning.\\
+Nonostante Metropolis sia molto più veloce di Swendsen-Wang a parità di step temporali, la grande autocorrelazione fra le configurazioni generate impone di dover generare molte più configurazioni. Questo fatto lo rende più lento di Swendsen-Wang a generare un sample di dati simili.\\
+Si confrontino i tempi dei due algoritmi in un reticolo 100x100:
+\\
+\begin{center}
+\begin{tabular}{cc}
+\toprule
+	Metropolis (120000 step) & Swendsen-Wang (20000 step) \\
+\midrule
+	111 s & 48 s \\
+\bottomrule
+\end{tabular} 
+\end{center}
+
+L'algoritmo Swendsen-Wang risulta così più efficiente di Metropolis.
+
+\newpage
+\subsection{Lunghezza di correlazione}
+
+La lunghezza di correlazione è stata stimata dal calcolo di:
+$$
+	<S_0 S_t > \, = \, A \, e^{-\frac{t}{\xi}} \qquad \mbox{dove} \qquad S_n = \frac{1}{L} \sum_i \sigma_{(n,i)} 
+$$
+Nel calcolo di $<S_0 S_t>$, inoltre è stata sfrutta l'invarianza per traslazione, rotazione di $\frac{\pi}{2}$ e inversione del reticolo, in modo da diminuire l'errore associato a questa grandezza.
+Si sfrutta l'invarianza per traslazione calcolando più precisamente la seguente quantità:
+$$
+	<S_0 S_t> = \frac{1}{L} \sum <S_i S_{t+i}>
+$$ 
+L'invarianza per rotazioni di $\frac{\pi}{2}$ è stata utilizzata mediando il calcolo fra righe e colonne. Inoltre è stata utilizzata anche l'invarianza per inversione  e la ciclicità del reticolo, le quali insieme comportano la validità di questa relazione:
+$$
+	< S_0 S_t> = < S_0 S_{L-t}>
+$$
+A questo punto si è calcolata osservabile e si sono stimati gli errori attraverso un binning come per le altre osservabili.
+I Valori della lunghezza di correlazione sono poi così stati stimati fittando con un esponenziale decrescente. I valori ottenuti dal fit (errori compresi) sono stati utilizzati per i grafici della lunghezza di correlazione in funzione della temperatura.
+\begin{figure}[t]
+\centering
+	\includegraphics[scale=0.56]{metropolis/corrN100.png}
+\caption{Lunghezza di correlazione con algoritmo Metropolis.}
+\end{figure}
+\begin{figure}[t]
+\centering
+	\includegraphics[scale=0.56]{sw/corrN100.png}
+\caption{Lunghezza di correlazione con algoritmo Swendsen-Wang.}
+\end{figure}
+Il risultato del fit è quindi:
+\begin{center}
+	\begin{tabular}{cc}
+	\toprule
+	Algoritmo & $\nu$ \\
+	\midrule
+	Metropolis & $ 1.01 \pm 0.01 $\\
+	Swendsen-Wang	& $ 1.00 \pm 0.01 $\\
+	\bottomrule
+	\end{tabular}
+\end{center}
+
+Come si può vedere in entrambi i casi l'accordo con la previsione teorica che prevede $\nu = 1$ è ottima per un reticolo 100x100. Inoltre, grazie ad aver imposto un numero di intervalli di binning simile tra i due algoritmi permette di avere una precisione molto simile tra i due.
+
+\subsection{Esponenti Critici}
+Si studiano ora gli esponenti critici del modello. Essi sono ottenuti attraverso un fit delle osservabili a cui sono associati nella fase paramagnetica. Tutti i fit sono stati effettuati per reticoli 100x100.
+\subsubsection{Magnetizzazione}
+
+
+
+\subsection{Finite Size Scaling}
+Si andranno ora a valutare gli esponenti critici di alcune osservabili come magnetizzazione, suscettività e calore specifico. Per q
 
 
 

@@ -33,7 +33,6 @@ ax.grid(True)
 #plt.xticks([i for i in range(0,lungh)])
 ax.text(x_min,10, 'Legenda',bbox={'facecolor':'green', 'alpha':0.5, 'pad':10})
 for d in all_datas:
-	plt.errorbar(d[0],d[1], fmt='o',yerr=d[2],label ='N = %d'%(int(d[3])))
-plt.xlabel('Lx')
+	plt.errorbar(d[0],d[1], fmt='*',yerr=d[2],label ='N = %d'%(int(d[3])))
 plt.legend(loc='upper left')
 plt.show()

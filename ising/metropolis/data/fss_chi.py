@@ -11,7 +11,7 @@ import os
 
 np.seterr(all='warn')
 xmin=0.43
-xmax=0.445
+xmax=0.44
 def par(x,*p):
 	return p[0]*x**2 + p[1]*x + p[2] 
 
@@ -63,7 +63,7 @@ del ers[:]
 
 x_lin = np.linspace(xmin,xmax,100)
 plt.plot(x_lin,par(x_lin,*popt))
-plt.plot(x,y,'ro')
+plt.err(x,y,'ro')
 plt.show()
 x = (x + -BETA_CRIT)/x
 x *= N**(1/nu_corr)

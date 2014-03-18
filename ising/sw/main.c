@@ -37,7 +37,7 @@ int main ( int argc, char * argv[]) {
 		printf("Inserire il valore di Beta e N\n");
 		exit(1);
 	}
-	int N_CORR = N/4;
+	int N_CORR = N/5;
 	double * X_n= malloc(sizeof(double)*N);
 	double * Y_n=malloc(sizeof(double)*N);
 		// init vettore
@@ -54,6 +54,7 @@ int main ( int argc, char * argv[]) {
 	}
 //	float index_simulation = mt_drand();
 	/***** FILENAMES AND FILE OPENING ******/
+	int rand_sig = (int) (mt_drand()*100000000)%9999;
 /* ------------------MAGN*/
 	char mag_filename[64] = "";
 	snprintf(mag_filename,64,"data/mag_mean%d.dat",N);
@@ -62,7 +63,7 @@ int main ( int argc, char * argv[]) {
 	char mag_binning_filename[64] = "";
 	snprintf(mag_binning_filename,64,"data/binning/mag_N%d__B%.8lf.dat",N,BETA); 
 	char mag_autocorr_filename[64] = "";
-	snprintf(mag_autocorr_filename,64,"data/mag_corr/mag_autocorrN%d_B%.8lf.dat",N,BETA);
+	snprintf(mag_autocorr_filename,64,"data/mag_corr/mag_autocorr%.4dN%d_B%.8lf.dat",rand_sig,N,BETA);
 	char mag_tau_filename[64] = "";
 	snprintf(mag_tau_filename,64,"data/tau_magN%d.dat",N);
 
@@ -72,7 +73,7 @@ int main ( int argc, char * argv[]) {
 	char en_filename[64] = "";
 	snprintf(en_filename,64,"data/en_N%d.dat",N);
 	char en_autocorr_filename[64] = "";
-	snprintf(en_autocorr_filename,64,"data/en_corr/en_autocorrN%d_B%.8lf.dat",N,BETA);
+	snprintf(en_autocorr_filename,64,"data/en_corr/en_autocorr%.4dN%d_B%.8lf.dat",rand_sig,N,BETA);
 //	char en_temp_filename[64] = "data/en_temp.dat";
 	char cv_filename[64]="";
 	snprintf(cv_filename,64,"data/cv%d.dat",N);
@@ -153,6 +154,7 @@ int main ( int argc, char * argv[]) {
 			X_n[i] = sum_row(matrix,i,N);
 			Y_n[i] = sum_col(matrix,i,N);
 		}
+		//Invarianza per traslazioni
 		for (j = 0; j < N; ++j){
 			for (i = 0; i < N;i++){
 				S_xt[i]+= X_n[j]*X_n[(i+j)%N];
@@ -163,6 +165,7 @@ int main ( int argc, char * argv[]) {
 		S_xt[i]/=(double)N;
 		S_yt[i]/=(double)N;
 		}	
+		// Invarianza per rotazioni e ciclicità+inversione
 		for (i=0;i<N_CORR;i++){
 			S_med_temp[i] = S_xt[i]+S_yt[i]+S_xt[N-1-i]+ S_yt[N-1-i];
 			S_med_temp[i] /=(4.0);
@@ -198,7 +201,7 @@ int main ( int argc, char * argv[]) {
 		S_fin[j]/= (double)(n_bin);
 		S_var_fin[j] /=(double)(n_bin);
 		S_var_fin[j] -= S_fin[j]*S_fin[j];
-		S_var_fin[j] = sqrt((S_var_fin[j]/(n_bin)));
+		S_var_fin[j] = sqrt((S_var_fin[j]/(double)(n_bin)));
 	}
 	for ( i = 0; i<N_CORR;i++){
 		fprintf(f_corr_row, "%d\t%.14e\t%.14e\n",i,S_fin[i],S_var_fin[i]);
