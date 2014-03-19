@@ -177,22 +177,25 @@ void flip_spin ( Spin * m, int N){
 
 void evolve_therm (Spin * matrix, Node * nodes, int N, float BETA){
 	int iteration = 0;
-//	FILE * f = fopen("data/mag_therm.dat","w");
+	FILE * f_mag = fopen("data/mag_therm.dat","w");
+	FILE * f_en = fopen("data/en_therm.dat","w");
 	for ( iteration = 0 ; iteration < ITERATION_TEMP ; iteration++){
 		startClustering(matrix,nodes,N,BETA);
 		flip_spin(matrix,N);
 		reset_cluster(matrix,nodes,N);
-//		fprintf(f,"%d\t%e\n",iteration,magnetization(matrix,N)/(double)(N*N));
-
+		fprintf(f_mag,"%d\t%e\n",iteration,magnetization(matrix,N)/(double)(N*N));
+		fprintf(f_en, "%d\t%e\n",iteration,hamiltoniana(matrix,N)/(double)(N*N));
 	}
-	//flcose(f);
+	fclose(f_mag);
+	fclose(f_en);
 }
 
 void evolve( Spin * matrix, Node * nodes, int N, float BETA){
+	reset_cluster(matrix,nodes,N);
 	startClustering(matrix,nodes,N,BETA);
 	flip_spin(matrix,N);
 	//PRENDERE DATI QUI
-	reset_cluster(matrix,nodes,N);
+
 }
 
 inline double hamiltoniana( Spin * s, int N){
@@ -237,4 +240,33 @@ cNum sum_col(Spin * s, int col, int N){
 	return cNum_mul(sum , cNum_create_real( 1.0/(double) N)) ;
 }
 
+
+double mag_improved(Spin *s , int N){
+	int i;
+	int max=0;
+	int spin_in_cluster[cluster_max+1];
+	for (i=0; i<cluster_max+1;i++){
+		spin_in_cluster[i]=0;
+	}
+	for(i=0;i<N*N;i++){
+		spin_in_cluster[s[i].cluster]++;
+	}
+
+	for (i=0; i<cluster_max+1;i++){
+		if (spin_in_cluster[i]>max)
+			max = spin_in_cluster[i];
+	}
+
+	return max;
+
+}
+void print_state(Spin * s , int N){
+	int i=0;
+	FILE * f = fopen("data/positions.dat","w");
+	for (i=0;i<N*N;i++){
+		fprintf(f,"%.14e\t%.14e\n", s[i].spin.r,s[i].spin.i);
+	}
+
+	fclose(f);
+}
 #endif

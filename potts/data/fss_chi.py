@@ -10,8 +10,8 @@ from operator import itemgetter
 import os
 
 np.seterr(all='warn')
-xmin=0.43
-xmax=0.44
+xmin=0.992
+xmax=1.01
 def par(x,*p):
 	return p[0]*x**2 + p[1]*x + p[2] 
 
@@ -39,11 +39,11 @@ def load_file(filename, betamin, betamax):
 
 
 N = int(sys.argv[1])
-nu_corr = 1.0
+nu_corr = 5/6.0
 chi_file = "chi%s.dat"%(N)
 chi_data = np.loadtxt(chi_file,dtype='float64',usecols=(0,1,2))
 chi_data = sorted(chi_data, key=itemgetter(0))
-gamma = 7.0/4.0
+gamma = 13.0/9.0
 #fit_exp(chi_file)
 BETA_CRIT ,popt= fit_par(chi_file)
 xs= []
@@ -63,7 +63,7 @@ del ers[:]
 
 x_lin = np.linspace(xmin,xmax,100)
 plt.plot(x_lin,par(x_lin,*popt))
-plt.err(x,y,'ro')
+plt.plot(x,y,'ro')
 plt.show()
 x = (x + -BETA_CRIT)/x
 x *= N**(1/nu_corr)

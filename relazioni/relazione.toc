@@ -1,11 +1,17 @@
 \select@language {italian}
 \select@language {italian}
-\contentsline {section}{\numberline {0.1}Modello di Ising}{2}{section.0.1}
-\contentsline {subsection}{\numberline {0.1.1}Termalizzazione}{2}{subsection.0.1.1}
-\contentsline {subsection}{\numberline {0.1.2}Autocorrelazione fra le configurazioni}{4}{subsection.0.1.2}
-\contentsline {subsection}{\numberline {0.1.3}Binning}{4}{subsection.0.1.3}
-\contentsline {subsection}{\numberline {0.1.4}Energia e Magnetizzazione}{9}{subsection.0.1.4}
-\contentsline {subsection}{\numberline {0.1.5}Distribuzione di probabilit\IeC {\`a} della magnetizzazione}{9}{subsection.0.1.5}
-\contentsline {subsection}{\numberline {0.1.6}Lunghezza di correlazione}{12}{subsection.0.1.6}
-\contentsline {subsection}{\numberline {0.1.7}Finite Size Scaling}{13}{subsection.0.1.7}
-\contentsline {section}{\numberline {0.2}Modello di Potts}{16}{section.0.2}
+\contentsline {chapter}{\numberline {1}Modello di Ising}{2}{chapter.1}
+\contentsline {section}{\numberline {1.1}Termalizzazione}{2}{section.1.1}
+\contentsline {section}{\numberline {1.2}Autocorrelazione fra le configurazioni}{3}{section.1.2}
+\contentsline {section}{\numberline {1.3}Binning}{5}{section.1.3}
+\contentsline {section}{\numberline {1.4}Energia e Magnetizzazione}{9}{section.1.4}
+\contentsline {section}{\numberline {1.5}Distribuzione di probabilit\IeC {\`a} della magnetizzazione}{9}{section.1.5}
+\contentsline {section}{\numberline {1.6}Lunghezza di correlazione}{10}{section.1.6}
+\contentsline {section}{\numberline {1.7}Finite Size Scaling}{14}{section.1.7}
+\contentsline {chapter}{\numberline {2}Modello di Potts}{17}{chapter.2}
+\contentsline {section}{\numberline {2.1}Termalizzazione}{17}{section.2.1}
+\contentsline {section}{\numberline {2.2}Binning}{18}{section.2.2}
+\contentsline {section}{\numberline {2.3}Energia e Magnetizzazione}{18}{section.2.3}
+\contentsline {section}{\numberline {2.4}Distribuzione di probabilit\IeC {\`a} della magnetizzazione}{18}{section.2.4}
+\contentsline {section}{\numberline {2.5}Lunghezza di correlazione}{19}{section.2.5}
+\contentsline {section}{\numberline {2.6}Finite Size Scaling}{19}{section.2.6}

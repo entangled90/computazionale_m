@@ -10,8 +10,8 @@ from operator import itemgetter
 import os
 
 np.seterr(all='warn')
-xmin=0.43
-xmax=0.44
+xmin=0.9
+xmax=1.1
 def par(x,*p):
 	return p[0]*x**2 + p[1]*x + p[2] 
 
@@ -39,13 +39,13 @@ def load_file(filename, betamin, betamax):
 
 
 N = int(sys.argv[1])
-nu_corr = 1.0
+nu_corr = 5/6.0
 mag_file = "mag_mean%s.dat"%(N)
 mag_data = np.loadtxt(mag_file,dtype='float64',usecols=(0,1,2))
 mag_data = sorted(mag_data, key=itemgetter(0))
-gamma = 0.125
+beta = 1/9.0
 #fit_exp(mag_file)
-BETA_CRIT = 0.44
+BETA_CRIT =1.00505254
 #,popt= fit_par(mag_file)
 xs= []
 ys= []
@@ -66,10 +66,10 @@ del ers[:]
 #plt.plot(x_lin,par(x_lin,*popt))
 plt.errorbar(x,y,yerr=er)
 plt.show()
-x = (x + -BETA_CRIT)/x
+x = (x + -BETA_CRIT)/BETA_CRIT
 x *= N**(1/nu_corr)
-y /= N**(-gamma/nu_corr)
-er/= N**(-gamma/nu_corr)
+y /= N**(-beta/nu_corr)
+er/= N**(-beta/nu_corr)
 
 out_file = open('./magfssN%d.dat'%(N),"w")
 for i in range(len(x)):

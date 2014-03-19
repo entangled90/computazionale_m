@@ -5,14 +5,14 @@
 \input{title.tex}
 \tableofcontents 
 \newpage
-\section{Modello di Ising}
+\chapter{Modello di Ising}
 Il modello è stato implementato su un reticolo bidimensione di larghezza N e inizializzando gli spin al valore $\pm 1 $  con uguale probabilità.
 Sono stati implementati due algoritmi: Metropolis e Swendsen-Wang.\\
 
-\subsection{Termalizzazione}
+\section{Termalizzazione}
 Possiamo valutare quando avviene la corretta termalizzazione del sistema analizzando l'andamento della magnetizzazione e dell'energia in funzione del tempo markoviano.
 Di seguito è riportato l'andamento dell'energia e della magnetizzazione durante la termalizzazione a due diverse temperature.
-\subsubsection*{Metropolis}
+\subsection*{Metropolis}
 \begin{figure}[h]
 \subfigure[$\beta=0.3$]{
 \includegraphics[scale=0.45]{metropolis/en_therm.png}
@@ -35,7 +35,7 @@ Di seguito è riportato l'andamento dell'energia e della magnetizzazione durante
 \end{figure}
 Come si può vedere dal grafico relativo alla magnetizzazione a $\beta=0.453$, vicino al punto critico il tempo di termalizzazione cresce di molto. Esso rimane comunque intorno a 100 alla temperatura critica.
 Dopo l'analisi di questi dati si è deciso di fissare il tempo di termalizzazione a 1000 passi temporali.
-\subsubsection*{Swendsen-Wang}
+\subsection*{Swendsen-Wang}
 \begin{figure}[h]
 \subfigure[$\beta=0.3$]{
 	\includegraphics[scale=0.45]{sw/en_therm0-3.png}
@@ -60,7 +60,7 @@ La sostanziale differenza che si vede nei grafici relativi alla magnetizzazione 
 Esso si manifesterà più chiaramente nello studio dell'autocorrelazione delle configurazioni.
 
 
-\subsection{Autocorrelazione fra le configurazioni}
+\section{Autocorrelazione fra le configurazioni}
 Come in ogni simulazione Monte Carlo, è necessario studiare l'autocorrelazione delle configurazione estratte attraverso l'algoritmo in modo da stimare l'efficienza dell'algoritmo ad estrarre configurazioni
 indipendenti e quindi nel produrre statistica.\\
 Il tempo di autocorrelazione è stato calcolato utilizzando la formula:
@@ -76,7 +76,7 @@ Non è stato possibile stimare il valore di $\tau_{corr}$ attraverso un fit con 
 Come si può vedere dai grafici, l'algoritmo Metropolis ha un tempo di autocorrelazione nettamente più elevato rispetto a Swendsen-Wang. Questo diverso comportamento è dovuto principalmente al fatto che Metropolis è un algoritmo locale, ossia l'inversione di ogni spin dipende esclusivamente dagli spin circostanti ad esso. L'algoritmo di Swendsen-Wang invece, è non-locale a causa della taglia estesa  che i cluster possono assumere.
 Questo permette a questo algoritmo di non avere difficoltà ad estrarre configurazioni statisticamente scorrelate più velocemente rispetto a Metropolis.
 
-\subsection{Binning}
+\section{Binning}
 Prima di affrontare la misura di osservabili è necessario analizzare come affrontare la correlazione fra le configurazioni estratte dagli algoritmi.
 La tecnica migliore per ovviare a questo fatto è quella del \emph{binning}, ossia raggruppare misure in intervalli di larghezza abbastanza grande da diventare un gruppo di misure scorrelate tra loro.
 A questo punto si procede a fare la media in ogni intervallo e si hanno così $\frac{N}{m}$ misure statisticamente indipendenti fra loro, a partire da $N$ misure autocorrelate suddivise in intervalli di larghezza $m$.\\
@@ -84,7 +84,7 @@ A questo punto si procede a fare la media in ogni intervallo e si hanno così $\
 della deviazione standard della media del nuovo set di $\frac{N}{m}$ misure in funzione di $m$.
 Come si può immaginare, la larghezza del bin è associata al tempo di autocorellazione di cui si è parlato prima. 
 
-\subsubsection*{Metropolis}
+\subsection*{Metropolis}
 Si vedano ora alcuni grafici di questa quantità a diverse temperature e per due diverse osservabili.
 \begin{figure}[h!]
 \subfigure[Energia a $\beta=0.325$]{
@@ -125,7 +125,7 @@ Si vedano ora alcuni grafici di questa quantità a diverse temperature e per due
 \end{figure}
 
 \newpage
-\subsubsection*{Swendsen-Wang}
+\subsection*{Swendsen-Wang}
 Si vedano anche per questo algoritmo le stesse osservabili alle stesse temperature di Metropolis. 
 \begin{figure}[h!]
 \subfigure[Energia a $\beta=0.325$]{
@@ -190,7 +190,7 @@ Si confrontino i tempi dei due algoritmi in un reticolo 100x100:
 L'algoritmo Swendsen-Wang risulta così più efficiente di Metropolis.
 \newpage
 
-\subsection{Energia e Magnetizzazione}
+\section{Energia e Magnetizzazione}
 Energia e magnetizzazione sono le due principali osservabili di questo modello ed è possibile confrontare facilmente il loro andamento con la soluzione teorica di Onsager (valida però per un reticolo di taglia infinita).
 Per la magnetizzazione è stata utilizzata l'osservabile \emph{improved} per Swendsen-Wang, ossia la frazione degli spin nel cluster più grande.
 Nonostante i grafici siano stati fatti con un reticolo 100x100 l'accordo con la previsione teorica è eccellente per entrambe le osservabili e con entrambi gli algoritmi.
@@ -217,7 +217,7 @@ Insieme ai dati raccolti è stata sovrapposta la soluzione analitica di Onsager 
 \end{figure}
 
 Gli errori sono stati calcolati attraverso il binning delle osservabili.
-\subsection{Distribuzione di probabilità della magnetizzazione}
+\section{Distribuzione di probabilità della magnetizzazione}
 Si studi ora la distribuzione di probabilità del modulo della magnetizzazione al variare della temperatura, confrontando fra loro i due algoritmi in questione.
 Si è deciso di studiare il modulo della magnetizzazione in quanto l'algoritmo Swendsen-Wang ad ogni step inverte i cluster (con probabilità $\frac{1}{2}$), mentre Metropolis, siccome inverte uno spin alla volta, tende a mantere costante il segno della magnetizzazione per temperature sotto il punto critico.
 
@@ -284,7 +284,7 @@ Si è deciso di studiare il modulo della magnetizzazione in quanto l'algoritmo S
 
 
 
-\subsection{Lunghezza di correlazione}
+\section{Lunghezza di correlazione}
 
 La lunghezza di correlazione è stata stimata dal calcolo di:
 $$
@@ -327,7 +327,7 @@ Il risultato del fit è quindi:
 Come si può vedere in entrambi i casi l'accordo con la previsione teorica che prevede $\nu = 1$ è ottima per un reticolo 100x100. Inoltre, grazie ad aver imposto un numero di intervalli di binning simile tra i due algoritmi permette di avere una precisione molto simile tra i due.
 
 \newpage
-\subsection{Finite Size Scaling}
+\section{Finite Size Scaling}
 Si andranno ora a fare uno studio di \emph{finite size scaling} per poter valutare l'accordo dei dati ottenuti per magnetizzazione, suscettività e calore specifico con gli esponenti critici esatti della soluzione di Onsager.
 Per fare uno studio di \emph{finite size scaling} è necessario raccogliere dati sulle osservabili in esame per varie taglie del reticolo. In questo caso sono state utilizzati i seguenti reticoli:
 \begin{itemize}
@@ -395,8 +395,119 @@ Siccome il \emph{finite size scaling} si basa sugli esponenti critici della solu
 Per questo, gli esponenti critici del modello simulato sembrano risultare simili a quelli previsti teoricamente.
 
 \newpage
-\section{Modello di Potts}
+\chapter{Modello di Potts}
 Il modello di Potts è una generalizzazione del modello di Ising studiato nel capitolo precedente.
-Esso generalizza il modello di Ising aggiungendo un numero arbitrario di stati.
+Esso generalizza il modello di Ising aggiungendo un numero arbitrario di stati.\\
+Si analizzerà ora il modello di Potts in 2 dimensioni con 3 stati. La sua implementazione ha sfruttato la rappresentazione degli stati come radici dell'unità $e^{2*\pi*i}$ con $i=0,1,2$.
+Il modello è stato implementato solo usando l'algoritmo Swendsen-Wang e verrà svolta un'analisi simile a quanto fatto con Ising data l'analogia tra i due modelli.
+
+
+\section{Termalizzazione}
+
+\begin{figure}[h!]
+	\subfigure[$\beta=0.5$]{
+		\includegraphics[scale=0.28]{potts/en_therm05.png}	
+	}
+	\subfigure[$\beta=1$]{
+		\includegraphics[scale=0.28]{potts/en_therm1.png}	
+	}
+	\subfigure[$\beta=1.5$]{
+		\includegraphics[scale=0.28]{potts/en_therm15.png}	
+	}
+	\caption{Andamento dell'energia in fase di termalizzazione}
+\end{figure}
+
+\begin{figure}[h!]
+	\subfigure[$\beta=0.5$]{
+		\includegraphics[scale=0.28]{potts/mag_therm05.png}	
+	}
+	\subfigure[$\beta=1$]{
+		\includegraphics[scale=0.28]{potts/mag_therm1.png}	
+	}
+	\subfigure[$\beta=1.5$]{
+		\includegraphics[scale=0.28]{potts/mag_therm15.png}	
+	}
+	\caption{Andamento della magnetizzazione in fase di termalizzazione}
+\end{figure}
+I siti del reticolo vengono inizializzati in modo uniformemente casuale tra i tre stati possibili.
+Dopo aver analizzato l'andamento di energia e magnetizzazione nella fase di termalizzazione si è scelto di impostare un tempo di termalizzazione pari a 1000 passi temporali anche se come si può vedere dai grafici, già 100 passi sono sufficienti.
+
+\section{Binning}
+Il binning è stato implementato esattamente come nel modello di Ising. Siccome questo modello è stato simulato attraverso Swendsen-Wang ci si aspetta che la larghezza dei bin sia comparabile a quella nel modello di Ising con il medesimo algoritmo. Infatti così accade e anche in questo caso è stata scelta una larghezza degli intervalli pari a 30. Il numero totale di passi temporali dell'algoritmo è in questo caso di 10000, quindi si hanno circa la metà dei dati rispetto a Ising con Swendsen-Wang.\\
+Si veda ora l'andamento della deviazione standar nel punto critico, temperatura in cui si ha l'autocorrelazione massima tra le configurazioni. A tutte le altre temperature, come nel modello di Ising, la curva si appiattisce molto più rapidamente.
+\begin{center}
+\begin{figure}[h]
+ 	\subfigure[ $\sigma$ della magnetizzazione]{
+	\includegraphics[scale=0.4]{potts/mag_bincrit.png}
+	}
+ 	\subfigure[ $\sigma$ dell'energia]{
+	\includegraphics[scale=0.4]{potts/en_bincrit.png}
+	}
+
+\end{figure}
+\end{center}
+
+\section{Energia e Magnetizzazione}
+A differenza del modello di Ising non si ha la soluzione analitica esatta di magnetizzazione ed energia in funzione della temperatura, quindi non è possibile confrontarle direttamente.\\
+Si può vedere che la temperatura a cui avviene la transizione di fase è di poco sopra $\beta=1$ come previsto. I grafici sono stati fatti con un reticolo di taglia 100x100.
+\begin{center}
+\begin{figure}[h]
+ 	\subfigure[Magnetizzazione]{
+	\includegraphics[scale=0.22]{potts/mag100.png}
+	}
+ 	\subfigure[Energia]{
+	\includegraphics[scale=0.4]{potts/en100.png}
+	}
+
+\end{figure}
+\end{center}
+\section{Distribuzione di probabilità della magnetizzazione}
+\begin{center}
+\begin{figure}[h]
+ 	\subfigure[$\beta=0.7$]{
+	\includegraphics[scale=0.4]{potts/PDFM07.png}
+	}
+ 	\subfigure[$beta=0.99$]{
+	\includegraphics[scale=0.4]{potts/PDFM099.png}
+	}
+
+\end{figure}
+\end{center}
+\begin{center}
+\begin{figure}[h]
+ 	\subfigure[$\beta=1$]{
+	\includegraphics[scale=0.4]{potts/PDFM1.png}
+	}
+ 	\subfigure[$beta=1.01$]{
+	\includegraphics[scale=0.4]{potts/PDFM101.png}
+	}
+
+\end{figure}
+\end{center}
+
+\begin{center}
+\begin{figure}[h]
+ 	\includegraphics[scale=0.4]{potts/PDFM11.png}
+ 	\caption{$beta=1.1$}
+\end{figure}
+\end{center}
+
+
+
+\section{Lunghezza di correlazione}
+
+
+\begin{center}
+\begin{figure}[h]
+ 	\includegraphics[scale=0.65]{potts/corr150.png}
+ 	\caption{$beta=1.1$}
+\end{figure}
+\end{center}
+
+
+
+
+\section{Finite Size Scaling}
+
 
 \end{document}

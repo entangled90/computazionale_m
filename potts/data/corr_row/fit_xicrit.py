@@ -13,42 +13,44 @@ def fit_fun(x,*p):
 	return p[0]*(np.exp(x*p[1]))
 def fit_fun_corr(x,*p):
 #	print(x)
-	return p[0]*(-1*(x + -1*p[2])/x)**p[1]
+	return p[0]*(np.fabs((x + -1*p[2])/x))**p[1]
 
 def fit_fun_corr_fitted(x,*p):
-	return p[0]*(-1*x)**p[1]
+	return p[0]*(np.fabs(x))**p[1]
 
 
 np.seterr(all='warn')
-BetaC = 0.43
-BetaMin = 0.2
+BetaC = 1.002
+BetaMin = 0.6
 N = sys.argv[1]
 file_temp = glob.glob('corr_row_N%s*.dat'%(N))	
+#print(file_temp)
 beta = []
 xi =  []
 files = []
 l_ord = []
 for f in file_temp:
-	beta_temp= float(f[-13:-4])
-#	print(beta_temp) 
+	beta_temp= float(f[-14:-4])
+	print(beta_temp) 
 	if (BetaMin <beta_temp < BetaC) & (os.stat(f)[6]!= 0):
 		files.append(f)
 
 for f in files:
-	beta_temp= float(f[-13:-4])
+	beta_temp= float(f[-14:-4])
 	temp = np.loadtxt(f,dtype='float64')
 		#= np.loadtxt('en_')
 	xs= []
 	ys= []
 	for i in range(len(temp)):
 		t = temp[i]
-		if t[0]<10:
+		if t[0]<20:
 			xs.append(t[0])
 			ys.append(t[1])
 	x_points = np.asarray(xs,dtype='float64')
 	y_points = np.asarray(ys,dtype='float64')
 	#x_points = (-1)*(x_points + (-BetaC))/BetaC
 	guess = [1,-1]
+
 	popt,pcov = curve_fit(fit_fun,x_points,y_points, p0=guess )
 	if not (any( math.isnan(i) for i in popt) or any(math.isinf(i) for i in popt)):
 		l_ord.append([beta_temp,-1/popt[1], math.sqrt(pcov[1][1])])
@@ -63,7 +65,7 @@ xi_np = np.asarray(xi,dtype='float64')
 error_np = np.asarray(error,dtype='float64')
 
 
-guess = [1, -1 , 0.44]
+guess = [1, -0.83 , 1.05]
 popt,pcov = curve_fit(fit_fun_corr,beta_np,xi_np, sigma=error, p0=guess )
 file_list = glob.glob('../xi_corrN%s_NU*.dat'%(N))
 for f in file_list:

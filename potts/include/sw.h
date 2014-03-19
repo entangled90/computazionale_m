@@ -21,6 +21,7 @@ void evolve( Spin * matrix, Node * nodes, int, float);
 double hamiltoniana(Spin * configuration, int N);
 cNum sum_row(Spin * s, int row, int N);
 cNum sum_col(Spin * s, int col, int N);
-
+double mag_improved(Spin *s , int N);
+void print_state(Spin * s , int N);
 //#endif
 #endif

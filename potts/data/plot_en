@@ -10,8 +10,8 @@ filename = sys.argv[1]
 x,y,ers = np.loadtxt(filename, comments='#',unpack=True)
 
 fig = plt.figure()
-fig.suptitle("Magnetizzazione modello di Potts")
+fig.suptitle("Energia modello di Potts")
 plt.xlabel(r'$\beta$')
-plt.ylabel(r'<|M|>')
+plt.ylabel(r'<|\mathcal{H}|>')
 plt.errorbar(x,y,yerr=ers,fmt='o')
 plt.show()
