@@ -31,7 +31,7 @@ plt.suptitle('Magnetizzazione in funzione di Beta')
 plt.xlabel(r'$\beta$')
 plt.ylabel('<|M|>')
 plt.plot(x_lin,mag_fun(x_lin),label='Onsager')
-plt.errorbar(xnp,ynp,yerr=ersnp, fmt='o', label='dati')
+plt.errorbar(xnp,ynp,yerr=ersnp, fmt='|', label='dati')
 plt.legend(loc='upper left')
 
 plt.show()

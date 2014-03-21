@@ -113,7 +113,7 @@ void startClustering (Spin * matrix, Node * nodes, int N, float BETA){
 	}
 }
 
-inline double magnetization(Spin *x, int N){
+inline cNum magnetization(Spin *x, int N){
 	int i,j;
 	cNum mag= { .r= 0.0 ,.i=0.0, .index=0};
 	for (i=0;i<N;i++){
@@ -121,7 +121,7 @@ inline double magnetization(Spin *x, int N){
 			mag = cNum_sum(mag,x[i*N+j].spin);
 		}
 	}
-	return cNum_Mod(mag);
+	return mag;
 }
 
 
@@ -183,7 +183,7 @@ void evolve_therm (Spin * matrix, Node * nodes, int N, float BETA){
 		startClustering(matrix,nodes,N,BETA);
 		flip_spin(matrix,N);
 		reset_cluster(matrix,nodes,N);
-		fprintf(f_mag,"%d\t%e\n",iteration,magnetization(matrix,N)/(double)(N*N));
+		fprintf(f_mag,"%d\t%e\n",iteration,mag_improved(matrix,N)/(double)(N*N));
 		fprintf(f_en, "%d\t%e\n",iteration,hamiltoniana(matrix,N)/(double)(N*N));
 	}
 	fclose(f_mag);

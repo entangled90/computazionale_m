@@ -70,6 +70,8 @@ int main ( int argc, char * argv[]) {
 
 	char corr_row_filename[64]="";
 	snprintf(corr_row_filename,64,"data/corr_row/corr_row_N%dB%.8lf.dat",N,BETA);
+	char mag_hist_filename[64]="";
+	snprintf(mag_hist_filename,64,"data/mag_histB%.8lf.dat",BETA);
 
 /*** I File sono chiamati: f_$(Nomestringa) ****/
 	FILE * f_mag = fopen(mag_filename,"a");
@@ -77,7 +79,8 @@ int main ( int argc, char * argv[]) {
 	FILE * f_mag_bin = fopen(mag_binning_filename,"w");
 
 	FILE * f_mag_autocorr = fopen(mag_autocorr_filename,"w");
-	FILE * f_mag_temp = fopen("data/mag_temp.dat","w");	FILE * f_en_bin = fopen(en_binning_filename,"w");
+	FILE * f_mag_temp = fopen("data/mag_temp.dat","w");
+	FILE * f_en_bin = fopen(en_binning_filename,"w");
 	FILE * f_en_autocorr = fopen(en_autocorr_filename,"w");
 	FILE * f_en = fopen(en_filename,"a");
 //	FILE * f_en_temp = fopen(en_temp_filename,"w");
@@ -130,10 +133,14 @@ int main ( int argc, char * argv[]) {
 	vec_zeros(S_fin,N_CORR);
 	vec_zeros(S_var_fin,N_CORR);
 	vec_zeros(S_test,N_CORR);
+	FILE * f = fopen(mag_hist_filename,"w");
+	cNum mag_hist;
 	/****** CICLO DI EVOLUZIONE: PRENDERE MISURE QUI */
 	for ( iteration=0;iteration<ITERATION_MAX; iteration++){
 		evolve(matrix,nodes,N,BETA);
 		mag_vet_dati[iteration] = mag_improved(matrix,N);
+		mag_hist=magnetization(matrix,N);
+		fprintf((f), "%.14e\t%.14e\n", mag_hist.r/(double)(N*N),mag_hist.i/(double)(N*N));
 		en_vet_dati[iteration] = hamiltoniana(matrix,N);
 		/* Correlazione righe e colonne*/
 		for ( i = 0; i<N;i++){
@@ -164,6 +171,7 @@ int main ( int argc, char * argv[]) {
 		}
 
 	}
+	fclose(f);
 	print_state(matrix,N);
 	savePPM(matrix,N,"dopoevoluzione.ppm");
 	int r=0;

@@ -10,7 +10,7 @@ void reset_cluster (Spin * matrix, Node * n, int N);
 int set_bond (Spin * s1, Spin * s2,float BETA);
 void fillCluster( Spin * matrix, Node * nodes, List * l, int N, float BETA);
 void startClustering (Spin * matrix, Node * nodes, int N,float BETA);
-inline double magnetization(Spin *x, int N);
+inline cNum magnetization(Spin *x, int N);
 inline void savePPM(Spin * s, int N, char *);
 void drawCluster(Spin * s, int N);
 void drawSpin(Spin * s, int N);	

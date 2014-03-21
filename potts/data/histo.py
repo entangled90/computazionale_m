@@ -16,8 +16,11 @@ errfunc  = lambda p, x, y: (y - fitfunc(p, x))
 filename = sys.argv[1]
 numOfBin = 30
 data = np.loadtxt(filename, dtype='float64')
+
+mag_datas = np.array([math.sqrt(i[0]**2+i[1]**2) for i in data])
+
 #Density normalizza l'istogramma 
-hist , bin_edges = np.histogram(data, bins= numOfBin, density=False)
+hist , bin_edges = np.histogram(mag_datas, bins= numOfBin, density=False)
 #  init dei parametri del fit:
 step = (float(bin_edges[-1] - bin_edges[0])/numOfBin)
 x_data = bin_edges[:-1]+step
@@ -37,7 +40,7 @@ width = 0.7 * (bin_edges[1] - bin_edges[0])
 center = (bin_edges[:-1] + bin_edges[1:]) / 2
 plt.bar(center, hist, align='center', width=width,color='g')
 #plt.plot(x,fitfunc(x,*popt), 'r')
-fig.suptitle(r'Distribuzione di probabilità a $\beta = 1.1$')
+fig.suptitle(r'Distribuzione di probabilità a $\beta = 1.015$')
 plt.xlabel(r'Magnetizzazione $M$')
 plt.ylabel(r'Densità di probabilità (normalizzata)')
 #plt.xlabel('Time collision')

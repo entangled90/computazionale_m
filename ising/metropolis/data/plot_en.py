@@ -27,7 +27,7 @@ plt.suptitle('Energia in funzione di Beta')
 plt.xlabel(r'$\beta$')
 plt.ylabel('<H>')
 plt.plot(x_lin,en_fun(x_lin),label='Onsager')
-plt.errorbar(xnp,ynp,yerr=ersnp, fmt='o',label='dati')
+plt.errorbar(xnp,ynp,yerr=ersnp, fmt='|',label='dati')
 plt.legend(loc='upper right')
 
 plt.show()

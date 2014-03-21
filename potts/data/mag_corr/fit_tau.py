@@ -17,12 +17,13 @@ np.seterr(all='warn')
 BetaC = 0.44
 BetaMin = 0.3
 N = sys.argv[1]
-files = glob.glob('mag_autocorrN%s_*.dat'%(N))	
+files = glob.glob('mag_autocorr*N%s_*.dat'%(N))	
 beta = []
 tau =  []
 l_ord = []
 for f in files:
-	beta_temp= float(f[-9:-4])
+	beta_temp= float(f[-13:-4])
+	print(beta_temp)
 	if (os.stat(f)[6]!= 0)&(beta_temp>0):
 		temp = np.loadtxt(f,dtype='float64')
 			#= np.loadtxt('en_')

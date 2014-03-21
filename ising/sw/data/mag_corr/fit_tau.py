@@ -22,7 +22,7 @@ beta = []
 tau =  []
 l_ord = []
 for f in files:
-	beta_temp= float(f[-9:-4])
+	beta_temp= float(f[-13:-4])
 	if (os.stat(f)[6]!= 0)&(beta_temp>0):
 		temp = np.loadtxt(f,dtype='float64')
 			#= np.loadtxt('en_')
@@ -30,7 +30,7 @@ for f in files:
 		ys= []
 		for i in range(len(temp)):
 			t = temp[i]
-			if t[0]<10:
+			if t[0]<5:
 				xs.append(t[0])
 				ys.append(t[1])
 		x_points = np.asarray(xs,dtype='float64')
