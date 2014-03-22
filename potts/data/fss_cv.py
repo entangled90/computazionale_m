@@ -47,7 +47,7 @@ data = np.loadtxt(f,dtype='float64')
 data = sorted(data, key=itemgetter(0))
 #fit_exp(f)
 #BETA_CRIT,popt = fit_par(f)
-BETA_CRIT = 1.00505254
+BETA_CRIT = 1.00321
 xs= []
 ys= []
 ers=[]
@@ -66,8 +66,9 @@ er = np.asarray(ers,dtype='float64')
 del xs[:]
 del ys[:]
 del ers[:]
+
 nu_corr =5/6.0
-alfa = 1/3.0
+alfa = 1/4.0
 plt.errorbar(x,y,yerr=er,fmt='ro')
 x_lin= np.linspace(xmin,xmax,100)
 #plt.plot(x_lin,par(x_lin,*popt))

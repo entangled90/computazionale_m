@@ -233,6 +233,8 @@ Come si vede dai grafici, con entrambi gli algoritmi l'energia del sistema è pe
 \end{figure}
 \begin{center}
 	\begin{figure}[h]
+		\centering
+
 		\includegraphics[scale=0.5]{sw/mag50100150.png}
 		\caption{Magnetizzazione per L=50,75,100. Swendsen-Wang}
 	\end{figure}
@@ -380,6 +382,8 @@ $$
 $$ 
 \begin{center}
 	\begin{figure}[h]
+		\centering
+
 		\includegraphics[scale=0.56]{sw/fsschi.png}
 		\caption{Studio di Fss per $\chi = t^{-\gamma}$, con $\gamma = \frac{7}{4}$}
 	\end{figure}
@@ -399,7 +403,7 @@ $$
 $$
 Gli esponenti critici della soluzione analitica sono i seguenti:\\
 \begin{center}
-	\begin{tabular}{|c|c|}
+	\begin{tabular}{c c }
 		\toprule
 		Esponente & valore \\
 		\midrule
@@ -412,12 +416,16 @@ Gli esponenti critici della soluzione analitica sono i seguenti:\\
 
 \begin{center}
 	\begin{figure}[h]
+		\centering
+
 		\includegraphics[scale=0.56]{sw/fsscv.png}
 		\caption{Studio di Fss per $c$, con $\alpha=0$}
 	\end{figure}
 \end{center}
 \begin{center}
 	\begin{figure}[h]
+		\centering
+
 		\includegraphics[scale=0.6]{sw/fssmag.png}
 		\caption{Studio di Fss per $M= t^{\beta}$, con $\beta=\frac{1}{8}$}
 	\end{figure}
@@ -471,6 +479,8 @@ Il binning è stato implementato esattamente come nel modello di Ising. Siccome 
 Si veda ora l'andamento della deviazione standar nel punto critico, temperatura in cui si ha l'autocorrelazione massima tra le configurazioni. A tutte le altre temperature, come nel modello di Ising, la curva si appiattisce molto più rapidamente.
 \begin{center}
 \begin{figure}[h!]
+	\centering
+
  	\subfigure[ $\sigma$ della magnetizzazione]{
 	\includegraphics[scale=0.4]{potts/mag_bincrit.png}
 	}
@@ -486,11 +496,12 @@ A differenza del modello di Ising non si ha la soluzione analitica esatta di mag
 Si può vedere che la temperatura a cui avviene la transizione di fase è di poco sopra $\beta=1$ come previsto. I grafici sono stati fatti con un reticolo di taglia 100x100.
 \begin{center}
 \begin{figure}[h!]
+	\centering
  	\subfigure[Magnetizzazione]{
-	\includegraphics[scale=0.4]{potts/mag100.png}
+	\includegraphics[scale=0.35]{potts/mag100.png}
 	}
  	\subfigure[Energia]{
-	\includegraphics[scale=0.4]{potts/en100.png}
+	\includegraphics[scale=0.35]{potts/en100.png}
 	}
 \end{figure}
 \end{center}
@@ -499,7 +510,7 @@ Le curve sono relative a reticoli 30x30,75x75 e 150x150:
 
 \begin{figure}[h]
 \centering
-\includegraphics[scale=0.6]{potts/mag_taglia.png}
+\includegraphics[scale=0.5]{potts/mag_taglia.png}
 \caption{Magnetizzazione per L=30,75,150.}
 \end{figure}
 
@@ -515,7 +526,7 @@ Ciò può essere fatto utilizzando la seguente definizione di magnetizzazione:
 $$
 	 M = \frac{| \sum_{siti} \phi_{i j} |}{N} 
 $$
-Se non si considera il modulo, essa può essere studiata nel piano complesso.
+Se non si considera il modulo, essa può essere studiata nel piano complesso.\\
 \begin{center}
 \begin{figure}[h!]
  	\subfigure[$\beta=0.81$]{
@@ -538,8 +549,6 @@ Se non si considera il modulo, essa può essere studiata nel piano complesso.
 	}
 \end{figure}
 \end{center}
-
-
 \begin{center}
 \begin{figure}[h!]
 
@@ -579,13 +588,14 @@ Anche in questo caso è stata utilizzata come valore di $\beta_{crit}$ quello te
 $\beta_{crit} = log(1+\sqrt(3)) = 1.0050525..$
 \begin{center}
 \begin{figure}[h]
+\centering
  	\includegraphics[scale=0.65]{potts/corr150.png}
  	\caption{Lunghezza di correlazione.}
 \end{figure}
 \end{center}
 
 \begin{center}
-\begin{tabular}{|c|c|}
+\begin{tabular}{c c }
 
 	\toprule
 	metodo & valore \\
@@ -600,6 +610,75 @@ $\beta_{crit} = log(1+\sqrt(3)) = 1.0050525..$
 
 
 \section{Finite Size Scaling}
+Lo studio di finite size scaling per questo modello è del tutto analogo a quanto fatto con il modello di Ising, con l'unica differenza che gli esponenti critici sono diversi:
+\begin{center}
+	\begin{tabular}{c c}
+	\toprule
+	Esponente & valore \\
+	\midrule
+	$\alpha$ &  $1/3$ \\
+	$\beta $ & $1/9$\\
+	$\gamma$ & $13/9$ \\
+	$\nu$ & $5/6$ \\
+	\bottomrule
+	\end{tabular}
+\end{center}
+L'unica grande differenza tra questi esponenti risiede nell'esponente critico $\alpha$, infatti per il modello di Ising si aveva $\alpha=0$ che indicava una scaling logaritmico mentre in questo modello si ha uno scaling a potenza anche per il calore specifico.
+Per lo studio del finite size scaling sono stati utilizzati i seguenti reticoli:
+\begin{itemize}
+\item 30x30
+\item 50x50
+\item 75x75
+\item 100x100
+\item 150x150
+\end{itemize}
+La temperatura è stata stimata come nel modello di Ising, facendo un fit con una parabola della suscettività nell'intorno del punto critico. La temperatura critica trovata per un valore del lato del reticolo è stata poi utilizzata anche per il calore specifico. \\
+Come si può vedere, all'aumentare del lato del reticolo la temperatura critica tende verso la temperatura critica teorica di cui si è parlato prima. \\
+Non sono stati calcolati gli errori sulla temperatura critica in funzione del lato del reticolo in quanto questo calcolo è stato effettuato per migliorare leggermente i grafici di finite size scaling in modo che per ogni lato del reticolo le osservabili fossero centrate in zero.
+Questi valori della temperatura sono stati troncati stimando l'errore in maniera grossolana cercando di sottostimare l'errore il meno possibile. 
+\begin{center}
+	\begin{tabular}{c c}
+	\toprule
+	Lato reticolo $(L)$ & $\beta_{crit}(L)$ \\
+	\midrule
+	30 & 0.986 \\
+	50 & 0.994 \\
+	75 & 0.998 \\
+	100 &  0.999 \\
+	150 & 1.002\\
+	\bottomrule
+	\end{tabular}
+\end{center}
+
+\begin{center}
+	\begin{figure}
+	\centering
+		\includegraphics[scale=0.55]{potts/magfss.png}
+		\caption{Studio di finite size scaling per magnetizzazione.}	
+	\end{figure}
+\end{center}
+
+
+\begin{center}
+	\begin{figure}
+		\centering
+
+		\includegraphics[scale=0.55]{potts/chifss.png}
+		\caption{Studio di finite size scaling per la suscettività.}	
+	\end{figure}
+\end{center}
+\begin{center}
+	\begin{figure}
+		\centering
+
+		\includegraphics[scale=0.55]{potts/cvfsssNONSCALATO.png}
+		\caption{Studio di finite size scaling per il calore specifico.}	
+	\end{figure}
+\end{center}
+
+Dai grafici notiamo come il finite size scaling per la magnetizzazione sia perfetto, come nel modello di Ising.\\
+
+
 
 
 \end{document}
