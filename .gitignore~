@@ -38,5 +38,9 @@ Thumbs.db
 
 # File dati generati #
 
-.dat
-.xyz
+*.dat
+*.xyz
+*.pdf
+
+#Eseguibili
+main
