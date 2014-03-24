@@ -169,6 +169,7 @@ int main ( int argc, char * argv[]) {
 		for (i=0;i<N_CORR;i++){
 			S_med_temp[i] = S_xt[i]+S_yt[i]+S_xt[N-1-i]+ S_yt[N-1-i];
 			S_med_temp[i] /=(4.0);
+	//		S_test[i] += S_med_temp[i];
 		}
 		for(j = 0;j<N_CORR;j++){
 			S_dati[iteration*N_CORR+j] = S_med_temp[j];
@@ -179,6 +180,14 @@ int main ( int argc, char * argv[]) {
 		}
 
 	}
+/*	for ( i = 0; i<N;i++){
+		S_xt[i] += S_yt[i]+S_xt[N-1-i] + S_yt[N-1-i];
+		S_xt[i]/=4.0*ITERATION_MAX;
+	}
+	for ( i = 0; i<N/2;i++){
+		fprintf(f_corr_row, "%d\t%lf\n",i,S_xt[i] );
+		}
+*/
 	divideByScalar(S_test,ITERATION_MAX,N_CORR);
 /**** BINNING E AUTOCORRELAZIONI */
 /* tutto il BINNING della Correlazione fra righe e colonne*/
@@ -196,6 +205,7 @@ int main ( int argc, char * argv[]) {
 	}
 	for ( i = 0; i<N_CORR;i++){
 		fprintf(f_corr_row, "%d\t%.14e\t%.14e\n",i,S_fin[i],S_var_fin[i]);
+	//	fprintf(f_corr_row,"%d\t%.14e\t%.14e\n",i,S_test[i],0.000001);
 	}
 
 
@@ -209,7 +219,7 @@ int main ( int argc, char * argv[]) {
 	divideByScalar(en_vet_binnato,N*N,n_bin);
 	divideByScalar(chi_vet_binnato,N*N,n_bin);
 	divideByScalar(cv_vet_binnato,N*N,n_bin);
-/* Scrivo su file i valori delle osservabili con errori calcolati con il binning*/
+
 	fprintf(f_mag,"%.8lf\t%.14e\t%.14e\n", BETA, meanOfDoubleArray(mag_vet_binnato,n_bin),
 		sqrt(varianceOfDoubleArray(mag_vet_binnato,n_bin)/n_bin));
 	fprintf(f_en,"%.8lf\t%.14e\t%.14e\n", BETA,meanOfDoubleArray(en_vet_binnato,n_bin),
@@ -219,10 +229,6 @@ int main ( int argc, char * argv[]) {
 	fprintf(f_chi,"%.8lf\t%.14e\t%.14e\n", BETA,meanOfDoubleArray(chi_vet_binnato,n_bin),
 		sqrt(varianceOfDoubleArray(chi_vet_binnato,n_bin)/n_bin));
 
-/********************************************
-******* AUTOCORRELAZIONE *******************
-*********************************************/
-/*divido per il volume per il calcolo dell'autocorrelazione (Prima avevo diviso i dati binnati)*/
 	divideByScalar(mag_vet_dati,N*N,ITERATION_MAX);
 	divideByScalar(en_vet_dati,N*N,ITERATION_MAX);
 //	mag_vet_binnato = malloc(sizeof(double)*(ITERATION_MAX));

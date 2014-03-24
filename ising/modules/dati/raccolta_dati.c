@@ -130,4 +130,12 @@ void divideByScalar(double * v, double scalar, int N){
 	}
 }
 
+void multByScalar(double * v, double scalar, int N){
+	int i;
+	for ( i = 0; i<N;i++){
+		v[i] *= scalar;
+	}
+}
+
+
 #endif

@@ -9,4 +9,5 @@ void autocorrelation (double * dati, double * risultato, int N,int corr_max);
 void divideByScalar(double * v, double scalar, int N);
 void binning_mat ( double * old_vec, double * new_vec,int n_row ,int n_data, int bin_width);
 void binning_deriv ( double * old_vec, double * new_vec, int sizeold, int m);
+void multByScalar(double * v, double scalar, int N);
 #endif
