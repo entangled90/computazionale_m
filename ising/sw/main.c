@@ -12,6 +12,7 @@
 
 #define CORR_MAX 50
 #define CORR_ESTREMO 15
+#define BIN_WIDTH_DERIV 1000
 
 
 int main ( int argc, char * argv[]) {
@@ -28,6 +29,8 @@ int main ( int argc, char * argv[]) {
 		printf("Numero BIN = 0\n");
 		exit(1);
 	}
+	int n_bin_deriv = ITERATION_MAX/BIN_WIDTH_DERIV;
+
 	/*Check for command line arguments*/
 	if (argc>1){
 		BETA = atof(argv[1]);
@@ -119,10 +122,10 @@ int main ( int argc, char * argv[]) {
 	en_vet_dati = malloc(sizeof(double)*ITERATION_MAX);
 
 	double * chi_vet_binnato;
-	chi_vet_binnato = malloc(sizeof(double)*(n_bin));
+	chi_vet_binnato = malloc(sizeof(double)*(n_bin_deriv));
 
 	double * cv_vet_binnato;
-	cv_vet_binnato = malloc(sizeof(double)*(n_bin));
+	cv_vet_binnato = malloc(sizeof(double)*(n_bin_deriv));
 
 	double * en_autocorr = malloc(sizeof(double)*CORR_MAX);
 	double * mag_autocorr = malloc(sizeof(double)*CORR_MAX);
@@ -212,22 +215,22 @@ int main ( int argc, char * argv[]) {
 	/* Binning osservabili scalari*/
 	binning(mag_vet_dati,mag_vet_binnato,ITERATION_MAX,larghezza_bin);
 	binning(en_vet_dati,en_vet_binnato,ITERATION_MAX,larghezza_bin);
-	binning_deriv(mag_vet_dati,chi_vet_binnato,ITERATION_MAX,larghezza_bin);
-	binning_deriv(en_vet_dati,cv_vet_binnato,ITERATION_MAX,larghezza_bin);
+	binning_deriv(mag_vet_dati,chi_vet_binnato,ITERATION_MAX,BIN_WIDTH_DERIV);
+	binning_deriv(en_vet_dati,cv_vet_binnato,ITERATION_MAX,BIN_WIDTH_DERIV);
 
 	divideByScalar(mag_vet_binnato,N*N,n_bin);
 	divideByScalar(en_vet_binnato,N*N,n_bin);
-	divideByScalar(chi_vet_binnato,N*N,n_bin);
-	divideByScalar(cv_vet_binnato,N*N,n_bin);
+	divideByScalar(chi_vet_binnato,N*N,n_bin_deriv);
+	divideByScalar(cv_vet_binnato,N*N,n_bin_deriv);
 
 	fprintf(f_mag,"%.8lf\t%.14e\t%.14e\n", BETA, meanOfDoubleArray(mag_vet_binnato,n_bin),
 		sqrt(varianceOfDoubleArray(mag_vet_binnato,n_bin)/n_bin));
 	fprintf(f_en,"%.8lf\t%.14e\t%.14e\n", BETA,meanOfDoubleArray(en_vet_binnato,n_bin),
 		sqrt(varianceOfDoubleArray(en_vet_binnato,n_bin)/n_bin));
-	fprintf(f_cv,"%.8lf\t%.14e\t%.14e\n", BETA,meanOfDoubleArray(cv_vet_binnato,n_bin),
-		sqrt(varianceOfDoubleArray(cv_vet_binnato,n_bin)/n_bin));
-	fprintf(f_chi,"%.8lf\t%.14e\t%.14e\n", BETA,meanOfDoubleArray(chi_vet_binnato,n_bin),
-		sqrt(varianceOfDoubleArray(chi_vet_binnato,n_bin)/n_bin));
+	fprintf(f_cv,"%.8lf\t%.14e\t%.14e\n", BETA,meanOfDoubleArray(cv_vet_binnato,n_bin_deriv),
+		sqrt(varianceOfDoubleArray(cv_vet_binnato,n_bin_deriv)/n_bin_deriv));
+	fprintf(f_chi,"%.8lf\t%.14e\t%.14e\n", BETA,meanOfDoubleArray(chi_vet_binnato,n_bin_deriv),
+		sqrt(varianceOfDoubleArray(chi_vet_binnato,n_bin_deriv)/n_bin_deriv));
 
 	divideByScalar(mag_vet_dati,N*N,ITERATION_MAX);
 	divideByScalar(en_vet_dati,N*N,ITERATION_MAX);

@@ -12,7 +12,7 @@
 #include "cnum.h"
 
 #define CORR_MAX 200
-#define BIN_WIDTH_DERIV 10000
+#define BIN_WIDTH_DERIV 1000
 
 int main ( int argc, char * argv[]) {
 	double BETA = 1;
@@ -101,12 +101,12 @@ int main ( int argc, char * argv[]) {
 /* Vettori per il binning*/
 	double * mag_vet_dati ;
 	double * mag_vet_binnato;
-	mag_vet_binnato = malloc(sizeof(double)*(n_bin));
+	mag_vet_binnato = malloc(sizeof(double)*(ITERATION_MAX));
 	mag_vet_dati = malloc(sizeof(double)*ITERATION_MAX);
 
 	double * en_vet_dati;
 	double * en_vet_binnato;
-	en_vet_binnato = malloc(sizeof(double)*(n_bin));
+	en_vet_binnato = malloc(sizeof(double)*(ITERATION_MAX));
 	en_vet_dati = malloc(sizeof(double)*ITERATION_MAX);
 
 	double * chi_vet_binnato;
@@ -262,7 +262,7 @@ int main ( int argc, char * argv[]) {
 	/* Free della memoria */
 	free(chi_vet_binnato);
 	free(cv_vet_binnato);
-	free(mag_vet_dati) ;0
+	free(mag_vet_dati) ;
 	free(mag_vet_binnato);
 	free(en_vet_dati);
 	free(en_vet_binnato);

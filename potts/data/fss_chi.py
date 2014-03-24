@@ -10,8 +10,8 @@ from operator import itemgetter
 import os
 
 np.seterr(all='warn')
-xmin=0.998
-xmax=1.006
+xmin=0.98
+xmax=1.01
 def par(x,*p):
 	return p[0]*x**2 + p[1]*x + p[2] 
 

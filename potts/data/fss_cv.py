@@ -13,8 +13,8 @@ np.seterr(all='warn')
 
 def par(x,*p):
 	return p[0]*x**2 + p[1]*x + p[2] 
-xmin=0.95
-xmax=1.05
+xmin=0.98
+xmax=1.01
 
 def fit_par(filename):
 	guess = [-100,100,-5]
@@ -47,7 +47,7 @@ data = np.loadtxt(f,dtype='float64')
 data = sorted(data, key=itemgetter(0))
 #fit_exp(f)
 #BETA_CRIT,popt = fit_par(f)
-BETA_CRIT = 1.00321
+BETA_CRIT =  0.993016
 xs= []
 ys= []
 ers=[]
