@@ -53,6 +53,10 @@ void binning ( double * old_vec, double * new_vec, int sizeold, int m){
 	}
 }
 
+
+/* Binning per grandezze derivate dalle osservabili, come il calore specifico e chi.
+Esse vengono calcolate in ogni bin 
+*/
 // new_vec deve esser già allocato
 void binning_deriv ( double * old_vec, double * new_vec, int sizeold, int m){
 	int i,j ;

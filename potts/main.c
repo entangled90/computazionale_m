@@ -160,7 +160,6 @@ int main ( int argc, char * argv[]) {
 		for (i=0;i<N_CORR;i++){
 			S_med_temp[i] = S_xt[i]+S_yt[i]+S_xt[N-1-i]+ S_yt[N-1-i];
 			S_med_temp[i] /=(4.0);
-	//		S_test[i] += S_med_temp[i];
 		}
 		for(j = 0;j<N_CORR;j++){
 			S_dati[iteration*N_CORR+j] = S_med_temp[j];
@@ -174,41 +173,10 @@ int main ( int argc, char * argv[]) {
 	fclose(f);
 	print_state(matrix,N);
 	savePPM(matrix,N,"dopoevoluzione.ppm");
-	int r=0;
-	int g =0;
-	int b=0;
-	int other=0;
-	double rd,gd,bd,otherd;
-	for (i = 0;i<N*N;i++){
-	//	printf("(%lf,%lf)\n",matrix[i].spin.r,matrix[i].spin.i );
-		if (matrix[i].spin.index == 0)
-			r++;
-		else if(matrix[i].spin.index == 1)
-			g++;
-		else if(matrix[i].spin.index == 2)
-			b++;
-		else
-			other++;
-	}
-	rd = r / (double)(N*N);
-	gd = g / (double)(N*N);
-	bd = b / (double)(N*N);
-	otherd = other/(double)(N*N);
-	printf(" r:%lf g:%lf b:%lf other:%lf\n",rd,gd,bd,otherd);
-	printf("Fine simulazione. Inizio elaborazione dati\n");
-/*	for ( i = 0; i<N;i++){
-		S_xt[i] += S_yt[i]+S_xt[N-1-i] + S_yt[N-1-i];
-		S_xt[i]/=4.0*ITERATION_MAX;
-	}
-	for ( i = 0; i<N/2;i++){
-		fprintf(f_corr_row, "%d\t%lf\n",i,S_xt[i] );
-		}
-*/
 	divideByScalar(S_test,ITERATION_MAX,N_CORR);
 /**** BINNING E AUTOCORRELAZIONI */
 /* tutto il BINNING della Correlazione fra righe e colonne*/
 	binning_mat(S_dati,S_dati_binnati,N_CORR,ITERATION_MAX,larghezza_bin);
-
 	for(j=0;j<N_CORR;j++){
 		for(i = 0; i< n_bin;i++){
 			S_fin[j] += S_dati_binnati[i*N_CORR+j];
@@ -221,7 +189,6 @@ int main ( int argc, char * argv[]) {
 	}
 	for ( i = 0; i<N_CORR;i++){
 		fprintf(f_corr_row, "%d\t%.14e\t%.14e\n",i,S_fin[i],S_var_fin[i]);
-	//	fprintf(f_corr_row,"%d\t%.14e\t%.14e\n",i,S_test[i],0.000001);
 	}
 
 
@@ -231,10 +198,10 @@ int main ( int argc, char * argv[]) {
 	binning_deriv(mag_vet_dati,chi_vet_binnato,ITERATION_MAX,larghezza_bin);
 	binning_deriv(en_vet_dati,cv_vet_binnato,ITERATION_MAX,larghezza_bin);
 
-	divideByScalar(mag_vet_binnato,N*N,n_bin);
-	divideByScalar(en_vet_binnato,N*N,n_bin);
 	divideByScalar(chi_vet_binnato,N*N,n_bin);
 	divideByScalar(cv_vet_binnato,N*N,n_bin);
+	divideByScalar(mag_vet_binnato,N*N,n_bin);
+	divideByScalar(en_vet_binnato,N*N,n_bin);
 
 	fprintf(f_mag,"%.8lf\t%.14e\t%.14e\n", BETA, meanOfDoubleArray(mag_vet_binnato,n_bin),
 		sqrt(varianceOfDoubleArray(mag_vet_binnato,n_bin)/n_bin));

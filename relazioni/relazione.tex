@@ -5,6 +5,14 @@
 \input{title.tex}
 \tableofcontents 
 \newpage
+
+\chapter{Sfere rigide}
+
+
+
+
+
+
 \chapter{Modello di Ising}
 Il modello è stato implementato su un reticolo bidimensione di larghezza N e inizializzando gli spin al valore $\pm 1 $  con uguale probabilità.
 Sono stati implementati due algoritmi: Metropolis e Swendsen-Wang.\\
@@ -581,9 +589,14 @@ Ciò è infatti analogo a quanto accade al modello di Ising con il medesimo algo
 Per il modello di Potts con $q=4$, per esempio, otterremo i vertici di un quadrato e così via.
 
 \section{Lunghezza di correlazione}
-Lo studio della lunghezza di correlazione è del tutto analago al modello di Ising.
-L'unico commento necessario è relativo alla scelta dell'intervallo in cui fare il fit della lunghezza di correlazione.\\
-Come nel caso di Ising, la temperatura più alta è scelta in modo da essere molto minore rispetto alla taglia del reticolo, che in questo caso è 150x150. Anche in questo caso, l'estremo inferiore è stato scelto molto vicino al punto critico: l'intervallo è dunque il range di temperature $[0.95,0.995]$.
+Lo studio della lunghezza di correlazione è del tutto analago al modello di Ising.\\
+La definizione dell'osservabile che permette di stimare la lunghezza di correlazione è diversa dal modello di ising:
+$$
+	Re(<S_0 S_t>) = A e^{-t \xi}
+$$
+Come nel modello di Ising è stata sfruttata l'invarianza per traslazioni, rotazioni e periodicità per diminuire l'errore associato a $<S_0 S_t>$.
+Un altro commento necessario è relativo alla scelta dell'intervallo in cui fare il fit della lunghezza di correlazione.\\
+Come nel caso di Ising, la temperatura più alta è scelta in modo che la lunghezza di correlazione sia molto minore rispetto alla taglia del reticolo, che in questo caso è 150x150. Anche in questo caso, l'estremo inferiore è stato scelto molto vicino al punto critico: l'intervallo è dunque il range di temperature $[0.95,0.995]$.
 Anche in questo caso è stata utilizzata come valore di $\beta_{crit}$ quello teorico, ossia
 $\beta_{crit} = log(1+\sqrt(3)) = 1.0050525..$
 \begin{center}
