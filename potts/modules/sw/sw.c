@@ -11,6 +11,7 @@
 #include "cnum.h"
 
 #define PI M_PI
+#define BIN_WIDTH_DERIV 1000
 
 
 int cluster_max = -1;

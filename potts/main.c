@@ -12,9 +12,10 @@
 #include "cnum.h"
 
 #define CORR_MAX 200
+#define BIN_WIDTH_DERIV 10000
 
 int main ( int argc, char * argv[]) {
-	float BETA = 1;
+	double BETA = 1;
 	int N = 40;
 	int iteration = 0;
 	mt_seed();
@@ -26,6 +27,7 @@ int main ( int argc, char * argv[]) {
 		printf("Numero BIN = 0\n");
 		exit(1);
 	}
+	int n_bin_deriv = ITERATION_MAX/BIN_WIDTH_DERIV;
 	/*Check for command line arguments*/
 	if (argc !=2){
 		BETA = atof(argv[1]);
@@ -99,19 +101,19 @@ int main ( int argc, char * argv[]) {
 /* Vettori per il binning*/
 	double * mag_vet_dati ;
 	double * mag_vet_binnato;
-	mag_vet_binnato = malloc(sizeof(double)*(ITERATION_MAX));
+	mag_vet_binnato = malloc(sizeof(double)*(n_bin));
 	mag_vet_dati = malloc(sizeof(double)*ITERATION_MAX);
 
 	double * en_vet_dati;
 	double * en_vet_binnato;
-	en_vet_binnato = malloc(sizeof(double)*(ITERATION_MAX));
+	en_vet_binnato = malloc(sizeof(double)*(n_bin));
 	en_vet_dati = malloc(sizeof(double)*ITERATION_MAX);
 
 	double * chi_vet_binnato;
-	chi_vet_binnato = malloc(sizeof(double)*(n_bin));
+	chi_vet_binnato = malloc(sizeof(double)*(n_bin_deriv));
 
 	double * cv_vet_binnato;
-	cv_vet_binnato = malloc(sizeof(double)*(n_bin));
+	cv_vet_binnato = malloc(sizeof(double)*(n_bin_deriv));
 
 	double * en_autocorr = malloc(sizeof(double)*CORR_MAX);
 	double * mag_autocorr = malloc(sizeof(double)*CORR_MAX);
@@ -195,22 +197,22 @@ int main ( int argc, char * argv[]) {
 	/* Binning osservabili scalari*/
 	binning(mag_vet_dati,mag_vet_binnato,ITERATION_MAX,larghezza_bin);
 	binning(en_vet_dati,en_vet_binnato,ITERATION_MAX,larghezza_bin);
-	binning_deriv(mag_vet_dati,chi_vet_binnato,ITERATION_MAX,larghezza_bin);
-	binning_deriv(en_vet_dati,cv_vet_binnato,ITERATION_MAX,larghezza_bin);
+	binning_deriv(mag_vet_dati,chi_vet_binnato,ITERATION_MAX,BIN_WIDTH_DERIV);
+	binning_deriv(en_vet_dati,cv_vet_binnato,ITERATION_MAX,BIN_WIDTH_DERIV);
 
-	divideByScalar(chi_vet_binnato,N*N,n_bin);
-	divideByScalar(cv_vet_binnato,N*N,n_bin);
+	divideByScalar(chi_vet_binnato,N*N,n_bin_deriv);
+	divideByScalar(cv_vet_binnato,N*N,n_bin_deriv);
 	divideByScalar(mag_vet_binnato,N*N,n_bin);
 	divideByScalar(en_vet_binnato,N*N,n_bin);
 
 	fprintf(f_mag,"%.8lf\t%.14e\t%.14e\n", BETA, meanOfDoubleArray(mag_vet_binnato,n_bin),
-		sqrt(varianceOfDoubleArray(mag_vet_binnato,n_bin)/n_bin));
+		sqrt(varianceOfDoubleArray(mag_vet_binnato,n_bin)/(double)	n_bin));
 	fprintf(f_en,"%.8lf\t%.14e\t%.14e\n", BETA,meanOfDoubleArray(en_vet_binnato,n_bin),
-		sqrt(varianceOfDoubleArray(en_vet_binnato,n_bin)/n_bin));
-	fprintf(f_cv,"%.8lf\t%.14e\t%.14e\n", BETA,meanOfDoubleArray(cv_vet_binnato,n_bin),
-		sqrt(varianceOfDoubleArray(cv_vet_binnato,n_bin)/n_bin));
-	fprintf(f_chi,"%.8lf\t%.14e\t%.14e\n", BETA,meanOfDoubleArray(chi_vet_binnato,n_bin),
-		sqrt(varianceOfDoubleArray(chi_vet_binnato,n_bin)/n_bin));
+		sqrt(varianceOfDoubleArray(en_vet_binnato,n_bin)/(double)n_bin));
+	fprintf(f_cv,"%.8lf\t%.14e\t%.14e\n", BETA,meanOfDoubleArray(cv_vet_binnato,n_bin_deriv),
+		sqrt(varianceOfDoubleArray(cv_vet_binnato,n_bin_deriv)/(double)n_bin_deriv));
+	fprintf(f_chi,"%.8lf\t%.14e\t%.14e\n", BETA,meanOfDoubleArray(chi_vet_binnato,n_bin_deriv),
+		sqrt(varianceOfDoubleArray(chi_vet_binnato,n_bin_deriv)/(double)n_bin_deriv));
 
 	divideByScalar(mag_vet_dati,N*N,ITERATION_MAX);
 	divideByScalar(en_vet_dati,N*N,ITERATION_MAX);
@@ -260,7 +262,7 @@ int main ( int argc, char * argv[]) {
 	/* Free della memoria */
 	free(chi_vet_binnato);
 	free(cv_vet_binnato);
-	free(mag_vet_dati) ;
+	free(mag_vet_dati) ;0
 	free(mag_vet_binnato);
 	free(en_vet_dati);
 	free(en_vet_binnato);

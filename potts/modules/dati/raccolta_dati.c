@@ -6,6 +6,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+
+#define BIN_WIDTH_DERIV 10000
 void vec_zeros(double * v, int N){
 	int i;
 	for (i=0;i<N;i++){
@@ -52,6 +54,31 @@ void binning ( double * old_vec, double * new_vec, int sizeold, int m){
 		}
 	}
 }
+/*
+// new_vec deve esser già allocato
+void binning_deriv ( double * old_vec, double * new_vec, int sizeold, int m){
+	int i,j ;
+	double * tmp = malloc(sizeof(double)*(sizeold/m));
+	for ( j = 0 ; j< sizeold/m;j++){
+			new_vec[j] = 0;
+			tmp[j]=0;
+		}
+		printf("sizeold/m = %d\n",sizeold/m);
+	for (i = 0; i < sizeold/m ; i++ ){
+		for ( j = 0 ; j< m;j++){
+			new_vec[i] += old_vec[i*m+j]*old_vec[i*m+j];
+			tmp[i] += old_vec[i*m+j];
+		}
+	tmp[i] /= (double)(m);
+	new_vec[i] /= (double)(m);
+	new_vec[i] -= tmp[i]*tmp[i];
+	}
+
+}
+
+*/
+
+
 
 // new_vec deve esser già allocato
 void binning_deriv ( double * old_vec, double * new_vec, int sizeold, int m){
