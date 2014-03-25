@@ -258,53 +258,69 @@ A sostegno di questa tesi si veda come all'aumentare della taglia del reticolo, 
 \section{Distribuzione di probabilità della magnetizzazione}
 
 \begin{figure}[h]
+\centering
 	\subfigure[ $\beta=0.3$]{
-		\includegraphics[scale=0.23]{metropolis/PDFM03.png}	
+		\includegraphics[scale=0.33]{metropolis/PDFM03.png}	
 	}
 	\subfigure[ $\beta=0.42$]{
-		\includegraphics[scale=0.23]{metropolis/PDFM042.png}	
+		\includegraphics[scale=0.33]{metropolis/PDFM042.png}	
 	}
-		\subfigure[ $\beta=0.43$]{
-		\includegraphics[scale=0.23]{metropolis/PDFM043.png}	
-	}
+
 	\caption{Metropolis}
 \end{figure}
 \begin{figure}[h]
-
-	\subfigure[ $\beta=0.44$]{
-		\includegraphics[scale=0.23]{metropolis/PDFM044.png}	
+\centering
+		\subfigure[ $\beta=0.43$]{
+		\includegraphics[scale=0.33]{metropolis/PDFM043.png}	
 	}
+	\subfigure[ $\beta=0.44$]{
+		\includegraphics[scale=0.33]{metropolis/PDFM044.png}	
+	}
+
+	\caption{Metropolis}
+\end{figure}
+
+\begin{figure}[h]
+\centering
 		\subfigure[ $\beta=0.46$]{
-		\includegraphics[scale=0.23]{metropolis/PDFM046.png}	
+		\includegraphics[scale=0.33]{metropolis/PDFM046.png}	
 	}
 	\subfigure[ $\beta=1$]{
-		\includegraphics[scale=0.23]{metropolis/PDFM1.png}	
+		\includegraphics[scale=0.33]{metropolis/PDFM1.png}	
 	}
 	\caption{Metropolis}
 \end{figure}
 
-
 \begin{figure}[h]
+\centering
 	\subfigure[ $\beta=0.3$]{
-		\includegraphics[scale=0.23]{sw/pdfM03.png}	
+		\includegraphics[scale=0.33]{sw/pdfM03.png}	
 	}
 	\subfigure[ $\beta=0.42$]{
-		\includegraphics[scale=0.23]{sw/pdfM042.png}	
+		\includegraphics[scale=0.33]{sw/pdfM042.png}	
 	}
-		\subfigure[ $\beta=0.43$]{
-		\includegraphics[scale=0.23]{sw/pdfM043.png}	
-	}
+
 	\caption{Swendsen-Wang}
 \end{figure}
 \begin{figure}[h]
-	\subfigure[ $\beta=0.46$]{
-		\includegraphics[scale=0.23]{sw/pdfM046.png}	
+\centering
+		\subfigure[ $\beta=0.43$]{
+		\includegraphics[scale=0.33]{sw/pdfM043.png}	
 	}
+	\subfigure[ $\beta=0.46$]{
+		\includegraphics[scale=0.33]{sw/pdfM046.png}	
+	}
+
+	\caption{Swendsen-Wang}
+\end{figure}
+
+\begin{figure}[h]
+\centering
 	\subfigure[ $\beta=1$]{
-		\includegraphics[scale=0.23]{sw/pdfM1.png}	
+		\includegraphics[scale=0.33]{sw/pdfM1.png}	
 	}
 	\subfigure[ $\beta=0.44$]{
-		\includegraphics[scale=	0.23]{sw/pdfM044.png}	
+		\includegraphics[scale=	0.33]{sw/pdfM044.png}	
 	}
 	\caption{Swendsen-Wang}
 \end{figure}
@@ -317,13 +333,13 @@ Da questi istogrammi inoltre, si vede chiaramente come l'avvicinarsi al punto cr
 A fronte di questo fatto, si può anche stimare che la temperatura critica per il reticolo 50x50 (quello utilizzato per gli istogrammi) è inferiore a $\beta=0.44$, dato che a questa temperatura la magnetizzazione è già più piccata che a $\beta=0.43$.
 
 
-
+\newpage
 
 \section{Lunghezza di correlazione}
 \begin{figure}[h]
 \centering
 	\includegraphics[scale=0.5]{metropolis/cor120.png}
-\caption{Lunghezza di correlazione:Metropolis}
+\caption{Lunghezza di correlazione $L=120$:Metropolis}
 \end{figure}
 
 
@@ -339,8 +355,8 @@ $$
 
 \begin{figure}[h]
 \centering
-	\includegraphics[scale=0.5]{sw/corrN120best.png}
-\caption{Lunghezza di correlazione:Swendsen-Wang}
+	\includegraphics[scale=0.5]{sw/corrN120.png}
+\caption{Lunghezza di correlazione $L=120$:Swendsen-Wang}
 \end{figure}
 L'invarianza per rotazioni di $\frac{\pi}{2}$ è stata utilizzata mediando il calcolo fra righe e colonne. Inoltre è stata utilizzata anche l'invarianza per inversione  e la ciclicità del reticolo, le quali insieme comportano la validità di questa relazione:
 $$
@@ -349,11 +365,11 @@ $$
 A questo punto si è calcolata osservabile e si sono stimati gli errori attraverso un binning come per le altre osservabili.
 I Valori della lunghezza di correlazione sono poi così stati stimati fittando con un esponenziale decrescente. I valori ottenuti dal fit (errori compresi) sono stati utilizzati per i grafici della lunghezza di correlazione in funzione della temperatura.\\
 A questo punto si è confrontata la dipendenza della lunghezza di correlazione $\xi$ con la previsione teorica, che prevede una divergenza (per un reticolo infinito) a potenza per temperature vicine a quella critica:
-\begin{align}*
+\begin{align*}
 	\xi \sim t^{-\nu} \qquad \mbox{per} \; t \sim 0 \qquad \mbox{con} \; \nu = 1 \; \mbox{(teorico)}  \\
 	t = \frac{\beta - \beta_{crit}}{\beta_{crit}} \qquad \beta_{crit} = 0.4406868
-\end{align}
-per il valore di temperatura critica è stato utilizzato quello teorico.
+\end{align*}
+per il valore di temperatura critica è stato utilizzato quello teorico
 Gli estremi dell'intervallo in cui è stato fatto il fit sono stati scelti in modo che la correlazione rimanesse un ordine di grandezza inferiore al lato del reticolo, per evitare che la taglia finita del reticolo influenzasse la misura dell'esponente. Inoltre, si è cercato di rimanere quanto più possibile vicini al punto critico visto che l'equazione sopra citata vale nell'intorno del punto critico.\\
 Dopo queste considerazioni è stato scelto come intervallo per il fit i valori $[0.415,0.43]$ per entrambi gli algoritmi. Il valore massimo di lunghezza di correlazione che si ottiene è $\sim 22$ che è piccolo rispetto al lato del reticolo pari a $120$. 
 Il risultato del fit è quindi:
@@ -362,45 +378,69 @@ Il risultato del fit è quindi:
 	\toprule
 	Algoritmo & $\nu$ \\
 	\midrule
-	Metropolis & $ 0.95 \pm 0.02 $\\
-	Swendsen-Wang	& $ 0.961 \pm 0.005 $\\
+	Metropolis & $ 1.004 \pm 0.009 $\\
+	Swendsen-Wang	& $ 1.018 \pm 0.005 $\\
 	\bottomrule
 	\end{tabular}
 \end{center}
 
 Con entrambi gli algoritmi si sono ottenuti risultati compatibili tra loro e abbastanza vicini alla previsione teorica.\\
 Bisogna tenere in considerazione che la taglia finita del reticolo incide su molti aspetti relativi al calcolo dell'esponente critico. Primo fra tuttti non è possibili avvicinarsi troppo al punto critico perchè la taglia finita del reticolo modifica la divergenza (teorica) e la rende finita. Oltre a questo, la temperatura critica per un reticolo finito è leggermente più bassa di quella teorica che è stata utilizzata per effettuare il fit. 
-
+\newpage
 \section{Finite Size Scaling}
+\subsubsection*{Calcolo suscettività e calore specifico}
+Per il calcolo di queste due osservabili non è stato utilizzato il binning nello stesso modo usato per energia e magnetizzazione. Questo perchè sono definite utilizzando i valori medi di energia e magnetizzazione.\\
+Per questo motivo sono stati creati degli intervalli di larghezza 3000 invece che 30 e sono state eseguite 30000 iterazioni dell'algoritmo, per diminuire l'errore.\\
+La formula utilizzata è la seguente:
+\begin{align*}
+	c = \frac{1}{V} < \mathcal{H}^2>_{bin} - <\mathcal{H}>_{bin}^2 \\
+	\chi = V < \mathcal{M}^2>_{bin} - <\mathcal{M}>_{bin}^2
+\end{align*}
+dove con $< ..>_{bin}$ si intende il valor medio sul bin di larghezza 3000 di cui si è parlato.
+
+\subsection*{Stima di $\beta_{crit}$ e Finite Size Scaling }
+
 Si andranno ora a fare uno studio di \emph{finite size scaling} per poter valutare l'accordo dei dati ottenuti per magnetizzazione, suscettività e calore specifico con gli esponenti critici esatti della soluzione di Onsager.
 Per fare uno studio di \emph{finite size scaling} è necessario raccogliere dati sulle osservabili in esame per varie taglie del reticolo. In questo caso sono state utilizzati i seguenti reticoli:
 \begin{itemize}
-\item 30x30 
+\item 35x35 
 \item 50x50 
-\item 75x75 
-\item 100x100 
+\item 65x65
+\item 90x90
+\item 120x120 
+\item 150x150
 \end{itemize}
-A questo punto, per suscettività e calore specifico è stato necessario calcolare per ognuno di essi la temperatura critica.
-Nel caso della suscettività essa è stata ottenuta facendo un fit con una parabola del picco, mentre per magnetizzazione e calore specifico è stata utilizzata la temperatura critica della soluzione analitica.
-Questa scelta è dovuta all'impossibilità di ricavare la temperatura critica in modo soddisfacente per il calore specifico attraverso il metodo della parabola.
-Per la magnetizzazione questo non è stato necessario in quanto presenta alcun picco.\\
+
+A questo punto, per suscettività e calore specifico è stato necessario calcolare per ogni taglia del reticolo  la temperatura critica.\\
+Si è deciso di stimare la temperatura critica facendo un fit con una parabola e stimando la temperatura critica come il massimo della parabola. Ciò ha dato risultati soddisfacenti nel caso della suscettività, mentre per il calore specifico il fit con la parabola non stimava correttamente la temperatura critica.
+Per questo motivo, si è deciso di utilizzare la temperatura critica stimata attraverso la suscettività per ciascuna taglia del reticolo anche per il calore specifico. \\
+Così facendo si è trascurata la dipendenza della temperatura critica dall'osservabile.
+A posteriori si può vedere come questa assunzione sia giustificata vedendo il grafico dopo aver effettuato il finite size scaling per questa osservabile.\\
+Le temperature critiche trovate in funzione della taglia del reticolo sono le seguenti:
+\begin{center}
+	\begin{tabular}{c c}
+	\toprule
+	Reticolo & $\beta_{crit}$ \\
+	\midrule
+	35x35 &  0.430294 \\ % 0.430437
+	50x50 &  0.433357 \\ %0.433357
+	65x65 & 0.435147 \\ %0.435147
+	90x90 & 0.436540\\
+	120x120 & 0.437669 \\ %0.437669
+	150x150 & 0.438262 \\
+	\end{tabular}
+\end{center}
+Per questo dato non è stato calcolato l'errore associato in quanto avrebbe richiesto ripetere varie volte le misure e siccome questa misura serve solo per poter effettuare il finite size scaling in modo corretto, il suo errore non influenza il risultato del finite size scaling.
+Per la magnetizzazione questo non è stato necessario in quanto non presenta alcun picco.\\
 Dopo aver ricavato la temperatura critica, si fa una traslazione sulla temperatura portandola nella nuova variabile 
 $$
 	 t = \frac{\beta - \beta_{crit}}{\beta_{crit}}
 $$ 
-\begin{center}
-	\begin{figure}[h]
-		\centering
-
-		\includegraphics[scale=0.56]{sw/fsschi.png}
-		\caption{Studio di Fss per $\chi = t^{-\gamma}$, con $\gamma = \frac{7}{4}$}
-	\end{figure}
-\end{center}
-Infine si effettua l'ultimo cambio di variabile, indicando con $L$ la taglia del reticolo e considerando la magnetizzazione si avrà:
-\begin{align}
+Infine si effettua l'ultimo scaling, indicando con $L$ la taglia del reticolo e considerando la magnetizzazione si avrà:
+\begin{align*}
 	t \longrightarrow L^{\frac{1}{\nu}} t = L t \\
 	M \longrightarrow \frac{M}{L^{\frac{-\beta}{\nu}}} = \frac{M}{L^{-\beta}}
-\end{align}
+\end{align*}
 Per la suscettività si avrà:
 $$
 	\chi \longrightarrow \frac{\chi}{L^{\frac{\gamma}{\nu}}} = \frac{\chi}{L^{\gamma}}
@@ -421,23 +461,31 @@ Gli esponenti critici della soluzione analitica sono i seguenti:\\
 		\bottomrule
 	\end{tabular}
 \end{center}
-
+Essi sono stati utilizzati per effettuare gli scaling delle varie osservabili.
 \begin{center}
 	\begin{figure}[h]
 		\centering
-
-		\includegraphics[scale=0.56]{sw/fsscv.png}
-		\caption{Studio di Fss per $c$, con $\alpha=0$}
-	\end{figure}
-\end{center}
-\begin{center}
-	\begin{figure}[h]
-		\centering
-
 		\includegraphics[scale=0.6]{sw/fssmag.png}
+		\includegraphics[scale=0.6]{sw/fssmagzoom.png}
 		\caption{Studio di Fss per $M= t^{\beta}$, con $\beta=\frac{1}{8}$}
 	\end{figure}
 \end{center}
+\begin{figure}[h]
+		\centering
+		\includegraphics[scale=0.6]{sw/fsschi.png}
+		\includegraphics[scale=0.6]{sw/fsschizoom.png}
+		\caption{Studio di Fss per $\chi = t^{-\gamma}$, con $\gamma = \frac{7}{4}$}
+\end{figure}
+
+\begin{center}
+	\begin{figure}[h]
+		\centering
+		\includegraphics[scale=0.6]{sw/fsscv.png}
+		\includegraphics[scale=0.6]{sw/fsscvzoom.png}
+		\caption{Studio di Fss per $c = \log{ t} $ ( $\alpha=0$)}
+	\end{figure}
+\end{center}
+
 
 A questo punto, ci si aspetta di vedere che le curve per ciascuna taglia, opportunamente scalate nella procedura descritta, collassino su un'unica curva \emph{universale}.
 Come si può vedere dai grafici per queste tre osservabili è proprio ciò che accade nella regione paramagnetica con $\beta < \beta_{crit}$.\\
@@ -502,17 +550,16 @@ Si veda ora l'andamento della deviazione standar nel punto critico, temperatura 
 \section{Energia e Magnetizzazione}
 A differenza del modello di Ising non si ha la soluzione analitica esatta di magnetizzazione ed energia in funzione della temperatura, quindi non è possibile confrontarle direttamente.\\
 Si può vedere che la temperatura a cui avviene la transizione di fase è di poco sopra $\beta=1$ come previsto. I grafici sono stati fatti con un reticolo di taglia 100x100.
-\begin{center}
 \begin{figure}[h!]
 	\centering
- 	\subfigure[Magnetizzazione]{
-	\includegraphics[scale=0.35]{potts/mag100.png}
-	}
- 	\subfigure[Energia]{
-	\includegraphics[scale=0.35]{potts/en100.png}
-	}
+	\includegraphics[scale=0.55]{potts/en100.png}
+	\caption{Energia per $L=100$}
 \end{figure}
-\end{center}
+\begin{figure}[h!]
+	\centering
+	\includegraphics[scale=0.55]{potts/mag100.png}
+	\caption{Magnetizzazione (improved) per $L=100$}
+\end{figure}
 Come nel caso del modello Ising, si possono apprezzare le differenze fra le diverse taglie del reticolo osservando la curva di magnetizzazione nella fase paramagnetica, dove le curve sono molto diverse tra loro, a differenza della fase ferromagnetica in cui questa differenza sparisce.\\
 Le curve sono relative a reticoli 30x30,75x75 e 150x150:
 
@@ -521,13 +568,7 @@ Le curve sono relative a reticoli 30x30,75x75 e 150x150:
 \includegraphics[scale=0.5]{potts/mag_taglia.png}
 \caption{Magnetizzazione per L=30,75,150.}
 \end{figure}
-
-
-
-
-
-
-
+\newpage
 \section{Distribuzione di probabilità della magnetizzazione}
 In questo modello, si può analizzare la distribuzione della probabilità della magnetizzazione nel piano complesso.
 Ciò può essere fatto utilizzando la seguente definizione di magnetizzazione:
@@ -537,57 +578,71 @@ $$
 Se non si considera il modulo, essa può essere studiata nel piano complesso.\\
 \begin{center}
 \begin{figure}[h!]
+\centering
  	\subfigure[$\beta=0.81$]{
-	\includegraphics[scale=0.23]{potts/potts08.png}
+	\includegraphics[scale=0.33]{potts/potts08.png}
 	}
  	\subfigure[$\beta=0.9$]{
-	\includegraphics[scale=0.23]{potts/potts09.png}
+	\includegraphics[scale=0.33]{potts/potts09.png}
 	}
- 	\subfigure[$\beta=0.97$]{
-	\includegraphics[scale=0.23]{potts/potts097.png}
-	}
+
  	\subfigure[$\beta=0.81$]{
-	\includegraphics[scale=0.23]{potts/magmod081.png}
+	\includegraphics[scale=0.33]{potts/magmod081.png}
 	}
  	\subfigure[$\beta=0.9$]{
-	\includegraphics[scale=0.23]{potts/magmod09.png}
+	\includegraphics[scale=0.33]{potts/magmod09.png}
 	}
- 	\subfigure[$\beta=0.97$]{
-	\includegraphics[scale=0.23]{potts/magmod097.png}
-	}
+
 \end{figure}
 \end{center}
 \begin{center}
 \begin{figure}[h!]
-
- 	\subfigure[$\beta=0.99$]{
-	\includegraphics[scale=0.23]{potts/potts099.png}
+\centering
+ 	\subfigure[$\beta=0.97$]{
+	\includegraphics[scale=0.33]{potts/potts097.png}
 	}
-	 	\subfigure[$\beta=1.005$]{
- 	\includegraphics[scale=0.23]{potts/potts1005.png}
-}
- 	\subfigure[$\beta=1.015$]{
-	\includegraphics[scale=0.23]{potts/potts1015.png}
+ 	\subfigure[$\beta=0.99$]{
+	\includegraphics[scale=0.33]{potts/potts099.png}
 	}
 
+ 	\subfigure[$\beta=0.97$]{
+	\includegraphics[scale=0.33]{potts/magmod097.png}
+	}
  	\subfigure[$\beta=0.99$]{
-	\includegraphics[scale=0.23]{potts/magmod099.png}
+	\includegraphics[scale=0.33]{potts/magmod099.png}
 	}
-	 	\subfigure[$\beta=1.005$]{
- 	\includegraphics[scale=0.23]{potts/magmod1005.png}
-}
- 	\subfigure[$\beta=1.015$]{
-	\includegraphics[scale=0.23]{potts/magmod1015.png}
-	}
+
 
 \end{figure}
 \end{center}
+
+
+\begin{center}
+\begin{figure}[h!]
+\centering
+	 	\subfigure[$\beta=1.005$]{
+ 	\includegraphics[scale=0.33]{potts/potts1005.png}
+}
+ 	\subfigure[$\beta=1.015$]{
+	\includegraphics[scale=0.33]{potts/potts1015.png}
+	}
+	 	\subfigure[$\beta=1.005$]{
+ 	\includegraphics[scale=0.33]{potts/magmod1005.png}
+}
+ 	\subfigure[$\beta=1.015$]{
+	\includegraphics[scale=0.33]{potts/magmod1015.png}
+	}
+\end{figure}
+\end{center}
+
 
 Come si vede dai grafici, quando si è vicini al punto critico e quindi la distribuzione di probabilità della magnetizzazione è molto larga, inizia ad emergere la figura di un triangolo che degenere nei 3 vertici superata la regione critica.\\
 La comparsa di questi 3 punti è da imputare al tipo di algoritmo utilizzato per simulare questo modello, ossia Swendsen-Wang.
 Ciò è infatti analogo a quanto accade al modello di Ising con il medesimo algoritmo se si studia la magnetizzazione senza aggiungere il modulo. Ciò è dovuto al fatto che ad ogni passo, per ogni cluster viene estratto un nuovo valore con probabilità $1/q$ dove $q$ è il numero di stati.\\
 Per il modello di Potts con $q=4$, per esempio, otterremo i vertici di un quadrato e così via.
 
+
+\newpage
 \section{Lunghezza di correlazione}
 Lo studio della lunghezza di correlazione è del tutto analago al modello di Ising.\\
 La definizione dell'osservabile che permette di stimare la lunghezza di correlazione è diversa dal modello di ising:
@@ -621,7 +676,7 @@ $\beta_{crit} = log(1+\sqrt(3)) = 1.0050525..$
 \end{center}
 
 
-
+\newpage
 \section{Finite Size Scaling}
 Lo studio di finite size scaling per questo modello è del tutto analogo a quanto fatto con il modello di Ising, con l'unica differenza che gli esponenti critici sono diversi:
 \begin{center}
@@ -639,26 +694,26 @@ Lo studio di finite size scaling per questo modello è del tutto analogo a quant
 L'unica grande differenza tra questi esponenti risiede nell'esponente critico $\alpha$, infatti per il modello di Ising si aveva $\alpha=0$ che indicava una scaling logaritmico mentre in questo modello si ha uno scaling a potenza anche per il calore specifico.
 Per lo studio del finite size scaling sono stati utilizzati i seguenti reticoli:
 \begin{itemize}
-\item 30x30
-\item 50x50
-\item 75x75
-\item 100x100
+\item 35x35
+\item 65x65
+\item 90x90
+\item 120x120
 \item 150x150
 \end{itemize}
 La temperatura è stata stimata come nel modello di Ising, facendo un fit con una parabola della suscettività nell'intorno del punto critico. La temperatura critica trovata per un valore del lato del reticolo è stata poi utilizzata anche per il calore specifico. \\
 Come si può vedere, all'aumentare del lato del reticolo la temperatura critica tende verso la temperatura critica teorica di cui si è parlato prima. \\
-Non sono stati calcolati gli errori sulla temperatura critica in funzione del lato del reticolo in quanto questo calcolo è stato effettuato per migliorare leggermente i grafici di finite size scaling in modo che per ogni lato del reticolo le osservabili fossero centrate in zero.
-Questi valori della temperatura sono stati troncati stimando l'errore in maniera grossolana cercando di sottostimare l'errore il meno possibile. 
+Non sono stati calcolati gli errori sulla temperatura critica in funzione del lato del reticolo in quanto questo calcolo è stato effettuato per migliorare i grafici di finite size scaling in modo che per ogni lato del reticolo le osservabili fossero centrate in zero.
+
 \begin{center}
 	\begin{tabular}{c c}
 	\toprule
 	Lato reticolo $(L)$ & $\beta_{crit}(L)$ \\
 	\midrule
-	30 & 0.986 \\
-	50 & 0.994 \\
-	75 & 0.998 \\
-	100 &  0.999 \\
-	150 & 1.002\\
+	35 & 0.992864 \\
+	65 & 0.999176 \\
+	90 &  1.001106 \\
+	120 &  1.002264 \\
+	150 & 1.003050\\
 	\bottomrule
 	\end{tabular}
 \end{center}
@@ -667,6 +722,7 @@ Questi valori della temperatura sono stati troncati stimando l'errore in maniera
 	\begin{figure}
 	\centering
 		\includegraphics[scale=0.55]{potts/magfss.png}
+		\includegraphics[scale=0.55]{potts/magfsszoom.png}
 		\caption{Studio di finite size scaling per magnetizzazione.}	
 	\end{figure}
 \end{center}
@@ -677,6 +733,8 @@ Questi valori della temperatura sono stati troncati stimando l'errore in maniera
 		\centering
 
 		\includegraphics[scale=0.55]{potts/chifss.png}
+				\includegraphics[scale=0.55]{potts/chifsszoom.png}
+
 		\caption{Studio di finite size scaling per la suscettività.}	
 	\end{figure}
 \end{center}
@@ -684,12 +742,12 @@ Questi valori della temperatura sono stati troncati stimando l'errore in maniera
 	\begin{figure}
 		\centering
 
-		\includegraphics[scale=0.55]{potts/cvfsssNONSCALATO.png}
+		\includegraphics[scale=0.55]{potts/cvfss.png}
+				\includegraphics[scale=0.55]{potts/cvfsszoom.png}
 		\caption{Studio di finite size scaling per il calore specifico.}	
 	\end{figure}
 \end{center}
 
-Dai grafici notiamo come il finite size scaling per la magnetizzazione sia perfetto, come nel modello di Ising.\\
 
 
 

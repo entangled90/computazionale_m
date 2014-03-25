@@ -15,7 +15,7 @@ def fit_fun(x,*p):
 	return p[0]*(np.exp(x*p[1]))
 def fit_fun_corr(x,*p):
 #	print(x)
-	return p[0]*(np.fabs((x + -1*BETAES)/x))**p[1]
+	return p[0]*(np.fabs((x + -1*BETAES)/BETAES))**p[1]
 
 def fit_fun_corr_fitted(x,*p):
 	return p[0]*(np.fabs(x))**p[1]
@@ -23,8 +23,8 @@ def fit_fun_corr_fitted(x,*p):
 
 np.seterr(all='warn')
 BetaC = 0.995
-BetaMin = 0.9
-BETAES= math.log(1+math.sqrt(3))
+BetaMin = 0.98
+BETAES= math.log(1+math.sqrt(3))-0.0001
 N = sys.argv[1]
 file_temp = glob.glob('corr_row_N%s*.dat'%(N))	
 #print(file_temp)
@@ -99,7 +99,7 @@ midplot = np.amin(xi_np)/2.0  + np.amax(xi_np)/2.0
 pPlot=popt[:2]
 plt.xlabel(r'$\beta$',fontsize='15')
 plt.ylabel(r'$\xi_{corr}$',fontsize='15')
-ax.text(np.amin(beta_np)+0.01,midplot,r'Funzione di fit: $C(t) = A \xi^{-\nu}$' '\n' r'$\nu=%lf \pm %lf$'%(-popt[1],ExpErr) , bbox={'facecolor':'green', 'alpha':0.5, 'pad':10})
+ax.text(np.amin(beta_np)+0.0001,midplot,r'Funzione di fit: $C(t) = A \xi^{-\nu}$' '\n' r'$\nu=%lf \pm %lf$'%(-popt[1],ExpErr) , bbox={'facecolor':'green', 'alpha':0.5, 'pad':10})
 ax.errorbar(beta_np, xi_np ,yerr=error_np,fmt='|',ecolor='r',label='original data')
 ax.plot(x,fit_fun_corr_fitted(x,*pPlot),label ='fitted curve')
 plt.legend(loc='upper left')

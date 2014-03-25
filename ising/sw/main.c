@@ -12,11 +12,11 @@
 
 #define CORR_MAX 50
 #define CORR_ESTREMO 15
-#define BIN_WIDTH_DERIV 1000
+#define BIN_WIDTH_DERIV 3000
 
 
 int main ( int argc, char * argv[]) {
-	float BETA = 1;
+	double BETA = 1;
 	int N = 40;
 	int iteration = 0;
 	mt_seed();

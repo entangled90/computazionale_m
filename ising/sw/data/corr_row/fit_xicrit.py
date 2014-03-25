@@ -13,7 +13,7 @@ def fit_fun(x,*p):
 	return p[0]*(np.exp(x/p[1]))
 def fit_fun_corr(x,*p):
 #	print(x)
-	return p[0]*(-1*(x + -1*BETAONS)/x)**p[1]
+	return p[0]*(-1*(x + -1*BETAONS)/BETAONS)**p[1]
 
 def fit_fun_corr_fitted(x,*p):
 	return p[0]*(-1*x)**p[1]
@@ -21,7 +21,7 @@ def fit_fun_corr_fitted(x,*p):
 
 np.seterr(all='warn')
 BetaC = 0.43
-BetaMin = 0.415
+BetaMin = 0.41
 BETAONS= 0.4406868
 N = sys.argv[1]
 file_temp = glob.glob('okcorr_row_N%s*.dat'%(N))	
@@ -31,7 +31,7 @@ files = []
 l_ord = []
 for f in file_temp:
 	beta_temp= float(f[-13:-4])
-#	print(beta_temp) 
+	print(beta_temp) 
 	if (BetaMin <beta_temp < BetaC) & (os.stat(f)[6]!= 0):
 		files.append(f)
 
@@ -44,7 +44,7 @@ for f in files:
 	ers=[]
 	for i in range(len(temp)):
 		t = temp[i]
-		if t[0]<6:
+		if t[0]<10:
 			xs.append(t[0])
 			ys.append(t[1])
 			ers.append(t[2])
@@ -68,8 +68,8 @@ xi_np = np.asarray(xi,dtype='float64')
 error_np = np.asarray(error,dtype='float64')
 
 
-guess = [1, -1 ] #, 0.44]
-popt,pcov = curve_fit(fit_fun_corr,beta_np,xi_np, sigma=error, p0=guess )
+guess1 = [1, -1]
+popt,pcov = curve_fit(fit_fun_corr,beta_np,xi_np, sigma=error_np, p0=guess1 )
 file_list = glob.glob('../xi_corrN%s_NU*.dat'%(N))
 for f in file_list:
 	os.remove(f)
@@ -81,8 +81,8 @@ out_file.close()
 print(beta_np)
 print(popt,pcov)
 #RISCALO BETA!
-#beta_np = (beta_np + -1*popt[2])/beta_np
-beta_np = (beta_np + -1*BETAONS)/beta_np
+#beta_np = (beta_np + -1*popt[2])/popt[2]
+beta_np = (beta_np + -1*BETAONS)/BETAONS
 
 #print (beta_np)
 Aerr = math.sqrt(pcov[0][0])
@@ -101,7 +101,8 @@ midplot = np.amin(xi_np)/2.0  + np.amax(xi_np)/2.0
 pPlot=popt[:2]
 plt.xlabel(r'$\beta$',fontsize='15')
 plt.ylabel(r'$\xi_{corr}$',fontsize='15')
-ax.text(np.amin(beta_np)+0.005,midplot,r'Funzione di fit: $\xi(t) = A t^{-\nu}$' '\n' r'$\nu=%lf \pm %lf$'%(-popt[1],ExpErr), bbox={'facecolor':'green', 'alpha':0.5, 'pad':10})
+#r'\n' r'$\beta=%lf \pm %lf'  ,popt[2],math.sqrt(pcov[2][2])
+ax.text(np.amin(beta_np)+0.005,midplot,r'Funzione di fit: $\xi(t) = A t^{-\nu}$' '\n' r'$\nu=%lf \pm %lf$' %(-popt[1],ExpErr), bbox={'facecolor':'green', 'alpha':0.5, 'pad':10})
 ax.errorbar(beta_np, xi_np ,yerr=error_np,fmt='|',ecolor='r',label='original data')
 ax.plot(x,fit_fun_corr_fitted(x,*pPlot),label ='fitted curve')
 plt.legend(loc='upper left')

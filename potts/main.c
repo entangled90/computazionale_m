@@ -12,7 +12,7 @@
 #include "cnum.h"
 
 #define CORR_MAX 200
-#define BIN_WIDTH_DERIV 1000
+#define BIN_WIDTH_DERIV 3000
 
 int main ( int argc, char * argv[]) {
 	double BETA = 1;
