@@ -213,11 +213,10 @@ inline double hamiltoniana( Spin * s, int N){
 	int a,b;
 	for (a = 0; a<N ; a++){
 		for ( b= 0; b<N; b++){
-			ham += -( s[ ((a+1+N)%N)*N + b].spin+ s[((a-1+N)%N)*N+b].spin
-				+ s[a*N+(b+1+N)%N].spin+s[a*N + (b-1+N)%N].spin)*(s[a*N +b].spin); 
+			ham += -( s[((a+1+N)%N)*N + b].spin + s[a*N+(b+1+N)%N].spin )*(s[a*N +b].spin); 
 		}
 	}
-	return (ham/2.0);
+	return (ham);
 }
 
 double sum_row(Spin * s, int row, int N){

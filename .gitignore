@@ -41,5 +41,10 @@ Thumbs.db
 *.xyz
 *.pdf
 
+
+#Immagini
+*.ppm
+
 #Eseguibili
 main
+ising

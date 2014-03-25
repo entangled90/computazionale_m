@@ -204,23 +204,16 @@ inline double hamiltoniana( Spin * s, int N){
 	int a,b;
 	for (a = 0; a<N ; a++){
 		for ( b= 0; b<N; b++){
-			if(s[((a+1+N)%N)*N +b].spin.index == s[a*N +b].spin.index){
+		if(s[((a+1+N)%N)*N +b].spin.index == s[a*N +b].spin.index){
 				ham -= 1.0;
 			}
-			if(s[((a-1+N)%N)*N+b].spin.index == s[a*N +b].spin.index){
-				ham -= 1.0;
-			}
+	
 			if(s[a*N+(b+1+N)%N].spin.index == s[a*N +b].spin.index){
 				ham -= 1.0;
 			}
-			if(s[a*N + (b-1+N)%N].spin.index == s[a*N +b].spin.index){
-				ham -= 1.0;
-			}
-//			ham += -( s[ ((a+1+N)%N)*N + b].spin+ s[((a-1+N)%N)*N+b].spin+ s[a*N+(b+1+N)%N].spin+s[a*N + (b-1+N)%N].spin)*(.index == s[a*N +b].spin); 
 		}
 	}
-	//printf("hamiltoniana:%lf\n",ham/2.0);
-	return (ham/2.0);
+	return (ham);
 }
 
 cNum sum_row(Spin * s, int row, int N){
