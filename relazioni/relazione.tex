@@ -30,11 +30,28 @@ $$
 $$
 Infine, si utilizzano condizioni di periodicità sui bordi della scatola in modi che il sistema abbia invarianza traslazionale.\\
 Le velocità vengono inizializzate inizialmente in modo pseudocasuale con una distribuzione di velocità piatta compresa fra $[-1,1]$ e in seguito si impone che la velocità del centro di massa sia nulla. 
-A questo punto si fissa la temperatura a 1. Questa è anche l'unica scala di energia del sistema, in quanto non c'è una scala di energia potenziale (esso vale $0$ o $\infty$).
+A questo punto si fissa la temperatura a 1. Questa è anche l'unica scala di energia del sistema, in quanto non c'è una scala di energia potenziale (esso vale $0$ o $\infty$).\\
+La raccolta dati è stata effettuata per una durata di 15 unità di tempo adimensionate. Ciò significa che il numero di collisioni effettuate non è costante, ma cresce con la frazione di impacchettamento. (siccome diminuisce il tempo di collisione medio):
+\begin{center}
+
+\begin{tabular}{c c}
+\toprule
+	$\eta$ & Numero collisioni \\
+	\midrule
+	0.2 & $\sim$ 27500 \\
+	0.75 & $\sim$ 335000 \\
+	\bottomrule
+\end{tabular}
+\end{center}
 
 \subsection{Termalizzazione}
 Il sistema viene fatto termalizzare per 10000 collisioni prima di prendere dati.
 Si è verificato che il sistema avesse termalizzato dopo questo numero di collisioni studiando la distribuzione di probabilità del modulo della velocità.\\
+\begin{figure}[ht]
+	\centering
+	\includegraphics[scale=0.5]{sfere2D/boltzmann.png}
+\end{figure}
+
 Per fare ciò si è fatto partire il programma 400 volte, inizializzando il sistema sempre alla stessa temperatura e si è fatto un istogramma delle velocità calcolate dopo il ciclo di termalizzazione.
 Si è poi fatto un fit con la distribuzione di Boltzmann in 2 dimensioni che è della forma:
 $$
@@ -45,22 +62,31 @@ Il fit è stato fatto con la temperatura come unico parametro libero e concorda 
 $$
 	T_{fit} = 1.003 \pm 0.002
 $$
-\begin{figure}[hb]
-	\centering
-	\includegraphics[scale=0.6]{sfere2D/boltzmann.png}
-\end{figure}
 
 \subsection{Raccolta e Analisi Dati}
 \subsubsection{Pressione}
 Si analizza ora la pressione in funzione della frazione di impacchettamento.\\
-Si è rappresentata la seguente osservabile, calcolata attraverso la formula\footnote{Valida in unità di misura adimensionate: $V=1$,$k=1$,$m=1$}
+Si è rappresentata la seguente osservabile, calcolata attraverso la formula\footnote{Utilizzata in unità di misura adimensionate: $V=1$,$k=1$,$m=1$}
+\begin{center}
 $$
-	\frac{P V_0}{n T} \, =\,  \frac{P}{nT}\frac{\eta}{\eta_0} \, = 1 + \frac{\sigma}{3 K_{en} t_{tot}} \sum_{coll} | \Delta v_{ij}| 
+	\frac{P V_0}{n k_{b} T} \, =\,  \frac{PV}{nT}\frac{\eta}{\eta_0} \, = 1 + \frac{m \sigma}{3 K_{en} t_{tot}} \sum_{coll} | \Delta v_{ij}| 
 $$
+\end{center}
 
 
+Gli errori sono stato calcolati facendo girare dieci volte il programma agli stessi valori della frazione di impacchettamento e assegnando come errore la deviazione standard della media di questo campione di misure.
 
-
+\begin{figure}[ht]
+	\centering
+	\subfigure[Grafico completo]{	
+	\includegraphics[scale=0.5]{sfere2D/pression.png}
+	}
+	\subfigure[Particolare della transizione di fase]{
+	\includegraphics[scale=0.5]{sfere2D/pressionzoom.png}
+	}	
+	\caption{ $\frac{P V_0}{n k_{b} T}$ in funzione di $\eta$ con $n=128$ particelle.}
+	\end{figure}
+Si può vedere dal grafico che questo sistema presenta una transizione di fase dovuta all'alta densità di impacchettamento.
 
 
 \chapter{Modello di Ising}

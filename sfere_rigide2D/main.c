@@ -647,6 +647,7 @@ while (total_time < TIME_MAX){
 	evolve();
 	fprintf(pdf_tc_file,"%f\n",time_collision);
 }
+printf("Num collisioni: %d\n",numOfCollisions);
 fclose(pdf_tc_file);
 if (time_counted > NUM_TEMPI_SALVATI){
 	printf("ERROR \n");
