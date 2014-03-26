@@ -8,6 +8,56 @@
 
 \chapter{Sfere rigide}
 
+\section{2 Dimensioni}
+
+\subsection{Inizializzazione}
+Il sistema è stato inizializzato su un reticolo rettangolare centrato.
+Per ottenere la massima frazione di impacchettamento possibile con questo reticolo è necessario utilizzare un numero di particelle $n$ tale che $ n = 2k^2$, con $k$ intero.\\
+Il lato della scatola $L$ \footnote{Si utilizzano unità adimensionate per l'espressione delle grandezze misurate, per la conversione in unità fisiche si rimanda alla formule sulle note} è stato fissato pari a 1.
+Per questo motivo è stato utilizzato come numero di particelle in tutte le simulazioni pari a $128$.
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=0.5]{sfere2D/reticolo.png}
+	\caption{Disposizione iniziale dei dischi, $n=128$}
+\end{figure}
+Il reticolo che viene generato dipende solo dal numero di particelle utilizzate, la frazione di impacchettamento $\eta$ influisce solo sul diametro $\sigma$ dei dischi. Esso è dato da:
+$$
+	\sigma = \sqrt{\frac{4 \eta}{ \pi n}}
+$$
+La frazione di impacchettamento massima con questo reticolo è facilmente calcolato, notando che ci sono due dischi per ogni cella reticolare (di lato $l$) :
+$$
+	\eta_max = \frac{ 2 A_{disco}}{A_{cella}} = \frac{2 \pi r_{max}^2}{l^2} = \frac{2 \pi (\sqrt{2} \frac{l}{4})^2}{l^2} = \frac{\pi}{4} = 0.7853982..
+$$
+Infine, si utilizzano condizioni di periodicità sui bordi della scatola in modi che il sistema abbia invarianza traslazionale.\\
+Le velocità vengono inizializzate inizialmente in modo pseudocasuale con una distribuzione di velocità piatta compresa fra $[-1,1]$ e in seguito si impone che la velocità del centro di massa sia nulla. 
+A questo punto si fissa la temperatura a 1. Questa è anche l'unica scala di energia del sistema, in quanto non c'è una scala di energia potenziale (esso vale $0$ o $\infty$).
+
+\subsection{Termalizzazione}
+Il sistema viene fatto termalizzare per 10000 collisioni prima di prendere dati.
+Si è verificato che il sistema avesse termalizzato dopo questo numero di collisioni studiando la distribuzione di probabilità del modulo della velocità.\\
+Per fare ciò si è fatto partire il programma 400 volte, inizializzando il sistema sempre alla stessa temperatura e si è fatto un istogramma delle velocità calcolate dopo il ciclo di termalizzazione.
+Si è poi fatto un fit con la distribuzione di Boltzmann in 2 dimensioni che è della forma:
+$$
+	P(|v|) = \frac{m}{k T} |v| e^{ - \frac{|v|^2}{2 k T}} = \frac{1}{T} |v| e^{ - \frac{|v|^2}{2T}}
+$$
+dove l'ultima uguaglianza vale per le unità di misura adimensionate che abbiamo utilizzato.\\
+Il fit è stato fatto con la temperatura come unico parametro libero e concorda con la temperatura a cui è stato inizializzato il sistema:
+$$
+	T_{fit} = 1.003 \pm 0.002
+$$
+\begin{figure}[hb]
+	\centering
+	\includegraphics[scale=0.6]{sfere2D/boltzmann.png}
+\end{figure}
+
+\subsection{Raccolta e Analisi Dati}
+\subsubsection{Pressione}
+Si analizza ora la pressione in funzione della frazione di impacchettamento.\\
+Si è rappresentata la seguente osservabile, calcolata attraverso la formula\footnote{Valida in unità di misura adimensionate: $V=1$,$k=1$,$m=1$}
+$$
+	\frac{P V_0}{n T} \, =\,  \frac{P}{nT}\frac{\eta}{\eta_0} \, = 1 + \frac{\sigma}{3 K_{en} t_{tot}} \sum_{coll} | \Delta v_{ij}| 
+$$
+
 
 
 
