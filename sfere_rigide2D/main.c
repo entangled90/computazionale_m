@@ -399,7 +399,8 @@ inline void  mean_free_path (){
 }
 
 /*Evolve il sistema di uno step
-* Volendo calcolar dr2(t) l'evoluzione non va di step din step, ma di dt in dt.
+* Volendo calcolar dr2(t) l'evoluzioneva di step din step e tiene conto del fatto se facendo lo step temporale che porta alla collisione successiva si supera lo step temporale
+* fissato per il dr2(t)
 */
 void evolve ( ) {
 	double deltaV_pre[N];
@@ -645,7 +646,7 @@ pression=0;
 printf("Termalizzato: %d urti ---- kin_en = %lf\n",numOfCollisions,kin_en());
 while (total_time < TIME_MAX){
 	evolve();
-	fprintf(pdf_tc_file,"%f\n",time_collision);
+	fprintf(pdf_tc_file,"%lf\n",time_collision*number_of_particles/2.0);
 }
 printf("Num collisioni: %d\n",numOfCollisions);
 fclose(pdf_tc_file);
@@ -665,7 +666,7 @@ pression *= SIGMA;
 pression +=1.0;
 pression *= (fraz_imp/0.9069); //dovuto a PV_0/NKT
 FILE *f_collision=fopen(tc_filename,"a");
-fprintf(f_collision,"%e\t%e\n",fraz_imp,total_time/(2*numOfCollisions/(double)number_of_particles));
+fprintf(f_collision,"%e\t%e\n",fraz_imp,total_time/(2*numOfCollisions)*(number_of_particles));
 
 FILE * file_pression = fopen(pression_filename,"a");
 fprintf(file_pression,"%e\n",pression);

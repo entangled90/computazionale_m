@@ -10,50 +10,40 @@ import numpy as np
 
 #Definisce la funzione per il fit
 def fitfunc(x,*p): 
-	return p[0]*exp(-p[1]*x)
+	return p[0]*x*np.exp(-(x**2)/p[0]/2)
 # read data from a text file. One number per line
 filename = sys.argv[1]
-eta = float (filename[ :7])
 numOfBin = float(100)
 data = np.loadtxt(filename,dtype='float64')
 #Density normalizza l'istogramma 
-hist , bin_edges = np.histogram(data, bins= numOfBin, density=False)
+hist , bin_edges = np.histogram(data[-400*128:-1], bins= numOfBin, density=True)
 #  init dei parametri del fit:
 
 
 step = float((bin_edges[-1] - bin_edges[0])/numOfBin)
 x_data = bin_edges[:-1]+step
-out_file = open('hist_pdftc%.8lf.dat'%(eta),"w")
-
-
-for i in range( len(hist) ):
-	out_file.write('%.8lf\t%.14e\n'%(x_data[i],hist[i]))
-out_file.close()
-
-guess = [ 100,0.001]
-popt,pcov  = curve_fit(fitfunc, x_data, hist, p0=guess )
+guess=[1]
+popt , pcov  = curve_fit(fitfunc, x_data, hist, p0=guess )
 
 print(popt)
 print(pcov)
-tau = 1/popt[1]
-#tau=100
 #print("x è "+ str(len(x_data)) + "y è "+ str(len(hist)))
 # add a 'best fit' line
 #y = mlab.normpdf( bins, mu, sigma)
 #l = plt.plot(bins, y, 'r--', linewidth=2)
-#y = fitfunc(coeff,x_data)
+y = fitfunc(x_data,*popt)
 fig = plt.figure()
-fig.suptitle(r'Pdf dei tempi di collisione per $\eta = %lf$'%(eta))
+fig.suptitle(r'Distribuzione di probabilità per la velocità')
 ax = fig.add_subplot(111)
 ax.grid(True)
 width = 0.7 * (bin_edges[1] - bin_edges[0])
 center = (bin_edges[:-1] + bin_edges[1:]) / 2
 plt.bar(center, hist, align='center', width=width,color='g')
 #plot
-#plt.plot(x_data,y,'r--',linewidth=2)
-plt.text(0.0008,7000,'Funzione di fit: ' '\n' r'$P(t) = e^{-\frac{t}{\tau}}$'  '\n' r'$ \tau = %.4e $'%(tau))
-plt.xlabel('Time collision')
-plt.ylabel('Probability')
+plt.plot(x_data,y,'r--',linewidth=2)
+plt.text(3,0.5, r'$ T = %lf\pm %lf$'%(popt[0],math.sqrt(pcov[0][0])),bbox={'facecolor':'green', 'alpha':0.5, 'pad':10} )
+plt.xlabel(r'$|v|$')
+plt.ylabel(r'P($|v|$)')
 #plt.title(r'$\mathrm{Histogram\ of\ IQ:}\ \mu=%.3f,\ \sigma=%.3f$' %(mu, sigma))
 plt.grid(True)
 plt.show()
