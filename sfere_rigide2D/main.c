@@ -14,7 +14,7 @@ altrimenti eta viene impostato di default a eta = 0.1 (fraz_imp)
 #define N 2
 #define TERM_TIME 10000
 #define MAX_COLLISION 2e5
-#define TIME_MAX 200
+#define TIME_MAX 15
 /*Numero particelle */
 int number_of_particles = 128;
 /* Diametro sfere */
@@ -29,7 +29,6 @@ double total_time = 0;
 double temperature = 0;
 double K_BOLTZ=1;
 double pression = 0;
-double pression_var=0;
 double D_speed_norm = 0;
 double DIST_RET = 0;
 
@@ -148,7 +147,7 @@ void reticolo () {
     int i,j;
     double speed_cm[2]={0.0,0.0};
      //Definisco il passo del reticolo cercando il minimo doppio di un quadrato: m >= n.
-      //Questa procedura permette di sfruttare l'intero spazio a disposizione per la creazione del reticolo.
+      //Questa procedur  	a permette di sfruttare l'intero spazio a disposizione per la creazione del reticolo.
      for (q = 0; m < number_of_particles; q++){
     	m = 2*q*q;
     }
@@ -176,16 +175,6 @@ void reticolo () {
 EXIT CODE 1 =  ERRORE, si toccano
 EXIT CODE 0 =  TUTTO OK
 */
-inline void riscala_vel_temp (){
-	int i,j;
-	double k_en = kin_en();
-	for ( i = 0; i<number_of_particles;i++){
-		for (j = 0; j<N;j++){
-			particleList[i].speed[j] *= sqrt( number_of_particles* T_D/k_en);
-		}
-	}
-}
-
 
 int  check_distance (){
 	int i,j;
@@ -212,6 +201,18 @@ int  check_distance (){
 	}
 	return (0);
 }
+
+inline void riscala_vel_temp (){
+	int i,j;
+	double k_en = kin_en();
+	for ( i = 0; i<number_of_particles;i++){
+		for (j = 0; j<N;j++){
+			particleList[i].speed[j] *= sqrt( number_of_particles* T_D/k_en);
+		}
+	}
+}
+
+
 /* Calcola il tempo minimo fra le 9 immagini  */
 double calc_min ( int i , int j){
 	double x,y;
@@ -451,7 +452,6 @@ void evolve ( ) {
 	numOfCollisions ++;
 	total_time+=time_collision;
 	pression += sqrt(scalar_prod(deltaV,deltaV));
-	//pression_var +=scalar_prod(deltaV,deltaV);
 	}
 
 /* Evolve ma utilizzata solo in fase di termalizzazione, senza alcuna presa dati*/
@@ -528,7 +528,7 @@ inline double r_squared_calc ( particle_s * list_0, particle_s * list_1){
 		}
 		sum += scalar_prod(rdiff2,rdiff2);
 	}
-	return sum/number_of_particles;
+	return sum/(double)number_of_particles;
 } 
 
 /* Fa una media sui tempi dei dr2(delta) per tutti i delta e per tempi tali che sono distanti delta tra di loro */
@@ -654,12 +654,6 @@ if (time_counted > NUM_TEMPI_SALVATI){
 	printf("ERROR \n");
 }
 r_squared_save(r2_file);
-/*
-pression*=SIGMA/3.0/kin_en();
-pression+=1.0;
-pression*=fraz_imp/M_PI*2*sqrt(3.00);
-pression *= number_of_particles*temperature;
-*/
 /****** CALCOLO PV/NKT = 1 + 1/(3*number_of_particles*k_boltz*temp)*massa*diametro*Somma collisioni******/
 pression /= (double) (3*(total_time)*kin_en());
 pression *= SIGMA;
