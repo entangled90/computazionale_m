@@ -24,14 +24,15 @@ Il reticolo che viene generato dipende solo dal numero di particelle utilizzate,
 $$
 	\sigma = \sqrt{\frac{4 \eta}{ \pi n}}
 $$
-La frazione di impacchettamento massima con questo reticolo è facilmente calcolato, notando che ci sono due dischi per ogni cella reticolare (di lato $l$) :
+La frazione di impacchettamento massima con questo reticolo è facilmente calcolabile, notando che ci sono due dischi per ogni cella reticolare (di lato $l$) :
 $$
 	\eta_max = \frac{ 2 A_{disco}}{A_{cella}} = \frac{2 \pi r_{max}^2}{l^2} = \frac{2 \pi (\sqrt{2} \frac{l}{4})^2}{l^2} = \frac{\pi}{4} = 0.7853982..
 $$
 Infine, si utilizzano condizioni di periodicità sui bordi della scatola in modi che il sistema abbia invarianza traslazionale.\\
-Le velocità vengono inizializzate inizialmente in modo pseudocasuale con una distribuzione di velocità piatta compresa fra $[-1,1]$ e in seguito si impone che la velocità del centro di massa sia nulla. 
-A questo punto si fissa la temperatura a 1. Questa è anche l'unica scala di energia del sistema, in quanto non c'è una scala di energia potenziale (esso vale $0$ o $\infty$).\\
-La raccolta dati è stata effettuata per una durata di 15 unità di tempo adimensionate. Ciò significa che il numero di collisioni effettuate non è costante, ma cresce con la frazione di impacchettamento. (siccome diminuisce il tempo di collisione medio):
+Le velocità vengono inizializzate inizialmente in modo pseudocasuale con una distribuzione di velocità piatta compresa fra $[-1,1]$ e in seguito si impone che la velocità del centro di massa sia nulla.\\
+Inoltre, si fissa la temperatura a 1, che equivale a fissare l'energia cinetica del sistema.
+Questa è anche l'unica scala di energia del sistema, in quanto non c'è una scala di energia potenziale (esso vale $0$ o $\infty$).\\
+La raccolta dati è stata effettuata per una durata di 15 unità di tempo\footnote{In unità di misura adimensionali} . Ciò significa che il numero di collisioni effettuate non è costante, ma cresce con la frazione di impacchettamento, siccome diminuisce il tempo di collisione medio:
 \begin{center}
 
 \begin{tabular}{c c}
@@ -79,19 +80,28 @@ $$
 
 Gli errori sono stato calcolati facendo girare dieci volte il programma agli stessi valori della frazione di impacchettamento e assegnando come errore la deviazione standard della media di questo campione di misure.
 
-\begin{figure}[ht]
+\begin{figure}[h!]
 	\centering
-	\subfigure[Grafico completo]{	
 	\includegraphics[scale=0.48]{sfere2D/pression.png}
-	}
-	\subfigure[Ingrandimento sulla transizione di fase]{
-	\includegraphics[scale=0.48]{sfere2D/pressionzoom.png}
-	}
-	\subfigure[Ulteriore ingrandimento]{
-	\includegraphics[scale=0.48]{sfere2D/pressionzoomzoom.png}
-	}
-	\caption{ $\frac{P V_0}{n k_{b} T}$ in funzione di $\eta$ con $n=128$ particelle.}
+	\caption{ $\frac{P V_0}{n k_{b} T}$ in funzione di $\eta$ con $n=128$ particelle}
 	\end{figure}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[scale=0.48]{sfere2D/pressionzoom.png}
+	\caption{Ingradimento di $\frac{P V_0}{n k_{b} T}$ in funzione di $\eta$ con $n=128$ particelle}
+	\end{figure}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[scale=0.48]{sfere2D/pressionzoomzoom.png}
+	\caption{Ulteriore ingrandimento di  $\frac{P V_0}{n k_{b} T}$ in funzione di $\eta$ con $n=128$ particelle}
+	\end{figure}
+
+
+
+
+
 Si può vedere dal grafico che questo sistema presenta una transizione di fase dovuta all'alta densità di impacchettamento.\\
 La transizione inizia ad un valor della frazione di impacchettamento leggermente inferiore a $\eta \sim 0.69$, ma è presente una regione metastabile in cui la pendenza della curva si riduce notevolmente rispetto alla regione a frazione d'impacchettamento minore..
 Subito dopo questo valore la curva ricomincia a salire, anche se con pe	ndenza minore.
@@ -115,23 +125,28 @@ $$
 $$
 
 Esso è stato calcolato per ogni simulazione e come nel caso della pressione, sono state ripetute 10 volte le misure. Da questo campione di dati si è calcolato media e deviazione standard della media.
-\begin{center}
-\begin{figure}
 
+
+\begin{figure}[h!]
 	\centering
-	\subfigure[Andamento generale]{
 	\includegraphics[scale=0.48]{sfere2D/tc.png}
-	}
-	\subfigure[Ingrandimento nella zona di transizione]{
-	\includegraphics[scale=0.48]{sfere2D/tczoom.png}
-	}
-	\subfigure[Ulteriore ingrandimento alla transizione]{
-		\includegraphics[scale=0.48]{sfere2D/tczoomzoom.png}
-	}
-\caption{Tempo medio di collisione in funzione della funzione di impacchettamento, $n=128$}
-\end{figure}
+	\caption{Tempo medio di collisione in funzione della funzione di impacchettamento, $n=128$}
+	\end{figure}
 
-\end{center}
+\begin{figure}[h!]
+	\centering
+	\includegraphics[scale=0.48]{sfere2D/tczoom.png}
+	\caption{Ingrandimento del tempo medio di collisione in funzione della funzione di impacchettamento, $n=128$}
+	\end{figure}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[scale=0.48]{sfere2D/tczoomzoom.png}
+	\caption{Ulteriore ingrandimento del tempo medio di collisione in funzione della funzione di impacchettamento, $n=128$}
+	\end{figure}
+
+
+
 Come si può vedere dal grafico si ha una regione in cui la curva è quasi piatta a partire da un valore della frazione di impacchettamento poco sotto $\eta \sim 0.69$ fino a $\eta \sim 0.71$.\\
 Questi sono gli stessi valori per cui si è notato un comportamento diverso della pressione nel grafico precedente.\\
 Come si vedrà in seguito, questo intervallo di temperature caratterizzerà tutte le quantità che analizzeremo.
@@ -140,9 +155,9 @@ Come si vedrà in seguito, questo intervallo di temperature caratterizzerà tutt
 Oltre ad analizzare il valor medio del tempo di collisione per particella, si può studiare anche la sua distribuzione di probabilità durante ogni simulazione.\\
 Analizzando gli istogrammi creati a partire dai tempi di collisione di ogni singolo urto si può vedere che la distribuzione di probabilità è della forma:
 $$
-	P(t) = N \, e^{-\frac{t}{t_{coll}}}
+	P(t) = \frac{1}{\tau} \, e^{-\frac{t}{\tau}} \qquad \mbox{Normalizzata}
 $$ 
-dove $t_{coll}$ si dimostrerà essere proprio il tempo di collisione medio per particella.\\
+dove $\tau$ si dimostrerà essere proprio il tempo di collisione medio per particella.\\
 Ci si aspetta dunque che la distribuzione di probabilità diventi sempre più piccata aumentando $\eta$ (in quanto $t_{coll}$ diminuisce all'aumentare di $\eta$).
 Si veda il caso per qualche valore di $\eta$:
 \begin{center}
@@ -156,19 +171,20 @@ Si veda il caso per qualche valore di $\eta$:
 Si veda inoltre il risultato del fit di uno di questi istogrammi con la distribuzione di probabilità citata sopra:
 
 \begin{center}
-	\begin{figure}[h]
+	\begin{figure}[h!]
 	\centering
 		\includegraphics[scale=0.5]{sfere2D/fit_pdf_tc.png}
 		\caption{Fit della distribuzione di probabilità con $e^{-\frac{t}{\tau}}$.}
 	\end{figure}
 \end{center}
-Ci aspetta che il valore di $\tau$ ottenuto tramite questo fit coincida con il valor medio del tempo di collisione per particella calcolato durante l'esecuzione del programma. Si può capire ciò per questo semplice fatto:
+Ci aspetta che il valore di $\tau$ ottenuto tramite questo fit coincida con il valor medio del tempo di collisione per particella calcolato durante l'esecuzione del programma. Si può capire ciò da questo semplice fatto:
 $$
-	<t> \, = \, \int_0^{\infty} e^{-\frac{t}{\tau}}\,dt = \tau
-$$ 
+	<t> \, = \, \frac{1}{\tau}\int_0^{\infty} t \, e^{-\frac{t}{\tau}}\,dt = \tau
+$$
+Ci si aspetta quindi che se la distribuzione di probabilità è di quella forma allora il risultato del fit deve coincidere con il valor medio del tempo di collisione.\\
 Nel grafico seguente si sono sovrapposti i valori di $t_{coll}$ calcolato come valor medio del tempo di collisione per particella e il valore di $\tau$ calcolati attraverso il fit:
 \begin{center}
-	\begin{figure}
+	\begin{figure}[h!]
 		\centering
 		\subfigure[Andamento generale]{
 		\includegraphics[scale=0.5]{sfere2D/tau_tcoll.png}
@@ -181,31 +197,45 @@ Nel grafico seguente si sono sovrapposti i valori di $t_{coll}$ calcolato come v
 \end{center}
 Nel grafico non sono stati inseriti gli errori in quanto non sono stati calcolati gli errori associati agli istogrammi e quindi l'errore restituito dal fit non è del tutto significativo.\\
 Si può vedere come l'accordo tra i due metodi di calcolo sia eccellente, anche nella regione di transizione di fase.
+Ciò è segno del fatto che la distribuzione di probabilità mantenga sempre la forma $e^{-\frac{t}{\tau}}$ .
 
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Libero cammino medio}
-Il valore del libero cammino è stato calcolato mediando il libero cammino medio per particella fra tutte le particelle. Sono state eseguite 10 simulazioni come per le altre quantità e gli errori stato calcolati sulla base di questo campione.
-\begin{center}
-	\begin{figure}[h]
+Il valore del libero cammino è stato calcolato mediando il libero cammino medio per particella fra tutte le particelle. Sono state eseguite 10 simulazioni come per le altre quantità e gli errori stato calcolati sulla base di questo campione.\\
+
+\begin{figure}[h!]
 	\centering
-	\subfigure[Andamento generale]{
-		\includegraphics[scale=0.48]{sfere2D/mfp.png}
-	}
-	\subfigure[Ingrandimento nella zona di transizione]{
-		\includegraphics[scale=0.48]{sfere2D/mfpzoom.png}
-	}
-	\subfigure[Ulteriore ngrandimento nella zona di transizione]{
-		\includegraphics[scale=0.48]{sfere2D/mfpzoomzoom.png}
-	}
-	\caption{Confronto tra i $\tau_{fit}$ delle distribuzioni di probabilità in funzione di $\eta$}
+	\includegraphics[scale=0.48]{sfere2D/mfp.png}
+	\caption{Libero cammino medio in funzione di $\eta$}
 	\end{figure}
-\end{center}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[scale=0.48]{sfere2D/mfpzoom.png}
+	\caption{Ingrandimento del libero cammino medio in funzione di $\eta$}
+	\end{figure}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[scale=0.48]{sfere2D/mfpzoomzoom.png}
+	\caption{Ulteriore ingrandimento del ibero cammino medio in funzione di $\eta$}
+	\end{figure}
+
 Si vede un comportamento del tutto simile a quanto accade con il tempo medio di collisione per particella, con una zona di transizione di fase nello stesso range di $\eta$ delle altre quantità.
 
 
 \newpage
 \subsection{Spostamento quadratico medio in funzione del tempo}
-
-
+Il valore di $\Delta r^2(t)$ è stato calcolato per ogni singola particella, sfruttando l'invarianza temporale del sistema, mediando così tra tutti gli istanti distanti tra loro un tempo $t$. Infine, da questo campione di dati si è calcolato valor medio ed errore.\\
+Il sistema è stato simulato fino a un valore del tempo pari a 15, ma i valori di $\Delta r^2(t)$ per $t$ superiore a 10 sono stati scartati in quando tendevano ad oscillare in quanto per essi il campione di dati era minore.\\
+Si è calcolata questa quantità ad istanti di tempo discreti pari a 0.03 e per fare ciò è stato necessario spezzare l'evoluzione temporale in modo da prendere dati per valori multipli di 0.03.\\
+Il valore aspettato per un sistema disordinato, prima della transizione di fase, è calcolabile teoricamente assumendo che in un tempo abbastanza grande ogni particella abbia avuto l'oppportunità di spostarsi in tutta la scatola. Esso è calcolabile in questo modo:
+$$
+<\Delta r^2(t)> \overset{\mathit{t\rightarrow \infty}}{\simeq} \int_{-\frac{L}{2}}^{\frac{L}{2}} dx \int_{-\frac{L}{2}}^{\frac{L}{2}} x^2 + y^2 = \frac{L^2}{6} \overset{\mathit{L=1}}{=} 0.166666..
+$$
 \begin{center}
 	\begin{figure}[h]
 	\centering
@@ -213,8 +243,31 @@ Si vede un comportamento del tutto simile a quanto accade con il tempo medio di 
 	\caption{Confronto tra i $\Delta r^2(t)$ a vari valori di $\eta$}
 	\end{figure}
 \end{center}
+Come si può vedere dal grafico, per valori di $\eta$ non troppo vicini alla regione di transizione la curva arriva al valore teorico calcolato prima e poi si appiattisce. All'aumentare di $\eta$ la forma della curva cambia e diventa una retta in prima approssimazione, con una pendenza che decresce sempre più all'aumentare della frazione di impacchettamento. Questo comportamento è segno della scarsa mobilità dei dischi all'aumentare del loro diametro (ossia di $\eta$).
+Per veder meglio questo fatto, si consideri il seguente grafico:
+\begin{center}
+	\begin{figure}[h!]
+		\centering
+		\includegraphics[scale=0.5]{sfere2D/dr2cfr.png}
+	\end{figure}
+\end{center}
+
+Come si può vedere, prima della transizione di fase ($\eta=0.6$) il sistema arriva rapidamente al valore teorico e continua ad oscillare intorno a quel valore.
+Per i valori successivi alla transizione di fase, le curve oltre ad avere una pendenza minore, esibiscono un comportamento diverso: non tendono più al valore calcolato teorico, calcolato nel caso di completa mobilità, ma si appiattiscono ad un altro valore, più basso.
+Tale valore, come si può vedere, diminuisce all'aumentare di $\eta$, segno della sempre più scarsa mobilità dei dischi del sistema.
+Da notare, inoltre, l'enorme tempo necessario per arrivare al valore limite, rispetto alla fase \emph{liquida}.
 
 
+\newpage
+\section{Sfere rigide 3D}
+
+
+
+
+
+
+
+\chapter{Sfere soffici}
 
 \chapter{Modello di Ising}
 Il modello è stato implementato su un reticolo bidimensione di larghezza N e inizializzando gli spin al valore $\pm 1 $  con uguale probabilità.

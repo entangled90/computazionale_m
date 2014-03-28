@@ -13,7 +13,7 @@ import random
 
 
 def fitfunc(x,*p): 
-	return p[0]*np.exp(-p[1]*x)
+	return p[0]*np.exp(-p[0]*x)
 numOfBin=100
 np.seterr(all='warn')
 file_temp = glob.glob('0.*.dat')	
@@ -33,13 +33,13 @@ for f in files:
 	hist , bin_edges = np.histogram(data, bins= numOfBin, density=True)
 	step = float((bin_edges[-1] - bin_edges[0])/(2*numOfBin))
 	x_data = bin_edges[:-1]+step
-	guess = [ 100,0.001]
+	guess = [ 0.001]
 	popt,pcov = curve_fit(fitfunc,x_data,hist, p0=guess )
 	eta.append(eta_temp)
-	tau.append(1/popt[1]) #, math.sqrt(pcov[1][1])])
+	tau.append(1/popt[0]) #, math.sqrt(pcov[1][1])])
 
 
-out_file = open('pdf_tau.dat',"a")
+out_file = open('pdf_tau.dat',"w")
 for i in range(len(eta)):
 	out_file.write('%.8lf\t%.14e\n'%(eta[i],tau[i]))
 out_file.close()

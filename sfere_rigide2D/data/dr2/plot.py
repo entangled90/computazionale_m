@@ -14,5 +14,6 @@ sorted(temp, key=itemgetter(0))
 for vector in temp:
 	x.append(float(vector[0]))
 	y.append(float(vector[1]))
-plt.plot(x,y,'b')
+plt.plot(x,y,'b',label=r'$\eta=0.75$')
+plt.legend(loc='upper right')
 plt.show()

@@ -13,7 +13,7 @@ altrimenti eta viene impostato di default a eta = 0.1 (fraz_imp)
 #define N 3
 #define TERM_TIME 20000
 #define MAX_COLLISION 2e5
-#define TIME_MAX 30
+#define TIME_MAX 15
 /*Numero particelle */
 int NUMBER_OF_PARTICLES = 128;
 /* Diametro sfere */
