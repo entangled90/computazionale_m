@@ -159,7 +159,7 @@ void reticolo () {
     genera_sottoreticolo(rx,ry,q,0,passo,speed_cm);
 	rx = passo/2.0;
 	ry = passo/2.0;
-    genera_sottoreticolo(ry,ry,q,number_of_particles/2, passo,speed_cm);
+    genera_sottoreticolo(rx,ry,q,number_of_particles/2, passo,speed_cm);
 	for ( i= 0; i<number_of_particles;i++){
 		for(j=0;j<N;j++){
 			particleList[i].speed[j] -= speed_cm[j]/((double) number_of_particles);

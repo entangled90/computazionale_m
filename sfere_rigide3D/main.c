@@ -14,7 +14,7 @@ altrimenti eta viene impostato di default a eta = 0.1 (fraz_imp)
 #define N 3
 #define TERM_TIME 20000
 #define MAX_COLLISION 2e5
-#define TIME_MAX 15
+#define TIME_MAX 10
 /*Numero particelle */
 int NUMBER_OF_PARTICLES = 128;
 /* Diametro sfere */
@@ -59,7 +59,7 @@ void print_coordinate (){
 	FILE *f = fopen ( "data/pack.dat","w");
 	int i = 0;
 	for ( i = 0; i< NUMBER_OF_PARTICLES ; i++){
-		fprintf(f,"%e \t %e\n", particleList[i].position[0], particleList[i].position[1]);
+		fprintf(f,"%e \t %e\t%e\n", particleList[i].position[0], particleList[i].position[1], particleList[i].position[2]);
 	}
 	fclose(f);
 	}
@@ -95,7 +95,7 @@ inline void boltzmann_file_save ( void ){
 }
 /*******************************************************************************************/
 
-
+/*
 
 void particle_init ( particle_s *particleList ){
 	int i_part= 0;
@@ -151,7 +151,83 @@ void particle_init ( particle_s *particleList ){
 		}
 	}
 }
+*/
 
+
+void genera_sottoreticolo(double rx_in, double ry_in,double rz_in,int q,int start, double passo, double * speed_cm){
+	int p = start; 
+	int c=0;
+	int d=0;
+	int e=0;
+	double rx;
+	double ry;
+	double rz;
+	rx=rx_in;
+	ry=ry_in;
+	rz=rz_in;
+	while(p<NUMBER_OF_PARTICLES && e<q-1){
+		while (p < NUMBER_OF_PARTICLES && d<q-1) { 
+			while (p < NUMBER_OF_PARTICLES && c<q-1) {
+				particleList[p].distance=0;
+				particleList[p].n_collision=0;
+				particleList[p].last_time_collision=0;
+				particleList[p].speed[0] =2*(rand()/(RAND_MAX*1.0)) -1.0 ;
+				particleList[p].speed[1] = 2*(rand()/(RAND_MAX*1.0)) -1.0 ;
+				particleList[p].position[0]=rx;
+				particleList[p].position[1]=ry;		
+				particleList[p].position[2]=rz;
+	//			printf("P %d %lf \t %lf\n", p,particleList[p].position[0],particleList[p].position[1]);
+				speed_cm[0] += particleList[p].speed[0];
+				speed_cm[1] += particleList[p].speed[1];
+				rx = rx + passo;
+				p++;
+				c++; 
+			} 
+			rx = rx_in;
+			c=0;
+			ry = ry + passo;
+			d++;
+		}
+		c=0;
+		d=0;
+		rz=rz+passo;
+		rx=rx_in;
+		ry=ry_in;
+		e++;
+	}
+}
+
+//genera un reticolo BCC
+void reticolo () { 
+	double passo = 0.0;//passo del reticolo 
+	//contatori 
+	int q=0;
+    int m=0;
+    int i,j;
+    double speed_cm[3]={0.0,0.0,0.0};
+     //Definisco il passo del reticolo cercando il minimo doppio di un cubo: m >= n.
+      //Questa procedur  	a permette di sfruttare l'intero spazio a disposizione per la creazione del reticolo.
+     for (q = 0; m < NUMBER_OF_PARTICLES; q++){
+    	m = 2*q*q*q;
+    }
+    passo = cbrt(2/(double)(m));
+	printf("passo %lf\n", passo);
+      	  //creazione reticolo
+
+	printf("Primo reticolo\n");
+  	genera_sottoreticolo(0,0,0,q,0,passo,speed_cm);
+
+	printf("Secondo reticolo\n");
+  	genera_sottoreticolo(passo/2.0,passo/2.0,passo/2.0,q,NUMBER_OF_PARTICLES/2, passo,speed_cm);
+	for ( i= 0; i<NUMBER_OF_PARTICLES;i++){
+		for(j=0;j<N;j++){
+			particleList[i].speed[j] -= speed_cm[j]/((double) NUMBER_OF_PARTICLES);
+		}
+	}
+	print_coordinate();
+	print_speed();
+
+}
 void reset_mfp_variables(){
 	int i;
 	for(i = 0; i<NUMBER_OF_PARTICLES;i++){
@@ -161,6 +237,7 @@ void reset_mfp_variables(){
 	
 	}
 }
+
 /* Controlla che le sfere non si compenetrino.
 *Utilizzata solo all'inizio
 */
@@ -182,7 +259,7 @@ int check_distance (){
 						diff(particleList[i].position,temp_part.position,diff_v);	
 						distance = sqrt(scalar_prod(diff_v,diff_v));
 						if( distance <SIGMA){
-							printf("Sfere (%d,%d) troppo vicine!\n",i,j);
+							printf("Sfere (%d,%d) troppo vicine: distanza %lf\n",i,j,distance);
 							return 1;
 						}
 					}
@@ -192,7 +269,7 @@ int check_distance (){
 	}
 	return 0;
 }
-/* Calcola il tempo minimo fra le 9 immagini  */
+/* Calcola il tempo minimo fra le 27 immagini  */
 double calc_min ( int i , int j){
 	double x,y,z;
 	double min= DBL_MAX;
@@ -234,6 +311,7 @@ void collision_table (){
 		}
 	}
 }
+
 
 
 /*
@@ -524,7 +602,7 @@ void r_squared_save ( char * filename){
 	double sum=0;
 	unsigned int delta,init;
 	unsigned int count ;
-	fprintf(f,"%s",header_file);
+//	fprintf(f,"%s",header_file);
 	double tmp;
 	double var =0;
 	for ( delta = 1; delta  <  time_counted-1; delta++){
@@ -582,8 +660,8 @@ double fraz_imp=0.1;
 if (argc > 1){
 	fraz_imp = atof(argv[1]);
 }
-SIGMA = sqrt(6*fraz_imp/ NUMBER_OF_PARTICLES / M_PI);
-DIST_RET = sqrt(4*0.76/ NUMBER_OF_PARTICLES / M_PI);
+SIGMA = cbrt(6*fraz_imp/ NUMBER_OF_PARTICLES / M_PI);
+//DIST_RET = sqrt(4*0.76/ NUMBER_OF_PARTICLES / M_PI);
 printf("\n\n*****************************************************\n");
 printf("Starting simulation with:");
 printf("SIGMA = %e\t",SIGMA);
@@ -591,7 +669,8 @@ printf("Frazione di impacchettamento: %e\n", fraz_imp);
 collTable = malloc (NUMBER_OF_PARTICLES*NUMBER_OF_PARTICLES*sizeof(double));
 particleList = malloc ( NUMBER_OF_PARTICLES * sizeof(particle_s));
 time_list = malloc (NUM_TEMPI_SALVATI*NUMBER_OF_PARTICLES * sizeof(particle_s));
-particle_init ( particleList);
+//particle_init ( particleList);
+reticolo();
 fix_boundaries();
 temperature = 2.0*kin_en()/((double) N)/(double) NUMBER_OF_PARTICLES/K_BOLTZ;
 if ( check_distance() != 0){
