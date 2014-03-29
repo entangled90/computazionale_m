@@ -261,7 +261,15 @@ Da notare, inoltre, l'enorme tempo necessario per arrivare al valore limite, ris
 \newpage
 \section{Sfere rigide 3D}
 
-
+\subsection{Inizializzazione}
+L'inizializzazione dell'algoritmo avviene in maniera del tutto simile a quanto fatto con i dischi in 2 dimensioni.
+In questo caso, il reticolo in cui vengono inizializzate le particelle è un reticolo BCC. Per questo reticolo la cella elementare contiene 2 particelle.\\
+La frazione di impacchettamento massima raggiungibile in questo caso è data da:
+$$
+	\eta_{max} = 2 \frac{V_{sfera}}{V_{cella}} = 2 \frac{ \frac{4}{3} \pi r_{max}^3}{ l^3 } = 2 \frac{\frac{4}{3} \pi
+	( \frac{l \sqrt{3}}{4} )^3}{l^3 }= 0.6801747616....
+$$
+Le velocità sono state inizializzate come nel caso bidimensionale e anche la temperatura è stata fissata al valore 1.
 
 
 

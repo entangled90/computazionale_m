@@ -10,6 +10,7 @@
 \contentsline {subsection}{\numberline {1.1.5}Libero cammino medio}{9}{subsection.1.1.5}
 \contentsline {subsection}{\numberline {1.1.6}Spostamento quadratico medio in funzione del tempo}{11}{subsection.1.1.6}
 \contentsline {section}{\numberline {1.2}Sfere rigide 3D}{13}{section.1.2}
+\contentsline {subsection}{\numberline {1.2.1}Inizializzazione}{13}{subsection.1.2.1}
 \contentsline {chapter}{\numberline {2}Sfere soffici}{14}{chapter.2}
 \contentsline {chapter}{\numberline {3}Modello di Ising}{15}{chapter.3}
 \contentsline {section}{\numberline {3.1}Termalizzazione}{15}{section.3.1}
