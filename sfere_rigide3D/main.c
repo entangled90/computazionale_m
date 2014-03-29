@@ -95,65 +95,6 @@ inline void boltzmann_file_save ( void ){
 }
 /*******************************************************************************************/
 
-/*
-
-void particle_init ( particle_s *particleList ){
-	int i_part= 0;
-	int i,j;
-	double r_0[N];
-	double speed_cm[3];
-	int z_row = 0;
-	double offsetX=0;
-	double offsetY=0;
-	
-	for ( i = 0; i<N;i++) {
-		r_0[i]=0;
-		speed_cm[i]=0.0;
-	}
-	
-	while (i_part <NUMBER_OF_PARTICLES){
-		for ( i=0; i<N;i++){
-		particleList[i_part].position[i] = r_0[i];
-		}
-		//particleList[i_part].dist = 0;
-		//particleList[i_part].num_collision=0;
-	//printf("%d Printed: (%e,%e,%e)\n", i_part,r_0[0],r_0[1],r_0[2]);
-	r_0[0] += DIST_RET;
-	if ( r_0[0] > 1.0 - SIGMA + offsetX){
-		r_0[0] = offsetX;
-		r_0[1] += DIST_RET;
-		if ( r_0[1] > 1.0 - SIGMA + offsetY){
-			z_row++;
-			offsetX= (z_row%2)*DIST_RET/2.0 ;
-			r_0[0] = offsetX;
-			offsetY= (z_row%2)*DIST_RET/2.0;
-			r_0[1] = offsetY;
-			r_0[2] += DIST_RET/sqrt(2.0);
-		}
-	}
-	if (r_0[2]> 1 - SIGMA){
-		printf("%e\n",r_0[2]);
-		print_coordinate(particleList);
-		printf("Impacchettamento non completato\n");
-		exit(1);
-	}
-	i_part++;
-	}
-	for ( i = 0; i< NUMBER_OF_PARTICLES; i++){
-		for ( j = 0; j<N;j++){
-			particleList[i].speed[j] = 2*(rand()/(RAND_MAX*1.0)) - 1.0 ;
-			speed_cm[j] += particleList[i].speed[j];
-			}
-	}
-	for (i =0 ; i< NUMBER_OF_PARTICLES; i++){
-		for ( j = 0; j<N;j++){
-			particleList[i].speed[j] -= (speed_cm[j]/((double) NUMBER_OF_PARTICLES));
-		}
-	}
-}
-*/
-
-
 void genera_sottoreticolo(double rx_in, double ry_in,double rz_in,int q,int start, double passo, double * speed_cm){
 	int p = start; 
 	int c=0;
@@ -622,7 +563,7 @@ void r_squared_save ( char * filename){
 	fclose(f);
 }
 
-
+////// CANNATA é per 2D -> inizializza a T*(2/3)
 inline void riscala_vel_temp (){
 	int i,j;
 	double k_en = kin_en();

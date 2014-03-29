@@ -8,19 +8,22 @@
 \BOOKMARK [2][-]{subsection.1.1.6}{Spostamento quadratico medio in funzione del tempo}{section.1.1}% 8
 \BOOKMARK [1][-]{section.1.2}{Sfere rigide 3D}{chapter.1}% 9
 \BOOKMARK [2][-]{subsection.1.2.1}{Inizializzazione}{section.1.2}% 10
-\BOOKMARK [0][-]{chapter.2}{Sfere soffici}{}% 11
-\BOOKMARK [0][-]{chapter.3}{Modello di Ising}{}% 12
-\BOOKMARK [1][-]{section.3.1}{Termalizzazione}{chapter.3}% 13
-\BOOKMARK [1][-]{section.3.2}{Autocorrelazione fra le configurazioni}{chapter.3}% 14
-\BOOKMARK [1][-]{section.3.3}{Binning}{chapter.3}% 15
-\BOOKMARK [1][-]{section.3.4}{Energia e Magnetizzazione}{chapter.3}% 16
-\BOOKMARK [1][-]{section.3.5}{Distribuzione di probabilit\340 della magnetizzazione}{chapter.3}% 17
-\BOOKMARK [1][-]{section.3.6}{Lunghezza di correlazione}{chapter.3}% 18
-\BOOKMARK [1][-]{section.3.7}{Finite Size Scaling}{chapter.3}% 19
-\BOOKMARK [0][-]{chapter.4}{Modello di Potts}{}% 20
-\BOOKMARK [1][-]{section.4.1}{Termalizzazione}{chapter.4}% 21
-\BOOKMARK [1][-]{section.4.2}{Binning}{chapter.4}% 22
-\BOOKMARK [1][-]{section.4.3}{Energia e Magnetizzazione}{chapter.4}% 23
-\BOOKMARK [1][-]{section.4.4}{Distribuzione di probabilit\340 della magnetizzazione}{chapter.4}% 24
-\BOOKMARK [1][-]{section.4.5}{Lunghezza di correlazione}{chapter.4}% 25
-\BOOKMARK [1][-]{section.4.6}{Finite Size Scaling}{chapter.4}% 26
+\BOOKMARK [2][-]{subsection.1.2.2}{Termalizzazione}{section.1.2}% 11
+\BOOKMARK [2][-]{subsection.1.2.3}{Pressione}{section.1.2}% 12
+\BOOKMARK [2][-]{subsection.1.2.4}{Spostamento quadratico medio}{section.1.2}% 13
+\BOOKMARK [0][-]{chapter.2}{Sfere soffici}{}% 14
+\BOOKMARK [0][-]{chapter.3}{Modello di Ising}{}% 15
+\BOOKMARK [1][-]{section.3.1}{Termalizzazione}{chapter.3}% 16
+\BOOKMARK [1][-]{section.3.2}{Autocorrelazione fra le configurazioni}{chapter.3}% 17
+\BOOKMARK [1][-]{section.3.3}{Binning}{chapter.3}% 18
+\BOOKMARK [1][-]{section.3.4}{Energia e Magnetizzazione}{chapter.3}% 19
+\BOOKMARK [1][-]{section.3.5}{Distribuzione di probabilit\340 della magnetizzazione}{chapter.3}% 20
+\BOOKMARK [1][-]{section.3.6}{Lunghezza di correlazione}{chapter.3}% 21
+\BOOKMARK [1][-]{section.3.7}{Finite Size Scaling}{chapter.3}% 22
+\BOOKMARK [0][-]{chapter.4}{Modello di Potts}{}% 23
+\BOOKMARK [1][-]{section.4.1}{Termalizzazione}{chapter.4}% 24
+\BOOKMARK [1][-]{section.4.2}{Binning}{chapter.4}% 25
+\BOOKMARK [1][-]{section.4.3}{Energia e Magnetizzazione}{chapter.4}% 26
+\BOOKMARK [1][-]{section.4.4}{Distribuzione di probabilit\340 della magnetizzazione}{chapter.4}% 27
+\BOOKMARK [1][-]{section.4.5}{Lunghezza di correlazione}{chapter.4}% 28
+\BOOKMARK [1][-]{section.4.6}{Finite Size Scaling}{chapter.4}% 29

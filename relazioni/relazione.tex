@@ -234,7 +234,7 @@ Il sistema è stato simulato fino a un valore del tempo pari a 15, ma i valori d
 Si è calcolata questa quantità ad istanti di tempo discreti pari a 0.03 e per fare ciò è stato necessario spezzare l'evoluzione temporale in modo da prendere dati per valori multipli di 0.03.\\
 Il valore aspettato per un sistema disordinato, prima della transizione di fase, è calcolabile teoricamente assumendo che in un tempo abbastanza grande ogni particella abbia avuto l'oppportunità di spostarsi in tutta la scatola. Esso è calcolabile in questo modo:
 $$
-<\Delta r^2(t)> \overset{\mathit{t\rightarrow \infty}}{\simeq} \int_{-\frac{L}{2}}^{\frac{L}{2}} dx \int_{-\frac{L}{2}}^{\frac{L}{2}} x^2 + y^2 = \frac{L^2}{6} \overset{\mathit{L=1}}{=} 0.166666..
+<\Delta r^2(t)> \overset{\mathit{t\rightarrow \infty}}{\simeq} \int_{-\frac{L}{2}}^{\frac{L}{2}} dx \int_{-\frac{L}{2}}^{\frac{L}{2}}dy \, (x^2 + y^2 )= \frac{L^2}{6} \overset{\mathit{L=1}}{=} 0.166667..
 $$
 \begin{center}
 	\begin{figure}[h]
@@ -264,12 +264,69 @@ Da notare, inoltre, l'enorme tempo necessario per arrivare al valore limite, ris
 \subsection{Inizializzazione}
 L'inizializzazione dell'algoritmo avviene in maniera del tutto simile a quanto fatto con i dischi in 2 dimensioni.
 In questo caso, il reticolo in cui vengono inizializzate le particelle è un reticolo BCC. Per questo reticolo la cella elementare contiene 2 particelle.\\
+\begin{center}
+	\begin{figure}[h]
+	\centering
+		\includegraphics[scale=0.6]{sfere3D/reticolo.png}
+	\end{figure}
+\end{center}
 La frazione di impacchettamento massima raggiungibile in questo caso è data da:
 $$
 	\eta_{max} = 2 \frac{V_{sfera}}{V_{cella}} = 2 \frac{ \frac{4}{3} \pi r_{max}^3}{ l^3 } = 2 \frac{\frac{4}{3} \pi
 	( \frac{l \sqrt{3}}{4} )^3}{l^3 }= 0.6801747616....
 $$
-Le velocità sono state inizializzate come nel caso bidimensionale e anche la temperatura è stata fissata al valore 1.
+Le velocità sono state inizializzate come nel caso bidimensionale e la temperatura è stata fissata al valore $\frac{2}{3}$.
+
+
+\subsection{Termalizzazione}
+Il numero di collisioni utilizzate per la termalizzazione del sistema è stato di 20000.\\
+Come per le sfere in 2 dimensioni si è valutata la corretta termalizzazione del sistema analizzando la distribuzione di probabilità per il modulo della velocità e facendo un fit con la Maxwell-Boltzmann in 3 dimensioni.
+In 3 dimensioni la distribuzione di probabilità assume la forma:
+$$
+	P(|v|) \, = \, 4 \pi \frac{m}{2 \pi k_{b} T}^3 |v|^2 e^{-\frac{m |v|^2}{2 k_b T}}
+$$
+%%%%%%%%%MAX_BOLTZMANN!!
+Per la creazione dell'istogramma sono state eseguite circa 150 simulazioni.
+\begin{myfig}
+	\includegraphics[scale=0.5]{sfere3D/boltzmann.png}
+	\caption{Confronto tra Maxwell-Boltzmann e la distribuzione di probabilità per la velocità}
+\end{myfig}
+La temperatura restituita dal fit è:
+$$
+	T = 0.669 \pm 0.05
+$$
+in pieno accordo con la temperatura a cui è stato inizializzato il sistema.
+
+
+
+\subsection{Pressione}
+Il calcolo della pressione è del tutto analogo al caso bidimensionale con l'unica differenza data dalla relazione tra energia e temperatura in 2 dimensioni e 3 dimensioni. I valori medi e gli errori sono stati calcolati con lo stesso metodo.\\
+L'andamento della pressione in funzione di $\eta$ è simile al caso bidimensionale al di fuori della zona di transizione, mentre in quella regione, la curva ha un comportamento molto diverso.
+\begin{myfig}
+	\includegraphics[scale=0.55]{sfere3D/pressione.png}
+\end{myfig}
+Nella zona di transizione accade un fenomeno particolare
+
+\begin{myfig}
+	\includegraphics[scale=0.55]{sfere3D/pressionezoomzoom.png}
+\end{myfig}
+
+
+
+
+
+\subsection{Spostamento quadratico medio}
+Come per la pressione, anche lo spostamento quadratico medio è stato calcolato in maniera uguale a quanto fatto in 2 dimensioni. Chiaramente, il valore limite che ci possiamo aspettare per $\eta$ piccoli è diverso:
+$$
+<\Delta r^2(t)> \overset{\mathit{t\rightarrow \infty}}{\simeq} \int_{-\frac{L}{2}}^{\frac{L}{2}} dx \int_{-\frac{L}{2}}^{\frac{L}{2}}dy \int_{-\frac{L}{2}}^{\frac{L}{2}} dz \, ( x^2 + y^2 +z^2 ) = \frac{L^2}{4} \overset{\mathit{L=1}}{=} 0.25
+$$
+Il comportamento del sistema è analogo a quello bidimensionale, come si può vedere da questo grafico:
+
+\begin{myfig}
+	\includegraphics[scale=0.55]{sfere3D/dr2vari.png}
+	\caption{Spostamento quadratico medio a vari $\eta$}
+\end{myfig}
+Anche qui, la rapidità con cui esso tende al valore limite diminuisce all'aumentare di $\eta$ e simulando per tempi maggiori si può vedere come per frazioni di impacchettamento dopo la transizione di fase il valore limite diminuisca all'aumentare della frazione di impacchettamento.
 
 
 

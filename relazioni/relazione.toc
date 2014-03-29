@@ -11,19 +11,22 @@
 \contentsline {subsection}{\numberline {1.1.6}Spostamento quadratico medio in funzione del tempo}{11}{subsection.1.1.6}
 \contentsline {section}{\numberline {1.2}Sfere rigide 3D}{13}{section.1.2}
 \contentsline {subsection}{\numberline {1.2.1}Inizializzazione}{13}{subsection.1.2.1}
-\contentsline {chapter}{\numberline {2}Sfere soffici}{14}{chapter.2}
-\contentsline {chapter}{\numberline {3}Modello di Ising}{15}{chapter.3}
-\contentsline {section}{\numberline {3.1}Termalizzazione}{15}{section.3.1}
-\contentsline {section}{\numberline {3.2}Autocorrelazione fra le configurazioni}{16}{section.3.2}
-\contentsline {section}{\numberline {3.3}Binning}{18}{section.3.3}
-\contentsline {section}{\numberline {3.4}Energia e Magnetizzazione}{23}{section.3.4}
-\contentsline {section}{\numberline {3.5}Distribuzione di probabilit\IeC {\`a} della magnetizzazione}{24}{section.3.5}
-\contentsline {section}{\numberline {3.6}Lunghezza di correlazione}{26}{section.3.6}
-\contentsline {section}{\numberline {3.7}Finite Size Scaling}{29}{section.3.7}
-\contentsline {chapter}{\numberline {4}Modello di Potts}{34}{chapter.4}
-\contentsline {section}{\numberline {4.1}Termalizzazione}{34}{section.4.1}
-\contentsline {section}{\numberline {4.2}Binning}{35}{section.4.2}
-\contentsline {section}{\numberline {4.3}Energia e Magnetizzazione}{35}{section.4.3}
-\contentsline {section}{\numberline {4.4}Distribuzione di probabilit\IeC {\`a} della magnetizzazione}{36}{section.4.4}
-\contentsline {section}{\numberline {4.5}Lunghezza di correlazione}{39}{section.4.5}
-\contentsline {section}{\numberline {4.6}Finite Size Scaling}{40}{section.4.6}
+\contentsline {subsection}{\numberline {1.2.2}Termalizzazione}{13}{subsection.1.2.2}
+\contentsline {subsection}{\numberline {1.2.3}Pressione}{14}{subsection.1.2.3}
+\contentsline {subsection}{\numberline {1.2.4}Spostamento quadratico medio}{14}{subsection.1.2.4}
+\contentsline {chapter}{\numberline {2}Sfere soffici}{17}{chapter.2}
+\contentsline {chapter}{\numberline {3}Modello di Ising}{18}{chapter.3}
+\contentsline {section}{\numberline {3.1}Termalizzazione}{18}{section.3.1}
+\contentsline {section}{\numberline {3.2}Autocorrelazione fra le configurazioni}{19}{section.3.2}
+\contentsline {section}{\numberline {3.3}Binning}{21}{section.3.3}
+\contentsline {section}{\numberline {3.4}Energia e Magnetizzazione}{26}{section.3.4}
+\contentsline {section}{\numberline {3.5}Distribuzione di probabilit\IeC {\`a} della magnetizzazione}{27}{section.3.5}
+\contentsline {section}{\numberline {3.6}Lunghezza di correlazione}{29}{section.3.6}
+\contentsline {section}{\numberline {3.7}Finite Size Scaling}{32}{section.3.7}
+\contentsline {chapter}{\numberline {4}Modello di Potts}{37}{chapter.4}
+\contentsline {section}{\numberline {4.1}Termalizzazione}{37}{section.4.1}
+\contentsline {section}{\numberline {4.2}Binning}{38}{section.4.2}
+\contentsline {section}{\numberline {4.3}Energia e Magnetizzazione}{38}{section.4.3}
+\contentsline {section}{\numberline {4.4}Distribuzione di probabilit\IeC {\`a} della magnetizzazione}{39}{section.4.4}
+\contentsline {section}{\numberline {4.5}Lunghezza di correlazione}{42}{section.4.5}
+\contentsline {section}{\numberline {4.6}Finite Size Scaling}{43}{section.4.6}
