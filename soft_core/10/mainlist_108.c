@@ -120,44 +120,6 @@ void fix_boundaries ( particle_s * particleList){
 	}
 }
 
-void particle_init (){
-	int i_part= 0;
-	double speed_cm[3];
-	int i,j;
-	int x,y,z;
-	for ( i = 0; i<N;i++) {
-		speed_cm[i]=0.0;
-	}
-	int cube_max=0;
-	do{
-	 cube_max++;
-	}while( cube_max*cube_max*cube_max<NUMBER_OF_PARTICLES);
-	DIST_RET = L/(double)cube_max;
-	for ( x=0; x<cube_max ; x++){
-		for ( y = 0;  y<cube_max; y++){
-			for ( z=0; z<cube_max; z++){
-				if(i_part<NUMBER_OF_PARTICLES){
-					particleList[i_part].position[0] = DIST_RET*(x+sqrt(2)*0.5);
-					particleList[i_part].position[1] = DIST_RET*(y+sqrt(2)*0.5);
-					particleList[i_part].position[2] = DIST_RET*(z+sqrt(2)*0.5);
-					}
-				i_part++;
-			}
-		}
-	}
-	for ( i = 0; i< NUMBER_OF_PARTICLES; i++){
-		for ( j = 0; j<N;j++){
-			particleList[i].speed[j] = (2*(rand()/(RAND_MAX*1.0)) - 1.0 )*V_MAX;
-			speed_cm[j] += particleList[i].speed[j];
-			particleList[i].acc[j]=0;
-			}
-	}
-	for (i =0 ; i< NUMBER_OF_PARTICLES; i++){
-		for ( j = 0; j<N;j++){
-			particleList[i].speed[j] -= speed_cm[j]/((double) NUMBER_OF_PARTICLES);
-		}
-	}
-}
 /*Lennard-Jones 6-12 -> U* = U/epsilon */
 inline double potential ( double r ){
 	if (r<R_LIM){

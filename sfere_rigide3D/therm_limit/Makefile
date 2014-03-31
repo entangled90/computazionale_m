@@ -25,9 +25,9 @@ MAIN =  main
 MODULES = $(RANDOM) $(START)
 #$(EXTRAS) # search path for modules
 
-MDIR = ../../modules
+#MDIR = ../../modules
 
-VPATH = $(MDIR)/random:$(MDIR)/start:
+#VPATH = $(MDIR)/random:$(MDIR)/start:
 #$(MDIR)/extras
 
 

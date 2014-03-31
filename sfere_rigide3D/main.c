@@ -14,9 +14,9 @@ altrimenti eta viene impostato di default a eta = 0.1 (fraz_imp)
 #define N 3
 #define TERM_TIME 20000
 #define MAX_COLLISION 2e5
-#define TIME_MAX 5
+#define TIME_MAX 150
 /*Numero particelle */
-int NUMBER_OF_PARTICLES = 250;
+int NUMBER_OF_PARTICLES = 128;
 /* Diametro sfere */
 double SIGMA =  0;
 /*Tavola delle collisioni */
@@ -69,7 +69,7 @@ void print_speed (){
 	FILE *f = fopen ( "data/speed.dat","w");
 	int i = 0;
 	for ( i = 0; i< NUMBER_OF_PARTICLES ; i++){
-		fprintf(f,"%e \t %e\n", particleList[i].speed[0], particleList[i].speed[1]);
+		fprintf(f,"%e \t %e \t%e\n", particleList[i].speed[0], particleList[i].speed[1],particleList[i].speed[2]);
 	}
 	fclose(f);
 	}
@@ -95,7 +95,7 @@ inline void boltzmann_file_save ( void ){
 }
 /*******************************************************************************************/
 
-void genera_sottoreticolo(double rx_in, double ry_in,double rz_in,int q,int start, double passo, double * speed_cm){
+void genera_sottoreticolo(double rx_in, double ry_in,double rz_in,int q,int start, double passo){
 	int p = start; 
 	int c=0;
 	int d=0;
@@ -114,12 +114,14 @@ void genera_sottoreticolo(double rx_in, double ry_in,double rz_in,int q,int star
 				particleList[p].last_time_collision=0;
 				particleList[p].speed[0] =2*(rand()/(RAND_MAX*1.0)) -1.0 ;
 				particleList[p].speed[1] = 2*(rand()/(RAND_MAX*1.0)) -1.0 ;
+				particleList[p].speed[2] = 2*(rand()/(RAND_MAX*1.0)) -1.0 ;
 				particleList[p].position[0]=rx;
 				particleList[p].position[1]=ry;		
 				particleList[p].position[2]=rz;
 	//			printf("P %d %lf \t %lf\n", p,particleList[p].position[0],particleList[p].position[1]);
 				speed_cm[0] += particleList[p].speed[0];
 				speed_cm[1] += particleList[p].speed[1];
+				speed_cm[2] += particleList[p].speed[2];
 				rx = rx + passo;
 				p++;
 				c++; 
@@ -156,15 +158,22 @@ void reticolo () {
       	  //creazione reticolo
 
 	printf("Primo reticolo\n");
-  	genera_sottoreticolo(0,0,0,q,0,passo,speed_cm);
+  	genera_sottoreticolo(0,0,0,q,0,passo);
 
 	printf("Secondo reticolo\n");
-  	genera_sottoreticolo(passo/2.0,passo/2.0,passo/2.0,q,NUMBER_OF_PARTICLES/2, passo,speed_cm);
-	for ( i= 0; i<NUMBER_OF_PARTICLES;i++){
-		for(j=0;j<N;j++){
+  	genera_sottoreticolo(passo/2.0,passo/2.0,passo/2.0,q,NUMBER_OF_PARTICLES/2, passo);
+	for (i =0 ; i< NUMBER_OF_PARTICLES; i++){
+		for ( j = 0; j<N;j++){	
+				speed_cm[j] += particleList[i].speed[j];
+		}
+	}
+
+	for (i =0 ; i< NUMBER_OF_PARTICLES; i++){
+		for ( j = 0; j<N;j++){
 			particleList[i].speed[j] -= speed_cm[j]/((double) NUMBER_OF_PARTICLES);
 		}
 	}
+
 	print_coordinate();
 	print_speed();
 

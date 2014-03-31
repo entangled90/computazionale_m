@@ -283,7 +283,7 @@ Il numero di collisioni utilizzate per la termalizzazione del sistema è stato d
 Come per le sfere in 2 dimensioni si è valutata la corretta termalizzazione del sistema analizzando la distribuzione di probabilità per il modulo della velocità e facendo un fit con la Maxwell-Boltzmann in 3 dimensioni.
 In 3 dimensioni la distribuzione di probabilità assume la forma:
 $$
-	P(|v|) \, = \, 4 \pi \frac{m}{2 \pi k_{b} T}^3 |v|^2 e^{-\frac{m |v|^2}{2 k_b T}}
+	P(|v|) \, = \, 4 \pi \left(\frac{m}{2 \pi k_{b} T}\right)^{\frac{3}{2}} |v|^2 e^{-\frac{m |v|^2}{2 k_b T}}
 $$
 %%%%%%%%%MAX_BOLTZMANN!!
 Per la creazione dell'istogramma sono state eseguite circa 150 simulazioni.
@@ -302,16 +302,31 @@ in pieno accordo con la temperatura a cui è stato inizializzato il sistema.
 \subsection{Pressione}
 Il calcolo della pressione è del tutto analogo al caso bidimensionale con l'unica differenza data dalla relazione tra energia e temperatura in 2 dimensioni e 3 dimensioni. I valori medi e gli errori sono stati calcolati con lo stesso metodo.\\
 L'andamento della pressione in funzione di $\eta$ è simile al caso bidimensionale al di fuori della zona di transizione, mentre in quella regione, la curva ha un comportamento molto diverso.
-\begin{myfig}
+\begin{myfig}[h]
 	\includegraphics[scale=0.55]{sfere3D/pressione.png}
+	\caption{Grafico relativo alla pressione per $n=128$ sfere.}
 \end{myfig}
-Nella zona di transizione accade un fenomeno particolare
-
-\begin{myfig}
+\begin{myfig}[h]
 	\includegraphics[scale=0.55]{sfere3D/pressionezoomzoom.png}
+	\caption{Particolare della transizione di fase del grafico relativo alla pressione per $n=128$ sfere.}
 \end{myfig}
 
+Si può vedere dal grafico ($n=128$) che per un valore di $\eta$ compreso tra 0.4935 e 0.4943 si ha un aumento dell'errore pari a un fattore 5. Ciò indica che si è all'inizio della transizione di fase.
+Il valore della pressione cresce ancora fino a $\eta = 0.498$.
+Sopra questo valore di $\eta$ la pressione comincia a scender ma gli errori diventano molto più grandi, segno delle grandi fluttuazioni presenti nel sistema, tipiche di una transizione di fase.
+Al valore $\eta \sim 0.51$ la pressione torna a risalire e con errori paragonabili a prima della transizione di fase.\\
+Infine si veda il confronto tra grafici della pressione per $n=128$ e $n=250$:
 
+\begin{myfig}[h]
+	\subfigure[$n=128$]{
+		\includegraphics[scale=0.35]{sfere3D/pressionezoomzoom.png}
+	}
+	\subfigure[$n=128$]{
+		\includegraphics[scale=0.35]{sfere3D/pre250.png}
+	}
+	\caption{Confronto della zona di transizione di fase per $n=128$ e $n=250$}
+\end{myfig}
+Nonostante il numero di sfere sia quasi raddoppiato, la curva mantiene lo stesso andamento e anche il valore di $\eta$ per cui si ha la transizione di fase sono del tutto simili. 
 
 
 
@@ -328,11 +343,59 @@ Il comportamento del sistema è analogo a quello bidimensionale, come si può ve
 \end{myfig}
 Anche qui, la rapidità con cui esso tende al valore limite diminuisce all'aumentare di $\eta$ e simulando per tempi maggiori si può vedere come per frazioni di impacchettamento dopo la transizione di fase il valore limite diminuisca all'aumentare della frazione di impacchettamento.
 
+\begin{myfig}[h!]
+	\includegraphics[scale=0.55]{sfere3D/dr2trans.png}
+	\caption{Spostamento quadratico medio fino a $t=140$ prima e dopo la transizione}
+\end{myfig}
 
+Come si può vedere dal grafico, c'è una netta differenza tra i grafici prima della solidificazione e dopo.\\
+Infatti il sistema per $\eta=0.5$ è nella zona di transizione, prima che il solidifichi e si può vedere come la curva abbia ancora un comportamento simile a quello in fase liquida.
+Diventa completamente diverso, invece, per il valore $\eta=0.51$, che come si è visto dal grafico della pressione è il valore per cui il sistema inizia ad entrare in fase solida.
+
+
+
+\subsection{Limite termodinamico}
+Si studia ora l'estrapolazione al limite termodinamico della pressione. Il limite termodinamico viene effettuato aumentando il numero di particelle del sistema e il volume, in modo tale che il loro rapporto rimanga costante. Il limite termodinamico viene raggiunto mandando $N,V \rightarrow \infty$
+Si veda ora il confronto tra i valori di $\frac{P V}{n k_b T} -1$ per $\eta=0.3$ con numero di particelle compreso fra 32 e 512.\\
+La raccolta dati è stata ripetuta 9 volte per ogni $n$ e si è calcolato valor medio ed errore sulla base di questo campione. I risultati sono i seguenti:
+\begin{center}
+	\begin{tabular}{c c c c}
+	\toprule
+	$N$ & $\frac{1}{N}$ & $<\frac{P V}{n k_b T} -1> $ & Errore \\
+	\midrule
+	$32	$	& $0.031250$	&$ 6.06	$	& $3e-02 $\\
+	$64	$	& $0.015625$	&$ 6.01	$	& $1e-02 $\\
+	$128$	& $0.007812$	&$ 5.989$	& $ 2.e-03 $\\
+	$256$	& $0.003906$	&$ 5.981$	& $ 4.e-03$ \\
+	$512$	& $0.001953$	&$ 5.973$	& $3.e-03$ \\
+	\bottomrule
+	\end{tabular}
+\end{center}
+
+
+\begin{myfig}[h]
+	\includegraphics[scale=0.58]{sfere3D/lim_therm.png}
+	\caption{Andamento della pressione al limite termodinamico}
+\end{myfig}
+Il fit è stato effettuato con una retta di equazione $y=mx +q$ e il grafico è stato disegnato in funzione di $\frac{1}{N}$
+	Il risultato del fit da come risultato:
+\begin{align}
+	m &= 2.8 \pm 0.02\\	
+	q &= 5.968 \pm 0.001\\
+\end{align}
+Estrapolando il valore per $N \rightarrow \infty$ il valore è dato dal termine noto della retta e ottienamo quindi il valore:
+$$
+	\frac{P V}{n k_b T} -1 = 5.968 \pm 0.001 \qquad \mbox{per} \quad N \rightarrow \infty
+$$
 
 
 
 \chapter{Sfere soffici}
+
+
+
+
+
 
 \chapter{Modello di Ising}
 Il modello è stato implementato su un reticolo bidimensione di larghezza N e inizializzando gli spin al valore $\pm 1 $  con uguale probabilità.

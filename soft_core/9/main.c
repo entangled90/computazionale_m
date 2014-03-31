@@ -4,10 +4,10 @@
 #include <time.h>
 #include <float.h>
 
-#define NUMBER_OF_PARTICLES 500
+#define NUMBER_OF_PARTICLES 508
 #define N 3
 #define ITERATION_MAX 2e4
-#define ITERATION_THERM 5000
+#define ITERATION_THERM 10000
 
 double SIGMA=1;
 double DIST_RET = 1;
@@ -24,7 +24,9 @@ double V_MAX = 1;
 double T_D = 1.19;
 double R_LIST;
 int last_index;
-
+//unsigned int NUM_TEMPI_SALVATI ;
+//unsigned int PERIOD_R2 = 100;
+//unsigned int time_counted;
 typedef struct particle_s {
 	double position[N];
 	double speed[N];
@@ -34,6 +36,7 @@ typedef struct particle_s {
 
 particle_s * particleList;
 particle_s * * neighboursList;
+//particle_s * time_list;
 void print_coordinate (){
 	FILE *f = fopen ( "data/pack.dat","w");
 	int i = 0;
@@ -90,17 +93,27 @@ inline double kin_en ( void) {
 	}
 	return (sum/(double)NUMBER_OF_PARTICLES);
 	}
-inline double total_momentum (){
+double total_momentum (){
 	int i,j;
-	double  sum = 0;
+	double  sum[N] = {0,0,0};
 	for ( i = 0; i< NUMBER_OF_PARTICLES ; i++){
 		for ( j = 0; j< N ; j++){
-		sum += particleList[i].speed[j];
+		sum[j] += particleList[i].speed[j];
 		}
 	}
-	return (sum);
+	return sqrt(scalar_prod(sum,sum));
 	}
-
+/*Lennard-Jones 6-12 -> U* = U/epsilon */
+inline double potential ( double r ){
+	if (r<R_LIM){
+		double tmp=pow(r,6);
+		return (( 4*(1/(tmp*tmp)-1/(tmp))) - u_R_LIM - DeltaF*(r-R_LIM));
+	}
+	else{
+		return 0;
+	}
+}
+	
 void fix_boundaries ( particle_s * particleList){
 	int i = 0;
 	int j = 0;
@@ -113,55 +126,83 @@ void fix_boundaries ( particle_s * particleList){
 		}
 	}
 }
+/*******************************************************************************************/
 
-void particle_init (){
-	int i_part= 0;
-	double speed_cm[3];
-	int i,j;
-	int x,y,z;
-	for ( i = 0; i<N;i++) {
-		speed_cm[i]=0.0;
+void genera_sottoreticolo(double rx_in, double ry_in,double rz_in,int q,int start, double passo){
+	int p = start; 
+	int c=0;
+	int d=0;
+	int e=0;
+	int j;
+	double rx;
+	double ry;
+	double rz;
+	rx=rx_in;
+	ry=ry_in;
+	rz=rz_in;
+	while(p<NUMBER_OF_PARTICLES && e<q-1){
+		while (p < NUMBER_OF_PARTICLES && d<q-1) { 
+			while (p < NUMBER_OF_PARTICLES && c<q-1) {
+				particleList[p].position[0]=rx;
+				particleList[p].position[1]=ry;		
+				particleList[p].position[2]=rz;
+			for ( j = 0; j<N;j++){
+				particleList[p].speed[j] = (2*(rand()/(RAND_MAX*1.0)) - 1.0 )*V_MAX;
+				particleList[p].acc[j]=0;
+				}
+				rx = rx + passo;
+				p++;
+				c++; 
+			} 
+			rx = rx_in;
+			c=0;
+			ry = ry + passo;
+			d++;
+		}
+		c=0;
+		d=0;
+		rz=rz+passo;
+		rx=rx_in;
+		ry=ry_in;
+		e++;
 	}
-	int cube_max=0;
-	do{
-	 cube_max++;
-	}while( cube_max*cube_max*cube_max<NUMBER_OF_PARTICLES);
-	DIST_RET = L/(double)cube_max;
-	for ( x=0; x<cube_max ; x++){
-		for ( y = 0;  y<cube_max; y++){
-			for ( z=0; z<cube_max; z++){
-				if(i_part<NUMBER_OF_PARTICLES){
-					particleList[i_part].position[0] = DIST_RET*(x+sqrt(2)*0.5);
-					particleList[i_part].position[1] = DIST_RET*(y+sqrt(2)*0.5);
-					particleList[i_part].position[2] = DIST_RET*(z+sqrt(2)*0.5);
-					}
-				i_part++;
-			}
+}
+
+//genera un reticolo BCC
+void reticolo () { 
+	double passo = 0.0;//passo del reticolo 
+	//contatori 
+	int q=0;
+    int m=0;
+    int i,j;
+    double speed_cm[3]={0.0,0.0,0.0};
+     //Definisco il passo del reticolo cercando il minimo doppio di un cubo: m >= n.
+      //Questa procedur  	a permette di sfruttare l'intero spazio a disposizione per la creazione del reticolo.
+     for (q = 0; m < NUMBER_OF_PARTICLES; q++){
+    	m = 2*q*q*q;
+    }
+    passo = cbrt(pow(L,3)*2/(double)(m));
+	printf("passo %lf\n", passo);
+ 	//creazione reticolo
+	//printf("Primo reticolo\n");
+  	genera_sottoreticolo(0,0,0,q,0,passo);
+//	printf("Secondo reticolo\n");
+  	genera_sottoreticolo(passo/2.0,passo/2.0,passo/2.0,q,NUMBER_OF_PARTICLES/2, passo);
+	for (i =0 ; i< NUMBER_OF_PARTICLES; i++){
+		for ( j = 0; j<N;j++){	
+				speed_cm[j] += particleList[i].speed[j];
 		}
 	}
-	for ( i = 0; i< NUMBER_OF_PARTICLES; i++){
-		for ( j = 0; j<N;j++){
-			particleList[i].speed[j] = (2*(rand()/(RAND_MAX*1.0)) - 1.0 )*V_MAX;
-			speed_cm[j] += particleList[i].speed[j];
-			particleList[i].acc[j]=0;
-			}
-	}
+
 	for (i =0 ; i< NUMBER_OF_PARTICLES; i++){
 		for ( j = 0; j<N;j++){
 			particleList[i].speed[j] -= speed_cm[j]/((double) NUMBER_OF_PARTICLES);
 		}
 	}
+	print_coordinate();
+	print_speed();
+
 }
-/*Lennard-Jones 6-12 -> U* = U/epsilon */
-inline double potential ( double r ){
-	if (r<R_LIM){
-		return (( 4*(1/(pow(r,12))-1/(pow(r,6)))) - u_R_LIM - DeltaF*(r-R_LIM));
-	}
-	else{
-		return 0;
-	}
-}
-	
 /* Crea liste*/
 void create_list (){
 	int i,j;
@@ -319,10 +360,11 @@ inline double total_energy(){
 
 inline void riscala_vel_temp (){
 	int i,j;
-	double k_en = kin_en();
+	double temp = 2/3.0*kin_en();
 	for ( i = 0; i<NUMBER_OF_PARTICLES;i++){
 		for (j = 0; j<N;j++){
-			particleList[i].speed[j] *= sqrt( T_D/k_en);
+			particleList[i].speed[j] *= sqrt(T_D/temp);
+			//printf("Correction %lf\n",sqrt(T_D/temp));
 		}
 	}
 }
@@ -366,10 +408,6 @@ void create_box_file(){
 }
 
 
-
-
-
-
 inline void vmd_file_save(){
 	int i ;
 	FILE *f_vmd = fopen("data/vmd.xyz","a");
@@ -380,18 +418,15 @@ inline void vmd_file_save(){
 	fclose(f_vmd);
 }
 
-inline void energy_file_save(){
-	FILE *f_energy = fopen("data/energy_500.dat","a");
-	fprintf(f_energy,"%e\t%e\n",total_time,total_energy());
-	fclose(f_energy);
-}
 
-inline void momentum_file_save(){
-	FILE *f_mom = fopen("data/momentum.dat","a");
-	fprintf(f_mom,"%e\t%e\n",total_time,total_momentum());
-	fclose(f_mom);
+void print_vec(char * file, double * vec, int Len){
+	int i=0;
+	FILE *f=fopen(file,"w");
+	for(i=0;i<Len;i++){
+		fprintf(f,"%e\t%e\n",i*D_T,vec[i]);
+	}
+	fclose(f);
 }
-
 
 
 int main (int argc, char *argv[]){
@@ -400,72 +435,87 @@ R_LIM = 2.5*SIGMA;
 R_LIST = 2.8*SIGMA;
 DeltaF = -0.039;
 int iteration = 0 ;
-int i;
 u_R_LIM = 4*(1/(pow(R_LIM,12))-1/(pow(R_LIM,6)));
-if (argc == 2){
-	rho = atof(argv[1]);
-}
 srand(time(NULL));
 L = cbrt(NUMBER_OF_PARTICLES/rho);
 if (R_LIM > L/2){
+	printf("R_LIM > L mezzi\n");
 	exit(1);
 }
 //NUM_TEMPI_SALVATI = (ITERATION_MAX)/( (double) PERIOD_R2) +1;
 printf("L = %e\n",L);
-printf("Frazione di impacchettamento: %e\n DIST_RET = %e\n", rho,DIST_RET);
-fflush(stdout);
+printf("Frazione di impacchettamento: %e\n\n", rho);
 particleList = malloc( sizeof(particle_s)*NUMBER_OF_PARTICLES);
 neighboursList = malloc(sizeof(particle_s)*30*NUMBER_OF_PARTICLES);
 //time_list = malloc(sizeof(particle_s)*NUM_TEMPI_SALVATI*NUMBER_OF_PARTICLES);
-particle_init();
+reticolo();
 fix_boundaries(particleList);
 print_coordinate();
 create_list();
 riscala_vel_temp();
-create_box_file();
-FILE *f_energy = fopen("data/energy_500.dat","w");
-fclose(f_energy);
+//create_box_file();
+
+
+
+/**********************FILES ***************************/
+//char r2_file[64] = "";
+//snprintf(r2_file,64,"data/dr2/dr2%.3d.dat",NUMBER_OF_PARTICLES); 
+
 /*
  * FILE *f_mom = fopen("data/momentum.dat","w+");
 FILE *f_vmd=fopen("data/vmd.xyz","w+");
 fclose(f_vmd);
 fclose(f_mom);
 */
-while ( iteration < ITERATION_THERM){
-	if (iteration %500== 0){
+total_time=0;
+char  energy_therm_filename[128] = "data/energy_therm.dat";
+//FILE * f_energy_therm = fopen(energy_therm_filename,"a");
+printf("TEMP = %e \t E_TOT = %e\t P = %e\n",2/3.0*kin_en(), total_energy() ,total_momentum());
+
+double * energy_vec = malloc(sizeof(double)*ITERATION_THERM);
+for(iteration=0;iteration<ITERATION_THERM;iteration++){
+	if (iteration %2000== 0){
 		printf("Iterazione %d\n",iteration);
-		printf("E_TOT = %e\t P = %e\n", total_energy() ,total_momentum());
+		printf("TEMP = %e \t E_TOT = %e\t P = %e\n",2/3.0*kin_en(), total_energy() ,total_momentum());
 	}
 	riscala_vel_temp();
 	if ( iteration %10== 0){
 		create_list();
 	}
+	energy_vec[iteration]=total_energy()/EPS;
 	verlet(particleList);
-	energy_file_save();
 	total_time+=D_T;
-	iteration++;
 }
-
-//iteration = 0;
-//total_time=0;
-
-while ( iteration < ITERATION_MAX+ITERATION_THERM){
-	if (iteration %1000== 0){
+print_vec(energy_therm_filename,energy_vec,ITERATION_THERM);
+free(energy_vec);
+//fclose(f_energy_therm);
+iteration = 0;
+total_time=0;
+char  energy_filename[128] = "";
+snprintf(energy_filename,128,"data/energy/energy%d.dat",NUMBER_OF_PARTICLES);
+FILE * f_energy = fopen(energy_filename,"w");
+FILE *f_mom = fopen("data/momentum.dat","w");
+energy_vec = malloc(sizeof(double)*ITERATION_MAX);
+while ( iteration < ITERATION_MAX){
+	if (iteration %4000== 0){
 		printf("Iterazione %d\n",iteration);
-		printf("E_TOT = %e\t P = %e\n", total_energy());//		boltzmann_file_save();
+		printf("TEMP = %e \t E_TOT = %e\t P = %e\n",2/3.0*kin_en(), total_energy() ,total_momentum());
+		boltzmann_file_save();
 	}
 
 	if ( iteration %10== 0){
 		create_list();
 	}
-//	riscala_vel_temp();
 	verlet(particleList);
 	total_time+=D_T;
 //	vmd_file_save();
-//	momentum_file_save();
-	energy_file_save();
+	energy_vec[iteration] = total_energy()/EPS;
+//	fprintf(f_energy,"%e\t%e\n",total_time,tmp);
 	iteration++;
 }
+print_vec(energy_filename,energy_vec,ITERATION_MAX);
+fclose(f_mom);
+fclose(f_energy);
 printf("Calcolo r2\n");
 //r_squared_save("data/r2.dat");
 

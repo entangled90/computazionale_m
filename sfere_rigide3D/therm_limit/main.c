@@ -12,8 +12,8 @@ altrimenti eta viene impostato di default a eta = 0.1 (fraz_imp)
 //#include "raccolta_dati.h"
 /*Numero di dimensioni */
 #define N 3
-#define THERM_TIME 20000
-#define MAX_COLLISION 2e5
+#define THERM_TIME 10000
+#define MAX_COLLISION 5e5
 #define TIME_MAX 10
 /*Numero particelle */
 int NUMBER_OF_PARTICLES = 128;
@@ -95,66 +95,8 @@ inline void boltzmann_file_save ( void ){
 }
 /*******************************************************************************************/
 
-/*
 
-void particle_init ( particle_s *particleList ){
-	int i_part= 0;
-	int i,j;
-	double r_0[N];
-	double speed_cm[3];
-	int z_row = 0;
-	double offsetX=0;
-	double offsetY=0;
-	
-	for ( i = 0; i<N;i++) {
-		r_0[i]=0;
-		speed_cm[i]=0.0;
-	}
-	
-	while (i_part <NUMBER_OF_PARTICLES){
-		for ( i=0; i<N;i++){
-		particleList[i_part].position[i] = r_0[i];
-		}
-		//particleList[i_part].dist = 0;
-		//particleList[i_part].num_collision=0;
-	//printf("%d Printed: (%e,%e,%e)\n", i_part,r_0[0],r_0[1],r_0[2]);
-	r_0[0] += DIST_RET;
-	if ( r_0[0] > 1.0 - SIGMA + offsetX){
-		r_0[0] = offsetX;
-		r_0[1] += DIST_RET;
-		if ( r_0[1] > 1.0 - SIGMA + offsetY){
-			z_row++;
-			offsetX= (z_row%2)*DIST_RET/2.0 ;
-			r_0[0] = offsetX;
-			offsetY= (z_row%2)*DIST_RET/2.0;
-			r_0[1] = offsetY;
-			r_0[2] += DIST_RET/sqrt(2.0);
-		}
-	}
-	if (r_0[2]> 1 - SIGMA){
-		printf("%e\n",r_0[2]);
-		print_coordinate(particleList);
-		printf("Impacchettamento non completato\n");
-		exit(1);
-	}
-	i_part++;
-	}
-	for ( i = 0; i< NUMBER_OF_PARTICLES; i++){
-		for ( j = 0; j<N;j++){
-			particleList[i].speed[j] = 2*(rand()/(RAND_MAX*1.0)) - 1.0 ;
-			speed_cm[j] += particleList[i].speed[j];
-			}
-	}
-	for (i =0 ; i< NUMBER_OF_PARTICLES; i++){
-		for ( j = 0; j<N;j++){
-			particleList[i].speed[j] -= (speed_cm[j]/((double) NUMBER_OF_PARTICLES));
-		}
-	}
-}
-*/
-
-
-void genera_sottoreticolo(double rx_in, double ry_in,double rz_in,int q,int start, double passo, double * speed_cm){
+void genera_sottoreticolo(double rx_in, double ry_in,double rz_in,int q,int start, double passo){
 	int p = start; 
 	int c=0;
 	int d=0;
@@ -173,12 +115,14 @@ void genera_sottoreticolo(double rx_in, double ry_in,double rz_in,int q,int star
 				particleList[p].last_time_collision=0;
 				particleList[p].speed[0] =2*(rand()/(RAND_MAX*1.0)) -1.0 ;
 				particleList[p].speed[1] = 2*(rand()/(RAND_MAX*1.0)) -1.0 ;
+				particleList[p].speed[2] = 2*(rand()/(RAND_MAX*1.0)) -1.0 ;
 				particleList[p].position[0]=rx;
 				particleList[p].position[1]=ry;		
 				particleList[p].position[2]=rz;
 	//			printf("P %d %lf \t %lf\n", p,particleList[p].position[0],particleList[p].position[1]);
 				speed_cm[0] += particleList[p].speed[0];
 				speed_cm[1] += particleList[p].speed[1];
+				speed_cm[2] += particleList[p].speed[2];
 				rx = rx + passo;
 				p++;
 				c++; 
@@ -215,15 +159,22 @@ void reticolo () {
       	  //creazione reticolo
 
 	printf("Primo reticolo\n");
-  	genera_sottoreticolo(0,0,0,q,0,passo,speed_cm);
+  	genera_sottoreticolo(0,0,0,q,0,passo);
 
 	printf("Secondo reticolo\n");
-  	genera_sottoreticolo(passo/2.0,passo/2.0,passo/2.0,q,NUMBER_OF_PARTICLES/2, passo,speed_cm);
-	for ( i= 0; i<NUMBER_OF_PARTICLES;i++){
-		for(j=0;j<N;j++){
+  	genera_sottoreticolo(passo/2.0,passo/2.0,passo/2.0,q,NUMBER_OF_PARTICLES/2, passo);
+	for (i =0 ; i< NUMBER_OF_PARTICLES; i++){
+		for ( j = 0; j<N;j++){	
+				speed_cm[j] += particleList[i].speed[j];
+		}
+	}
+
+	for (i =0 ; i< NUMBER_OF_PARTICLES; i++){
+		for ( j = 0; j<N;j++){
 			particleList[i].speed[j] -= speed_cm[j]/((double) NUMBER_OF_PARTICLES);
 		}
 	}
+
 	print_coordinate();
 	print_speed();
 
@@ -631,10 +582,10 @@ NUM_TEMPI_SALVATI = (int) (floor( (double) TIME_MAX / DeltaT)+1);
 //unsigned int i ;
 srand(time(NULL));
 //double dist_tot=0;
-double fraz_imp=0.1;
+double fraz_imp=0.3;
 
 if (argc > 1){
-	fraz_imp = atof(argv[1]);
+	NUMBER_OF_PARTICLES = atoi(argv[1]);
 }
 SIGMA = cbrt(6*fraz_imp/ NUMBER_OF_PARTICLES / M_PI);
 //DIST_RET = sqrt(4*0.76/ NUMBER_OF_PARTICLES / M_PI);
@@ -660,7 +611,7 @@ riscala_vel_temp();
 /****** GESTIONE FILE  ******/
 //char * press_file = "data/press.dat";
 char  pression_filename[128] = "";
-snprintf(pression_filename,128,"data/pression/pression%.6lf.dat",fraz_imp);
+snprintf(pression_filename,128,"data/pression/pression%.3d.dat",NUMBER_OF_PARTICLES);
 
 
 print_coordinate();
