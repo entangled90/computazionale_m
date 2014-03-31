@@ -4,7 +4,7 @@
 #include <time.h>
 #include <float.h>
 
-#define NUMBER_OF_PARTICLES 508
+#define NUMBER_OF_PARTICLES 108
 #define N 3
 #define ITERATION_MAX 2e4
 #define ITERATION_THERM 10000
@@ -492,9 +492,9 @@ free(energy_vec);
 iteration = 0;
 total_time=0;
 char  energy_filename[128] = "";
-snprintf(energy_filename,128,"data/energy/energy%d.dat",NUMBER_OF_PARTICLES);
-FILE * f_energy = fopen(energy_filename,"w");
-FILE *f_mom = fopen("data/momentum.dat","w");
+snprintf(energy_filename,128,"data/energy/intenergy%d.dat",NUMBER_OF_PARTICLES);
+//FILE * f_energy = fopen(energy_filename,"w");
+//FILE *f_mom = fopen("data/momentum.dat","w");
 energy_vec = malloc(sizeof(double)*ITERATION_MAX);
 while ( iteration < ITERATION_MAX){
 	if (iteration %4000== 0){
@@ -509,7 +509,7 @@ while ( iteration < ITERATION_MAX){
 	verlet(particleList);
 	total_time+=D_T;
 //	vmd_file_save();
-	energy_vec[iteration] = total_energy()/EPS;
+	energy_vec[iteration] = potential_energy()/EPS;
 //	fprintf(f_energy,"%e\t%e\n",total_time,tmp);
 	iteration++;
 }

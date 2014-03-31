@@ -19,7 +19,7 @@ all: rmxeq mkdep mkxeq rmpmk
 
 # main programs and required modules 
 
-MAIN =  mainlist08 mainlist1087
+MAIN =  main
 #main mainvv 
 #RANDOM =ranlxs ranlxd
 #gauss pdf
@@ -53,7 +53,7 @@ LIBPATH =
 
 # scheduling and optimization options (such as -DSSE -DSSE2 -DP4)
  
-CFLAGS = -Wall -O3  -DSSE2 -march=native
+CFLAGS = -Wall -O3 -g3 -DSSE2 -march=native
  
 
 ############################## do not change ###################################
