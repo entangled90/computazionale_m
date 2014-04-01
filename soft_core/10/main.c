@@ -6,7 +6,7 @@
 
 #define NUMBER_OF_PARTICLES 108
 #define N 3
-#define ITERATION_MAX 2e4
+#define ITERATION_MAX 1e4
 #define ITERATION_THERM 5e3
 #define COUNT 1000
 
@@ -22,7 +22,7 @@ double DeltaF;
 double u_R_LIM;
 double L;
 double V_MAX = 1;
-double T_D = 1.6;
+double T_D = 1.22;
 double R_LIST;
 int last_index;
 double pression=0;
@@ -266,12 +266,12 @@ inline void calc_acc (){
 	int x,y,z;
 	int found;
 	particle_s temp_part;
+	pression=0;
 	for (i=0;i<NUMBER_OF_PARTICLES;i++){
 		for ( l=0;l<N;l++){
 			particleList[i].acc[l] = 0;
 		}
 	}
-	//FILE * f = fopen("data/r.dat","a");
 	for (i=0;i<NUMBER_OF_PARTICLES-1;i++){
 		for ( j = particleList[i].list_start; ((j < particleList[i+1].list_start) && ( j<last_index)) ;j++){
 			found =0;
@@ -289,16 +289,12 @@ inline void calc_acc (){
 								r = sqrt(r);
 								found++;
 								F= force(r);
+								pression+=F*r;
 								scalar_mult(1/r,r_versore);
 								for ( l=0;l<N;l++){
 									particleList[i].acc[l] += F*r_versore[l];
 									neighboursList[j]->acc[l] -= F*r_versore[l];
 								}
-								if (isProduction==1 ){
-	//								fprintf(f,"%e\n",r);
-									pression+=F*r;
-								}
-						//		printf("F=%lf\n",F);						
 							}
 						}
 					}
@@ -306,8 +302,6 @@ inline void calc_acc (){
 			}
 		}
 	}
-//	pression /= 3.0*NUMBER_OF_PARTICLES*temperature;
-	//fclose(f);
 }
 
 inline void verlet( particle_s * partList){
@@ -341,7 +335,7 @@ inline double potential_energy(){
 			for ( x= -1; x < 2 ; x++){
 				for ( y = -1; y<2 ; y++){
 					for( z=-1 ; z<2 ; z++){
-						if (found ==0){
+			//			if (found ==0){
 							temp_part = *(neighboursList[j]) ;
 							temp_part.position[0] += x*L;
 							temp_part.position[1] += y*L;
@@ -354,7 +348,7 @@ inline double potential_energy(){
 								found++;
 							}
 						}
-					}
+			//		}
 				}
 			}
 		}
@@ -362,6 +356,7 @@ inline double potential_energy(){
 	u /= (double) NUMBER_OF_PARTICLES;
 	return u;
 }
+
 
 
 inline double total_energy(){
@@ -459,7 +454,7 @@ int main (int argc, char *argv[]){
 double rho=0.6;
 R_LIM = 2.5*SIGMA;
 R_LIST = 2.8*SIGMA;
-DeltaF = -0.039;
+DeltaF = 0.0389994774528;
 u_R_LIM = 4*(1/(pow(R_LIM,12))-1/(pow(R_LIM,6)));
 srand(time(NULL));
 L = cbrt(NUMBER_OF_PARTICLES/rho);
@@ -538,6 +533,9 @@ if (f_press==NULL){
 	printf("errore apertura file\n");
 }
 */
+FILE *f_vmd = fopen("data/vmd.xyz","w");
+fclose(f_vmd);
+
 while ( iteration < ITERATION_MAX){
 	if (iteration %4000== 0){
 		printf("Iterazione %d\n",iteration);
@@ -554,14 +552,9 @@ while ( iteration < ITERATION_MAX){
 	vmd_file_save();
 	energy_vec[iteration] = potential_energy()/EPS;
 	temp_vec[iteration] = temperature;
-	if (iteration%COUNT==COUNT-1)
-	{
-		printf("Iteration:%d\n",iteration);
-		tmp=pression/(3.0*temperature*((double)(NUMBER_OF_PARTICLES*COUNT)));
+	tmp=pression/(3.0*temperature*((double)(NUMBER_OF_PARTICLES)));
 //		fprintf(f_press ,"%e\t%e\n",iteration*COUNT*D_T,tmp);
-		pres_vec[iteration/(COUNT-1)] = tmp;
-		pression=0;
-	}
+	pres_vec[iteration] = tmp;
 //	printf("temp: %lf\t press: %lf\n",temperature,pression);
 //	fprintf(f_energy,"%e\t%e\n",total_time,tmp);
 	iteration++;
@@ -569,7 +562,7 @@ while ( iteration < ITERATION_MAX){
 //fclose(f_press);
 print_vec(energy_filename,energy_vec,ITERATION_MAX);
 print_vec(temp_filename,temp_vec,ITERATION_MAX);
-print_vec(press_filename,pres_vec,ITERATION_MAX/COUNT);
+print_vec(press_filename,pres_vec,ITERATION_MAX);
 //fclose(f_mom);
 //fclose(f_energy);
 //printf("Calcolo r2\n");

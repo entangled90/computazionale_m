@@ -7,7 +7,7 @@ import glob
 
 
 
-L_bin = 1
+L_bin = 1000
 f = sys.argv[1]	
 t,dati = np.loadtxt(f,unpack=True)
 N_bin = int(len(dati)/L_bin)

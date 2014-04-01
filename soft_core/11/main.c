@@ -509,7 +509,7 @@ double rho=0.9;
 DeltaT=skip_times*D_T;
 R_LIM = 2.5*SIGMA;
 R_LIST = 2.8*SIGMA;
-DeltaF = -0.039;
+DeltaF = 0.0389994774528;
 int iteration = 0 ;
 u_R_LIM = 4*(1/(pow(R_LIM,12))-1/(pow(R_LIM,6)));
 srand(time(NULL));

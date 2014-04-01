@@ -179,15 +179,15 @@ void reticolo () {
      //Definisco il passo del reticolo cercando il minimo doppio di un cubo: m >= n.
       //Questa procedur  	a permette di sfruttare l'intero spazio a disposizione per la creazione del reticolo.
      for (q = 0; m < NUMBER_OF_PARTICLES; q++){
-    	m = 2*q*q*q;
+    	m = q*q*q;
     }
-    passo = cbrt(pow(L,3)*2/(double)(m));
+    passo = cbrt(pow(L,3)/(double)(m));
 	printf("passo %lf\n", passo);
  	//creazione reticolo
 	//printf("Primo reticolo\n");
   	genera_sottoreticolo(0,0,0,q,0,passo);
 //	printf("Secondo reticolo\n");
-  	genera_sottoreticolo(passo/2.0,passo/2.0,passo/2.0,q,NUMBER_OF_PARTICLES/2, passo);
+//  	genera_sottoreticolo(passo/2.0,passo/2.0,passo/2.0,q,NUMBER_OF_PARTICLES/2, passo);
 	for (i =0 ; i< NUMBER_OF_PARTICLES; i++){
 		for ( j = 0; j<N;j++){	
 				speed_cm[j] += particleList[i].speed[j];
@@ -296,6 +296,7 @@ inline void calc_acc (){
 	}
 }
 
+
 inline void verlet( particle_s * partList){
 	int i,j;
 	for ( i = 0 ; i < NUMBER_OF_PARTICLES ; i++){
@@ -348,8 +349,6 @@ inline double potential_energy(){
 	u /= (double) NUMBER_OF_PARTICLES;
 	return u;
 }
-
-
 inline double total_energy(){
 	double k_en,u;
 	k_en = kin_en();
@@ -433,7 +432,7 @@ int main (int argc, char *argv[]){
 double rho=0.7;
 R_LIM = 2.5*SIGMA;
 R_LIST = 2.8*SIGMA;
-DeltaF = -0.039;
+DeltaF = +0.0389994774528;
 int iteration = 0 ;
 u_R_LIM = 4*(1/(pow(R_LIM,12))-1/(pow(R_LIM,6)));
 srand(time(NULL));
@@ -514,8 +513,6 @@ while ( iteration < ITERATION_MAX){
 	iteration++;
 }
 print_vec(energy_filename,energy_vec,ITERATION_MAX);
-fclose(f_mom);
-fclose(f_energy);
 printf("Calcolo r2\n");
 //r_squared_save("data/r2.dat");
 
