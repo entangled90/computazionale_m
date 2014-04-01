@@ -3,11 +3,12 @@
 #include <stdlib.h>
 #include <time.h>
 #include <float.h>
-c
+
 #define NUMBER_OF_PARTICLES 108
 #define N 3
 #define ITERATION_MAX 2e4
-#define ITERATION_THERM 10000
+#define ITERATION_THERM 5e3
+#define COUNT 1000
 
 double SIGMA=1;
 double DIST_RET = 1;
@@ -21,11 +22,12 @@ double DeltaF;
 double u_R_LIM;
 double L;
 double V_MAX = 1;
-double T_D = 1.22;
+double T_D = 1.6;
 double R_LIST;
 int last_index;
 double pression=0;
 double temperature;
+int isProduction=0;
 //unsigned int NUM_TEMPI_SALVATI ;
 //unsigned int PERIOD_R2 = 100;
 //unsigned int time_counted;
@@ -35,6 +37,7 @@ typedef struct particle_s {
 	double acc[N];
 	int list_start;
 	} particle_s ;
+int iteration = 0 ;
 
 particle_s * particleList;
 particle_s * * neighboursList;
@@ -181,15 +184,15 @@ void reticolo () {
      //Definisco il passo del reticolo cercando il minimo doppio di un cubo: m >= n.
       //Questa procedur  	a permette di sfruttare l'intero spazio a disposizione per la creazione del reticolo.
      for (q = 0; m < NUMBER_OF_PARTICLES; q++){
-    	m = 2*q*q*q;
+    	m = q*q*q;
     }
-    passo = cbrt(pow(L,3)*2/(double)(m));
+    passo = cbrt(pow(L,3)/(double)(m));
 	printf("passo %lf\n", passo);
  	//creazione reticolo
 	//printf("Primo reticolo\n");
   	genera_sottoreticolo(0,0,0,q,0,passo);
 //	printf("Secondo reticolo\n");
-  	genera_sottoreticolo(passo/2.0,passo/2.0,passo/2.0,q,NUMBER_OF_PARTICLES/2, passo);
+//  	genera_sottoreticolo(passo/2.0,passo/2.0,passo/2.0,q,NUMBER_OF_PARTICLES/2, passo);
 	for (i =0 ; i< NUMBER_OF_PARTICLES; i++){
 		for ( j = 0; j<N;j++){	
 				speed_cm[j] += particleList[i].speed[j];
@@ -251,8 +254,9 @@ void create_list (){
 }
 /*Si intende forza* (adimensionata)*/
 inline double force (double r){
-		return (24*(2*pow(1/r,13) - pow(1/r,7))+ DeltaF);
+		return (24*(2*pow(1/r,13.0) - pow(1/r,7.0))+ DeltaF);
 }
+
 
 inline void calc_acc (){
 	double r;
@@ -267,7 +271,7 @@ inline void calc_acc (){
 			particleList[i].acc[l] = 0;
 		}
 	}
-	pression=0;
+	//FILE * f = fopen("data/r.dat","a");
 	for (i=0;i<NUMBER_OF_PARTICLES-1;i++){
 		for ( j = particleList[i].list_start; ((j < particleList[i+1].list_start) && ( j<last_index)) ;j++){
 			found =0;
@@ -290,7 +294,11 @@ inline void calc_acc (){
 									particleList[i].acc[l] += F*r_versore[l];
 									neighboursList[j]->acc[l] -= F*r_versore[l];
 								}
-								pression+=F*r;							
+								if (isProduction==1 ){
+	//								fprintf(f,"%e\n",r);
+									pression+=F*r;
+								}
+						//		printf("F=%lf\n",F);						
 							}
 						}
 					}
@@ -298,8 +306,8 @@ inline void calc_acc (){
 			}
 		}
 	}
-	pression /= 3.0*NUMBER_OF_PARTICLES*temperature;
-
+//	pression /= 3.0*NUMBER_OF_PARTICLES*temperature;
+	//fclose(f);
 }
 
 inline void verlet( particle_s * partList){
@@ -366,7 +374,7 @@ inline double total_energy(){
 
 inline void riscala_vel_temp (){
 	int i,j;
-	double temp = 2/3.0*kin_en();
+	double temp= 2/3.0*kin_en();
 	for ( i = 0; i<NUMBER_OF_PARTICLES;i++){
 		for (j = 0; j<N;j++){
 			particleList[i].speed[j] *= sqrt(T_D/temp);
@@ -389,7 +397,7 @@ inline void boltzmann_file_save ( void ){
 
 void print_vec(char * file, double * vec, int Len){
 	int i=0;
-	FILE *f=fopen(file,"w");
+	FILE *f=fopen(file,"w+");
 	for(i=0;i<Len;i++){
 		fprintf(f,"%e\t%e\n",i*D_T,vec[i]);
 	}
@@ -397,15 +405,67 @@ void print_vec(char * file, double * vec, int Len){
 }
 
 
+
+void create_box_file(){
+	FILE *f = fopen("data/box.tcl","w");
+	fprintf(f,"set minx 0\n");
+	fprintf(f,"set miny 0\n");
+	fprintf(f,"set minz 0\n");
+	fprintf(f,"set maxx %e\n",L);
+	fprintf(f,"set maxy %e\n",L);
+	fprintf(f,"set maxz %e\n",L);
+	fprintf(f,"draw materials off \n draw color yellow \n ");
+	fprintf(f,"draw line \" $minx $miny $minz \" \" $maxx $miny $minz\"\n ");
+	fprintf(f,"draw line \"$minx $miny $minz\" \"$minx $maxy $minz\"\n ");
+	fprintf(f,"draw line \"$minx $miny $minz\" \"$minx $miny $maxz\"\n ");
+	fprintf(f,"draw line \"$maxx $miny $minz\" \"$maxx $maxy $minz\"\n ");
+	fprintf(f,"draw line \"$maxx $miny $minz\" \"$maxx $miny $maxz\"\n ");
+	fprintf(f,"draw line \"$minx $maxy $minz\" \"$maxx $maxy $minz\"\n" );
+	fprintf(f,"draw line \"$minx $maxy $minz\" \"$minx $maxy $maxz\"\n ");
+	fprintf(f,"draw line \"$minx $miny $maxz\" \"$maxx $miny $maxz\"\n ");
+	fprintf(f,"draw line \"$minx $miny $maxz\" \"$minx $maxy $maxz\"\n ");
+	fprintf(f,"draw line \"$maxx $maxy $maxz\" \"$maxx $maxy $minz\"\n ");
+	fprintf(f,"draw line \"$maxx $maxy $maxz\" \"$minx $maxy $maxz\"\n ");
+	fprintf(f,"draw line \"$maxx $maxy $maxz\" \"$maxx $miny $maxz\" \n ");
+	fprintf(f,"mol default style VDW\n");
+	fprintf(f,"mol addfile vmd.xyz\n");
+	fprintf(f,"set sel [atomselect top all]\n$sel set radius 0.1\n");
+	fclose(f);
+}
+
+
+inline void vmd_file_save(){
+	int i ;
+	FILE *f_vmd = fopen("data/vmd.xyz","a");
+	fprintf(f_vmd,"%d\n\n",NUMBER_OF_PARTICLES);
+	for( i = 0; i<NUMBER_OF_PARTICLES;i++){
+			fprintf(f_vmd,"He\t%14.10e\t%14.10e\t%14.10e\n",particleList[i].position[0],particleList[i].position[1],particleList[i].position[2]);
+	}
+	fclose(f_vmd);
+}
+
+void print_force(){
+	int i;
+	FILE * f = fopen("data/forza.dat","w");
+	for (i = 0; i<1000;i++){
+		fprintf(f, "%e\t%e\n",R_LIM/1000*(i+100),force(R_LIM/1000*(i+100)) );
+	}
+	fclose(f);
+}
+
+
+
 int main (int argc, char *argv[]){
 double rho=0.6;
 R_LIM = 2.5*SIGMA;
 R_LIST = 2.8*SIGMA;
 DeltaF = -0.039;
-int iteration = 0 ;
 u_R_LIM = 4*(1/(pow(R_LIM,12))-1/(pow(R_LIM,6)));
 srand(time(NULL));
 L = cbrt(NUMBER_OF_PARTICLES/rho);
+if (argc ==2){
+	rho = atof(argv[1]);
+}
 if (R_LIM > L/2.0){
 	printf("R_LIM > L mezzi\n");
 	exit(1);
@@ -421,7 +481,7 @@ fix_boundaries(particleList);
 print_coordinate();
 create_list();
 riscala_vel_temp();
-//create_box_file();
+create_box_file();
 
 
 
@@ -439,7 +499,7 @@ total_time=0;
 char  energy_therm_filename[128] = "data/energy_therm.dat";
 //FILE * f_energy_therm = fopen(energy_therm_filename,"a");
 printf("TEMP = %e \t E_TOT = %e\t P = %e\n",2/3.0*kin_en(), total_energy() ,total_momentum());
-
+//print_force();
 double * energy_vec = malloc(sizeof(double)*ITERATION_THERM);
 for(iteration=0;iteration<ITERATION_THERM;iteration++){
 	if (iteration %2000== 0){
@@ -456,48 +516,67 @@ for(iteration=0;iteration<ITERATION_THERM;iteration++){
 }
 print_vec(energy_therm_filename,energy_vec,ITERATION_THERM);
 free(energy_vec);
-//fclose(f_energy_therm);
 iteration = 0;
 total_time=0;
 printf("**************************************\n");
 char  energy_filename[128] = "";
 snprintf(energy_filename,128,"data/energy/energy%d.dat",NUMBER_OF_PARTICLES);
-char  press_filename[128] = "data/pressione.dat";
+char  press_filename[128] = "";
+snprintf(press_filename,128,"data/pression/pression%.6lf.dat",rho);
 char  temp_filename[128] = "data/temperature.dat";
-
 //FILE * f_energy = fopen(energy_filename,"w");
 //FILE *f_mom = fopen("data/momentum.dat","w");
 energy_vec = malloc(sizeof(double)*ITERATION_MAX);
 double * temp_vec = malloc(sizeof(double)*ITERATION_MAX);
 double * pres_vec = malloc(sizeof(double)*ITERATION_MAX);
+isProduction=1; 
+double tmp;
+double temperature_pretherm=kin_en()*2/3.0;
+/*
+FILE * f_press=fopen(press_filename,"w");
+if (f_press==NULL){
+	printf("errore apertura file\n");
+}
+*/
 while ( iteration < ITERATION_MAX){
 	if (iteration %4000== 0){
 		printf("Iterazione %d\n",iteration);
 		printf("TEMP = %e \t E_TOT = %e\t P = %e\n",2/3.0*kin_en(), total_energy() ,total_momentum());
 		boltzmann_file_save();
 	}
+	//riscala_vel_temp();
 	if ( iteration %10== 0){
 		create_list();
 	}
 	temperature=kin_en()*2/3.0;
 	verlet(particleList);
 	total_time+=D_T;
-//	vmd_file_save();
+	vmd_file_save();
 	energy_vec[iteration] = potential_energy()/EPS;
 	temp_vec[iteration] = temperature;
-	pres_vec[iteration] = pression;
+	if (iteration%COUNT==COUNT-1)
+	{
+		printf("Iteration:%d\n",iteration);
+		tmp=pression/(3.0*temperature*((double)(NUMBER_OF_PARTICLES*COUNT)));
+//		fprintf(f_press ,"%e\t%e\n",iteration*COUNT*D_T,tmp);
+		pres_vec[iteration/(COUNT-1)] = tmp;
+		pression=0;
+	}
 //	printf("temp: %lf\t press: %lf\n",temperature,pression);
 //	fprintf(f_energy,"%e\t%e\n",total_time,tmp);
 	iteration++;
 }
+//fclose(f_press);
 print_vec(energy_filename,energy_vec,ITERATION_MAX);
 print_vec(temp_filename,temp_vec,ITERATION_MAX);
-print_vec(press_filename,pres_vec,ITERATION_MAX);
+print_vec(press_filename,pres_vec,ITERATION_MAX/COUNT);
 //fclose(f_mom);
 //fclose(f_energy);
-printf("Calcolo r2\n");
+//printf("Calcolo r2\n");
 //r_squared_save("data/r2.dat");
-
+free(energy_vec);
+free(temp_vec);
+free(pres_vec);
 free(neighboursList);
 free(particleList);
 

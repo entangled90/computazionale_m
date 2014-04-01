@@ -6,7 +6,7 @@
 
 #define NUMBER_OF_PARTICLES 256
 #define N 3
-#define ITERATION_MAX 1e4
+#define ITERATION_MAX 2e4
 #define ITERATION_THERM 10000
 #define skip_times 10
 double SIGMA=1;
@@ -595,7 +595,7 @@ while ( iteration < ITERATION_MAX){
 print_vec(energy_filename,energy_vec,ITERATION_MAX);
 printf("Calcolo r2\n");
 r_squared_save(r2_filename);
-
+free(energy_vec);
 free(neighboursList);
 free(particleList);
 

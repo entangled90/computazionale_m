@@ -1,9 +1,9 @@
 set minx 0
 set miny 0
 set minz 0
-set maxx 5.363421e+00
-set maxy 5.363421e+00
-set maxz 5.363421e+00
+set maxx 5.646216e+00
+set maxy 5.646216e+00
+set maxz 5.646216e+00
 draw materials off 
  draw color yellow 
  draw line " $minx $miny $minz " " $maxx $miny $minz"

@@ -519,6 +519,7 @@ fclose(f_energy);
 printf("Calcolo r2\n");
 //r_squared_save("data/r2.dat");
 
+free(energy_vec);
 free(neighboursList);
 free(particleList);
 
