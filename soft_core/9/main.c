@@ -4,7 +4,7 @@
 #include <time.h>
 #include <float.h>
 
-#define NUMBER_OF_PARTICLES 108
+#define NUMBER_OF_PARTICLES 500
 #define N 3
 #define ITERATION_MAX 2e4
 #define ITERATION_THERM 10000
@@ -472,6 +472,7 @@ char  energy_therm_filename[128] = "data/energy_therm.dat";
 printf("TEMP = %e \t E_TOT = %e\t P = %e\n",2/3.0*kin_en(), total_energy() ,total_momentum());
 
 double * energy_vec = malloc(sizeof(double)*ITERATION_THERM);
+double * temp_therm = malloc(sizeof(double)*ITERATION_THERM);
 for(iteration=0;iteration<ITERATION_THERM;iteration++){
 	if (iteration %2000== 0){
 		printf("Iterazione %d\n",iteration);
@@ -483,10 +484,13 @@ for(iteration=0;iteration<ITERATION_THERM;iteration++){
 	}
 	energy_vec[iteration]=total_energy()/EPS;
 	verlet(particleList);
+	temp_therm[iteration] = 2/3.0*kin_en();
 	total_time+=D_T;
 }
 print_vec(energy_therm_filename,energy_vec,ITERATION_THERM);
+print_vec("data/temp_therm.dat",temp_therm,ITERATION_THERM);
 free(energy_vec);
+free(temp_therm);
 //fclose(f_energy_therm);
 iteration = 0;
 total_time=0;

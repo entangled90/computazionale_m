@@ -408,8 +408,124 @@ L'algoritmo implementato utilizza le liste dei vicini come indicato sulle note c
 Per l'evoluzione del sistema è stato utilizzato l'algoritmo \emph{velocity verlet} con uno step temporale pari $\delta t = 0.001$ e si è potuto vedere che grandezza come l'energia totale e il momento vengono conservate (nel senso che dopo circa 10000 step evolutivi la loro variazione è di circa $10^{-6} - 10^{-7}$ come si vedrà dai grafici).
 
 \subsection{Termalizzazione}
+Per stimare il tempo necessario di termalizzazione si è valutato l'andamento dell'energia e della temperatura. Durante questo periodo di termalizzazione si è fissato il valore della temperatura alla temperatura desiderata.
+
+\begin{myfig}[h]
+	\subfigure[$N=108$ particelle]{
+		\includegraphics[scale=0.4]{soft_core/temp_therm.png}
+	}
+	\subfigure[$N=500$ particelle]{
+		\includegraphics[scale=0.4]{soft_core/temp_therm500.png}
+	}
+	\caption{Temperatura in funzione del tempo in fase di termalizzazione per diverso numero di particelle}
+\end{myfig}
+
+\begin{myfig}[h]
+	\subfigure[$N=108$ particelle]{
+		\includegraphics[scale=0.4]{soft_core/en_therm.png}
+	}
+	\subfigure[$N=500$ particelle]{
+		\includegraphics[scale=0.4]{soft_core/en_therm500.png}
+	}
+	\caption{Energia in funzione del tempo in fase di termalizzazione per diverso numero di particelle}
+\end{myfig}
+Come si può vedere dai grafici, il sistema non impiega molto a termalizzare, già dopo 2 unità di tempo si può dire che il sistema ha ormai termalizzato.
+Nelle simulazioni si è deciso di utilizzare un tempo di termalizzazione pari a 5 o 10 ossia 5000 o 10000 step di evoluzione.\\
+Si può vedere dai grafici, inoltre come le fluttuazioni di entrambe le osservabili diminuiscano all'aumentare del numero di particelle.
+Dopo aver fatto termalizzare il sistema il valore di temperatura o energia totale è stato lasciato libero nella simulazione senza più esser fissato al valore voluto ad ogni step.\\
+
+\section{Produzione e analisi dati}
+La raccolta e l'analisi dei dati viene divisa nelle 4 richieste delle note
+\subsection{Primo caso}
+In questa prima raccolta dati prevede le seguenti condizioni iniziali:
+$$
+	\rho = 0.7 \qquad <T>=1.19 \qquad N=108,500
+$$
+Si veda ora il confronto fra l'energia interna del sistema fra $N=108$ e $N=500$ particelle con queste condizioni iniziali.
+Il numero di step in cui sono stati raccolti dati è stato 20000.
+\begin{myfig}[h]
+	\subfigure[$N=108$ particelle]{
+		\includegraphics[scale=0.35]{soft_core/9_int108.png}
+	}
+	\subfigure[$N=500$ particelle]{
+		\includegraphics[scale=0.35]{soft_core/9_int500.png}
+	}
+	\caption{Andamento dell'energia interna per particella con diverso numero di particelle}
+\end{myfig}
+
+\begin{myfig}[h]
+	\includegraphics[scale=0.5]{soft_core/9cfr.png}
+	\caption{Confronto tra $N=108$ e $N=500$}
+\end{myfig}
+
+\begin{align}
+N=108 \qquad <\frac{U}{N \epsilon}> &= -3.520 \pm 0.004 \\
+N=500 \qquad <\frac{U}{N \epsilon}> &= -3.503 \pm 0.001 \\
+\end{align}
+Come si può vedere dalla sovrapposizione dei due grafici, aumentando il numero di particelle le fluttuazioni sull'energia interna diminuiscono e quindi anche l'errore associato.
+L'errore è stato calcolato attraverso il \emph{binning} con intervalli contenenti 2000 dati.
+%%%%%%%%%%%%%%CONTROLLA
+
+\subsection{Secondo caso}
+Il sistema viene ora inizializzato con questi parametri:
+$$
+	\rho = 0.6 \qquad <T> = 1.22 \qquad N=108
+$$
+Il sistema è stato fatto evolvere per 40000 step temporali.\\
+\subsubsection{Temperatura}
+La prima quantità analizzata è l'andamento della temperatura nel tempo. Per la stima dell'errore si è usata la tecnica del \emph{binning} con intervalli contenenti 2500 dati.\\
+Il valore ottenuto è il seguente:
+$$
+		<\frac{k_b T}{\epsilon}> = 1.175 \pm 0.002
+$$
+
+\begin{myfig}[h]
+\includegraphics[scale=0.55]{soft_core/10_temp.png}
+\caption{Andamento della temperatura}
+\end{myfig}
+Il valore medio della temperatura è diverso dal valore a cui si è inizializzato il sistema. Ciò è dovuto al fatto che questo sistema è isolato e quindi si conserva l'energia totale e non l'energia cinetica (che è proporzionale alla temperatura).
+Come si è visto dal grafico della sezione precedente infatti, nemmeno l'energia interna è una costante del moto, quindi non può esserlo nemmeno la temperatura.\\
+
+\subsubsection{Pressione}
+Un'altra quantità misurata riguarda la pressione o meglio la correzione alla pressione del gas ideale dovuta al fatto che le particelle interagiscono fra loro.
+Come per la temperatura, è stato usato il \emph{binning} con intervallo di 2500 dati ciascuno.\\
+Il risultato è il seguente:
+$$
+	\frac{P}{\rho k_b T} - 1 = 0.119 \pm 0.009
+$$ 
+
+\begin{myfig}
+\includegraphics[scale=0.55]{soft_core/10_pres.png}
+\caption{Andamento di $\frac{P}{\rho k_b T} - 1$}
+\end{myfig}
+
+\subsubsection{Energia interna}
+L'ultima osservabile considerata è l'andamento dell'energia interna, gli errori sono stati calcolati come nei casi precedenti
+
+\begin{myfig}
+\includegraphics[scale=0.55]{soft_core/10_U.png}
+\caption{Andamento dell'energia interna}
+\end{myfig}
+$$
+<\frac{U}{\epsilon N}> = -3.008 \pm 0.004
+$$
+
+\subsubsection{Confronto tra le osservabili}
+Infine, si possono confrontare le varie osservabili in un unico grafico.
+\begin{myfig}
+\includegraphics[scale=0.55]{soft_core/10_cfr.png}
+\caption{Confronto tra pressione, temperatura ed energia interna}
+\end{myfig}
+È interessante notare come temperatura ed energia interna oscillino nello stesso range.
+Ci si poteva aspettare questo risultato in quanto l'energia totale è conservata dal sistema.
+Siccome essa può essere scritta in questo modo:
+$$
+	E_{tot} = \frac{1}{N} (K + U) = \frac{3}{2} T+ \frac{U}{N} 
+$$
+Quindi le oscillazioni della temperatura devono essere circa 1 volta e mezzo quelle dell'energia interna.
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%CONTINUAAAAA
 
 
 

@@ -4,7 +4,7 @@
 #include <time.h>
 #include <float.h>
 
-#define NUMBER_OF_PARTICLES 1000
+#define NUMBER_OF_PARTICLES 108
 #define N 3
 #define ITERATION_MAX 5e4
 #define ITERATION_THERM 5000
