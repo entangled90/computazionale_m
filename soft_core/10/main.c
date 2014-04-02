@@ -6,7 +6,7 @@
 
 #define NUMBER_OF_PARTICLES 108
 #define N 3
-#define ITERATION_MAX 1e4
+#define ITERATION_MAX 4e4
 #define ITERATION_THERM 5e3
 #define COUNT 1000
 

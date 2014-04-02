@@ -391,7 +391,23 @@ $$
 
 
 \chapter{Sfere soffici}
+\section{Inizializzazione e definizione dei parametri}
+Il sistema è costituito da un numero $N$ di particelle in una scatola di lato $L$ con condizioni periodiche al bordo. A differenza delle sfere rigide, non c'è una lunghezza caratteristica essendo trattate come puntiformi. Per questo motivo si è scelto come unità di lunghezza la scala $\sigma$ che entra nella definizione del potenziale di Lennard-Jones:
+$$
+	U(r) = 4 \, \epsilon \left[ \left(\frac{\sigma}{r}\right)^{12} - \left(\frac{\sigma}{r}\right)^6 \right]
+$$
+Inoltre, come scala di energia è stata utilizzato $\epsilon$.\\
+Si è scelto di porre queste due grandezze a 1 per comodità e per velocizzare il calcolo del potenziale durante l'algoritmo. Per via di questa scelta, il lato della scatola non è più uguale a 1 ovviamente, ma viene calcolato a partire dalla densità e dal numero di particelle in questo modo:
+$$
+	L = \sqrt[3]{\frac{\rho}{N}}
+$$
+Infine, le masse delle particelle e la costante $k_b$ sono state poste a 1.\\
+Il sistema è stato inizializzato su un reticolo cubico semplice, inizializzando inizialmente le particelle con una distribuzione di probabilità piatta compresa fra $[-1,1]$.
+In seguito sono stati fissati i parametri \emph{fisici} del sistema come la temperatura o l'energia totale del sistema a seconda delle richieste dell'esercizio utilizzando il metodo indicato sulle note.\\
+L'algoritmo implementato utilizza le liste dei vicini come indicato sulle note che vengono aggiornate ogni 10 step evolutivi.\\
+Per l'evoluzione del sistema è stato utilizzato l'algoritmo \emph{velocity verlet} con uno step temporale pari $\delta t = 0.001$ e si è potuto vedere che grandezza come l'energia totale e il momento vengono conservate (nel senso che dopo circa 10000 step evolutivi la loro variazione è di circa $10^{-6} - 10^{-7}$ come si vedrà dai grafici).
 
+\subsection{Termalizzazione}
 
 
 

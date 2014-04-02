@@ -1,5 +1,5 @@
 # Fdb version 3
-["pdflatex"] 1396271303 "relazione.tex" "relazione.pdf" "relazione" 1396271314
+["pdflatex"] 1396447320 "relazione.tex" "relazione.pdf" "relazione" 1396447331
   "/usr/share/texmf-dist/tex/context/base/supp-pdf.mkii" 1394609583 71627 94eb9990bed73c364d7f53f960cc8c5b ""
   "/usr/share/texmf-dist/tex/generic/babel-italian/italian.ldf" 1394609578 11067 cefc270d47105eff772228df789cd123 ""
   "/usr/share/texmf-dist/tex/generic/babel/babel.def" 1394609578 44590 cbeafe75704649248599c30a21c5b6b4 ""
@@ -114,10 +114,10 @@
   "potts/potts099.png" 1395256271 55528 0348b8454b2df9d8c74c01c5a1553463 ""
   "potts/potts1005.png" 1395256368 51497 cf236cbf76e337614eaebce8e6b23b5f ""
   "potts/potts1015.png" 1395256294 45961 e686cc6f9aa666ddefbca719d57fc95c ""
-  "relazione.aux" 1396271314 20045 de4f27aefb42b0b138d314bb7dda8d5a ""
-  "relazione.out" 1396271314 2061 193dae8b9b1743a5c110848800219fb2 ""
-  "relazione.tex" 1396271302 57376 64234b013f64580eb382d93e1ee40224 ""
-  "relazione.toc" 1396271314 2690 49f51bc28524bb5aef665384ca409214 ""
+  "relazione.aux" 1396447331 20167 818946f659f01b4757e7065960bff57f ""
+  "relazione.out" 1396447331 2152 eb63eff893ade7dc583ccd75ad073967 ""
+  "relazione.tex" 1396447319 58752 af538489f4b806e9c22449d585ebf16f ""
+  "relazione.toc" 1396447331 2794 ac51ba128d01455c7a2124059ac0578f ""
   "sfere2D/boltzmann.png" 1395858699 38826 827d7528e51396edfe02af9aa5d54ac7 ""
   "sfere2D/dr2cfr.png" 1396005021 51362 56d65fcdd0149469cbdd0fae28b07d3d ""
   "sfere2D/dr2vari.png" 1395917506 80741 5da43fbc0582c7ebd934e8962c38c4dd ""
@@ -174,8 +174,8 @@
   "sw/pdfM1.png" 1395163744 39409 ab2f63349eb2829d61857a7bb57d1b87 ""
   "title.tex" 1395758417 436 159623bc5bba2c3a0f3c6dd67c0e9226 ""
   (generated)
-  "relazione.out"
-  "relazione.toc"
-  "relazione.aux"
   "relazione.log"
+  "relazione.aux"
+  "relazione.toc"
+  "relazione.out"
   "relazione.pdf"
