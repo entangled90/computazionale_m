@@ -6,9 +6,9 @@
 
 #define NUMBER_OF_PARTICLES 256
 #define N 3
-#define ITERATION_MAX 2e4
-#define ITERATION_THERM 10000
-#define skip_times 10
+#define ITERATION_MAX 5e4
+#define ITERATION_THERM 5000
+#define skip_times 50
 double SIGMA=1;
 double DIST_RET = 1;
 double EPS = 1;
@@ -514,6 +514,9 @@ int iteration = 0 ;
 u_R_LIM = 4*(1/(pow(R_LIM,12))-1/(pow(R_LIM,6)));
 srand(time(NULL));
 L = cbrt(NUMBER_OF_PARTICLES/rho);
+if(argc==2){
+	T_D=atof(argv[1]);
+}
 if (R_LIM > L/2){
 	printf("R_LIM > L mezzi\n");
 	exit(1);
@@ -530,8 +533,8 @@ fix_boundaries(particleList);
 print_coordinate();
 create_list();
 riscala_vel_temp();
-//create_box_file();
-
+create_box_file();
+unsigned int i;
 
 
 /**********************FILES ***************************/
@@ -546,11 +549,9 @@ fclose(f_mom);
 //FILE *f_vmd=fopen("data/vmd.xyz","w+");
 
 total_time=0;
-char  energy_therm_filename[128] = "data/energy_therm.dat";
+//char  energy_therm_filename[128] = "data/energy_therm.dat";
 //FILE * f_energy_therm = fopen(energy_therm_filename,"a");
-printf("TEMP = %e \t E_TOT = %e\t P = %e\n",2/3.0*kin_en(), total_energy() ,total_momentum());
-
-double * energy_vec = malloc(sizeof(double)*ITERATION_THERM);
+//double * energy_vec = malloc(sizeof(double)*ITERATION_THERM);
 for(iteration=0;iteration<ITERATION_THERM;iteration++){
 	if (iteration %2000== 0){
 		printf("Iterazione %d\n",iteration);
@@ -560,18 +561,18 @@ for(iteration=0;iteration<ITERATION_THERM;iteration++){
 	if ( iteration %10== 0){
 		create_list();
 	}
-	energy_vec[iteration]=total_energy()/EPS;
+	//energy_vec[iteration]=total_energy()/EPS;
 	verlet(particleList);
 	total_time+=D_T;
 }
-print_vec(energy_therm_filename,energy_vec,ITERATION_THERM);
-free(energy_vec);
+//print_vec(energy_therm_filename,energy_vec,ITERATION_THERM);
+//free(energy_vec);
 //fclose(f_energy_therm);
 iteration = 0;
 total_time=0;
 char  energy_filename[128] = "";
 snprintf(energy_filename,128,"data/energy/energy%d.dat",NUMBER_OF_PARTICLES);
-energy_vec = malloc(sizeof(double)*ITERATION_MAX);
+//energy_vec = malloc(sizeof(double)*ITERATION_MAX);
 while ( iteration < ITERATION_MAX){
 	if (iteration %4000== 0){
 		printf("Iterazione %d\n",iteration);
@@ -579,23 +580,26 @@ while ( iteration < ITERATION_MAX){
 		boltzmann_file_save();
 	}
 	if (iteration%skip_times==0){
-	copyList(particleList,time_list+iteration);		
-//	vmd_file_save();
+		for ( i = 0; i< NUMBER_OF_PARTICLES;i++){
+			time_list[iteration/skip_times*NUMBER_OF_PARTICLES+i] = particleList[i];
+		}	
 	}
+	
 	if ( iteration %10== 0){
 		create_list();
+		vmd_file_save();
 	}
 	verlet(particleList);
 	total_time+=D_T;
 //	vmd_file_save();
-	energy_vec[iteration] = total_energy()/EPS;
+	//energy_vec[iteration] = total_energy()/EPS;
 //	fprintf(f_energy,"%e\t%e\n",total_time,tmp);
 	iteration++;
 }
-print_vec(energy_filename,energy_vec,ITERATION_MAX);
+//print_vec(energy_filename,energy_vec,ITERATION_MAX);
 printf("Calcolo r2\n");
 r_squared_save(r2_filename);
-free(energy_vec);
+//free(energy_vec);
 free(neighboursList);
 free(particleList);
 

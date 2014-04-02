@@ -4,11 +4,11 @@
 #include <time.h>
 #include <float.h>
 
-#define NUMBER_OF_PARTICLES 500
+#define NUMBER_OF_PARTICLES 1000
 #define N 3
-#define ITERATION_MAX 2e4
-#define ITERATION_THERM 10000
-
+#define ITERATION_MAX 5e4
+#define ITERATION_THERM 5000
+#define skip_times 100
 double SIGMA=1;
 double DIST_RET = 1;
 double EPS = 1;
@@ -21,9 +21,10 @@ double DeltaF;
 double u_R_LIM;
 double L;
 double V_MAX = 1;
-double T_D = 1.19;
+double E_D = -2.98;
 double R_LIST;
 int last_index;
+double DeltaT;
 //unsigned int NUM_TEMPI_SALVATI ;
 //unsigned int PERIOD_R2 = 100;
 //unsigned int time_counted;
@@ -36,6 +37,7 @@ typedef struct particle_s {
 
 particle_s * particleList;
 particle_s * * neighboursList;
+particle_s * time_list;
 //particle_s * time_list;
 void print_coordinate (){
 	FILE *f = fopen ( "data/pack.dat","w");
@@ -358,15 +360,17 @@ inline double total_energy(){
 }
 
 
-inline void riscala_vel_temp (){
+ double riscala_vel_en (){
 	int i,j;
-	double temp = 2/3.0*kin_en();
+	double pot=0;
+	pot=potential_energy();
 	for ( i = 0; i<NUMBER_OF_PARTICLES;i++){
 		for (j = 0; j<N;j++){
-			particleList[i].speed[j] *= sqrt(T_D/temp);
+			particleList[i].speed[j] *= sqrt((E_D - pot)/(kin_en()));
 			//printf("Correction %lf\n",sqrt(T_D/temp));
 		}
 	}
+	return pot;
 }
 
 inline void boltzmann_file_save ( void ){
@@ -429,15 +433,90 @@ void print_vec(char * file, double * vec, int Len){
 }
 
 
+
+/*Calcola il minimo di dr2 fra tutte le immagini*/
+inline double r_squared_calc ( particle_s * list_0, particle_s * list_1){
+	unsigned int i,k;
+	double sum = 0;
+	double rdiff[N];
+	double distance, min;
+	double rdiff2[N]={0,0,0};
+	int x,y,z;
+	particle_s temp_part;
+	for ( i = 0; i< NUMBER_OF_PARTICLES;i++){
+		min = DBL_MAX;
+		for ( x= -1; x < 2 ; x++){
+			for ( y = -1; y<2 ; y++){
+				for ( z = -1 ; z<2 ; z++){
+					temp_part = list_0[i];
+					temp_part.position[0] += x;
+					temp_part.position[1] += y;
+					temp_part.position[2] += z;
+					diff(list_1[i].position,temp_part.position,rdiff);
+					distance = scalar_prod(rdiff,rdiff);
+					if( distance < min ){
+						min = distance;
+						for ( k = 0; k<N;k++){
+							rdiff2[k] = rdiff[k];
+						}
+					}
+				}
+			}
+		}
+		sum += scalar_prod(rdiff2,rdiff2);
+	}
+	return sum/(double)NUMBER_OF_PARTICLES;
+} 
+
+/* Fa una media sui tempi dei dr2(delta) per tutti i delta e per tempi tali che sono distanti delta tra di loro */
+void r_squared_save ( char * filename){
+	FILE *f = fopen(filename, "w");
+	double sum=0;
+	unsigned int delta,init;
+	unsigned int count ;
+//	fprintf(f,"%s",header_file);
+	double tmp;
+	double var =0;
+	for ( delta = 1; delta  <  ITERATION_MAX/skip_times; delta++){
+		sum = 0;
+		count = 0;
+		for ( init = 0; init+delta<ITERATION_MAX/skip_times; init++){
+			tmp=r_squared_calc( time_list+(init+delta)*NUMBER_OF_PARTICLES,time_list + init*NUMBER_OF_PARTICLES);
+			sum += tmp;
+			var +=tmp*tmp;
+			count++;
+		}
+		sum /= (double) count;
+		var /= (double) count;
+		var -= sum*sum;
+		fprintf(f,"%.14e\t%.14e\t%.14e\n",delta*DeltaT*skip_times, sum/(L*L), sqrt(var/(double)count)/L);
+	}
+	fclose(f);
+}
+
+
+
+inline void copyList ( particle_s * in , particle_s * out){
+	unsigned int i;
+	for ( i = 0; i< NUMBER_OF_PARTICLES;i++){
+		out[i] = in[i];
+	}
+}
+
+
+
+
 int main (int argc, char *argv[]){
 double rho=0.7;
+DeltaT=skip_times*D_T;
 R_LIM = 2.5*SIGMA;
 R_LIST = 2.8*SIGMA;
-DeltaF = -0.039;
+DeltaF = 0.0389994774528;
 int iteration = 0 ;
 u_R_LIM = 4*(1/(pow(R_LIM,12))-1/(pow(R_LIM,6)));
 srand(time(NULL));
 L = cbrt(NUMBER_OF_PARTICLES/rho);
+
 if (R_LIM > L/2){
 	printf("R_LIM > L mezzi\n");
 	exit(1);
@@ -446,55 +525,57 @@ if (R_LIM > L/2){
 printf("L = %e\n",L);
 printf("Frazione di impacchettamento: %e\n\n", rho);
 particleList = malloc( sizeof(particle_s)*NUMBER_OF_PARTICLES);
+time_list=malloc(sizeof(particle_s)*NUMBER_OF_PARTICLES*ITERATION_MAX/skip_times);
 neighboursList = malloc(sizeof(particle_s)*30*NUMBER_OF_PARTICLES);
 //time_list = malloc(sizeof(particle_s)*NUM_TEMPI_SALVATI*NUMBER_OF_PARTICLES);
 reticolo();
 fix_boundaries(particleList);
 print_coordinate();
 create_list();
-riscala_vel_temp();
-//create_box_file();
-
+create_box_file();
+unsigned int i;
 
 
 /**********************FILES ***************************/
-//char r2_file[64] = "";
-//snprintf(r2_file,64,"data/dr2/dr2%.3d.dat",NUMBER_OF_PARTICLES); 
+//char r2_filename[64] = "";
+//snprintf(r2_filename,64,"data/dr2/dr2%.5lf.dat",T_D); 
 
 /*
- * FILE *f_mom = fopen("data/momentum.dat","w+");
-FILE *f_vmd=fopen("data/vmd.xyz","w+");
+ FILE *f_mom = fopen("data/momentum.dat","w+");
 fclose(f_vmd);
 fclose(f_mom);
 */
-total_time=0;
-char  energy_therm_filename[128] = "data/energy_therm.dat";
-//FILE * f_energy_therm = fopen(energy_therm_filename,"a");
-printf("TEMP = %e \t E_TOT = %e\t P = %e\n",2/3.0*kin_en(), total_energy() ,total_momentum());
+//FILE *f_vmd=fopen("data/vmd.xyz","w+");
 
-double * energy_vec = malloc(sizeof(double)*ITERATION_THERM);
+total_time=0;
+//char  energy_therm_filename[128] = "data/energy_therm.dat";
+//FILE * f_energy_therm = fopen(energy_therm_filename,"a");
+double * energy_vec ;
 for(iteration=0;iteration<ITERATION_THERM;iteration++){
 	if (iteration %2000== 0){
 		printf("Iterazione %d\n",iteration);
 		printf("TEMP = %e \t E_TOT = %e\t P = %e\n",2/3.0*kin_en(), total_energy() ,total_momentum());
 	}
-	riscala_vel_temp();
+	riscala_vel_en();
 	if ( iteration %10== 0){
 		create_list();
 	}
-	energy_vec[iteration]=total_energy()/EPS;
+//	energy_vec[iteration]=total_energy()/EPS;
 	verlet(particleList);
 	total_time+=D_T;
 }
-print_vec(energy_therm_filename,energy_vec,ITERATION_THERM);
-free(energy_vec);
+//print_vec(energy_therm_filename,energy_vec,ITERATION_THERM);
+//free(energy_vec);
 //fclose(f_energy_therm);
 iteration = 0;
 total_time=0;
 char  energy_filename[128] = "";
-snprintf(energy_filename,128,"data/energy/energy%d.dat",NUMBER_OF_PARTICLES);
-FILE * f_energy = fopen(energy_filename,"w");
-FILE *f_mom = fopen("data/momentum.dat","w");
+snprintf(energy_filename,128,"data/energy/energy%.4d.dat",NUMBER_OF_PARTICLES);
+
+char  temp_filename[128] = "";
+snprintf(temp_filename,128,"data/temperature/temperature%.4d.dat",NUMBER_OF_PARTICLES);
+double * temp_vec;
+temp_vec= malloc(sizeof(double)*ITERATION_MAX);
 energy_vec = malloc(sizeof(double)*ITERATION_MAX);
 while ( iteration < ITERATION_MAX){
 	if (iteration %4000== 0){
@@ -502,23 +583,23 @@ while ( iteration < ITERATION_MAX){
 		printf("TEMP = %e \t E_TOT = %e\t P = %e\n",2/3.0*kin_en(), total_energy() ,total_momentum());
 		boltzmann_file_save();
 	}
-
 	if ( iteration %10== 0){
 		create_list();
+		vmd_file_save();
 	}
 	verlet(particleList);
 	total_time+=D_T;
 //	vmd_file_save();
 	energy_vec[iteration] = total_energy()/EPS;
+	temp_vec[iteration]	= 2/3.0*kin_en();
 //	fprintf(f_energy,"%e\t%e\n",total_time,tmp);
 	iteration++;
 }
 print_vec(energy_filename,energy_vec,ITERATION_MAX);
-fclose(f_mom);
-fclose(f_energy);
+print_vec(temp_filename,temp_vec,ITERATION_MAX);
 printf("Calcolo r2\n");
-//r_squared_save("data/r2.dat");
-
+//r_squared_save(r2_filename);
+free(energy_vec);
 free(neighboursList);
 free(particleList);
 
