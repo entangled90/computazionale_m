@@ -12,8 +12,10 @@ altrimenti eta viene impostato di default a eta = 0.1 (fraz_imp)
 #include "raccolta_dati.h"
 /*Numero di dimensioni */
 #define N 2
+//Numero collisioni di termalizzazione
 #define TERM_TIME 10000
 #define MAX_COLLISION 2e5
+//tempo adimensionato in cui si simula il sistema
 #define TIME_MAX 15
 /*Numero particelle */
 int number_of_particles = 128;
@@ -38,6 +40,9 @@ double DeltaT= 0.03;
 double time_prec;
 unsigned int time_counted = 0;
 unsigned int NUM_TEMPI_SALVATI;
+
+//Struttura per la particella. COntine velocità, posizione, 
+//il tempo in cui ha effettuato l'ultima collisione, il numero di collisioni che ha fatto e la distanza percorsa.
 typedef struct particle_s {
 	double position[N];
 	double speed[N];
@@ -46,6 +51,7 @@ typedef struct particle_s {
 	double distance;
 	} particle_s ;
 particle_s * particleList;
+//Necessaria per il calcolo di Delta r^2 per memorizzare la "storia" di tutta la simulazione
 particle_s * time_list;
 double T_D = 1;
 
@@ -82,7 +88,7 @@ double kin_en ( void) {
 	}
 	return sum/2.0;
 	}
-	
+	/*Salva il modulo della velocità in un file per poter fare un istogramma */
 inline void boltzmann_file_save ( void ){
 	int i = 0;
 	double speed_squared = 0;
@@ -96,8 +102,8 @@ inline void boltzmann_file_save ( void ){
 /*******************************************************************************************/
 
 /* Inizializzazione delle particelle */
-//Genera un reticolo quadrato a partire dal punto rx
-void genera_sottoreticolo(double rx_in, double ry_in, int q,int start, double passo, double * speed_cm){
+//Genera un reticolo quadrato a partire dal punto rx,ry con passo p e q particelle per lato
+void genera_sottoreticolo(double rx_in, double ry_in, int q,int start, double passo){
 	int p = start; 
 	int c=0;
 	int d=0;
@@ -115,8 +121,6 @@ void genera_sottoreticolo(double rx_in, double ry_in, int q,int start, double pa
 			particleList[p].position[0]=rx;
 			particleList[p].position[1]=ry;
 //			printf("P %d %lf \t %lf\n", p,particleList[p].position[0],particleList[p].position[1]);
-			speed_cm[0] += particleList[p].speed[0];
-			speed_cm[1] += particleList[p].speed[1];
 			rx = rx + passo;
 			p++;
 			c++; 
@@ -160,6 +164,12 @@ void reticolo () {
 	rx = passo/2.0;
 	ry = passo/2.0;
     genera_sottoreticolo(rx,ry,q,number_of_particles/2, passo,speed_cm);
+	for (i =0 ; i< number_of_particles; i++){
+		for ( j = 0; j<N;j++){	
+				speed_cm[j] += particleList[i].speed[j];
+		}
+	}
+
 	for ( i= 0; i<number_of_particles;i++){
 		for(j=0;j<N;j++){
 			particleList[i].speed[j] -= speed_cm[j]/((double) number_of_particles);
@@ -202,6 +212,8 @@ int  check_distance (){
 	return (0);
 }
 
+
+/*Riscala la velocità in modo da avere la temperatura desiderata T_D*/
 inline void riscala_vel_temp (){
 	int i,j;
 	double k_en = kin_en();
@@ -293,7 +305,7 @@ void step (double time_step){
 	}
 }
 
-
+/*Modifica le velocità delle particelle coinvolte nella collisione*/
 void switch_speeds(){
 	int j;
 	int  x,y;
@@ -500,7 +512,10 @@ inline void copyList ( particle_s * in , particle_s * out){
 	}
 }
 
-/*Calcola il minimo di dr2 fra tutte le immagini*/
+/*Calcola il minimo di dr2 fra tutte le immagini
+	Viene calcolato per tutte le particelle. Le due liste passate sono le liste di particelle a istanti di tempo diversi
+	Deve essere chiamata da r_squared_save
+*/
 inline double r_squared_calc ( particle_s * list_0, particle_s * list_1){
 	unsigned int i,k;
 	double sum = 0;

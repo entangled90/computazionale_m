@@ -540,9 +540,26 @@ Si è interessati a confrontare l'andamento dello spostamento quadratico medio i
 \caption{Confronto di $\Delta r^2(t)$ a varie temperature}
 \end{myfig}
 Il grafico è stato generato a partire da 5 simulazioni indipendenti per ogni valore della temperatura. Si è calcolato il valor medio e l'errore a partire da questo insieme di dati per ogni istante temporale.
+Si può vedere come abbassando la temperatura la rapidità con cui il valore dello spostamento quadratico medio diminuisce, in modo simile a quando accadeva nel caso delle sfere rigide.\\
+Anche in questo caso il valore limite di questa quantità è $\Delta r^2(t \rightarrow \infty) = 0.25$ come nel caso delle sfere rigide in 3 dimensioni.
+
+\subsection{Quarto caso}
+L'ultima classe di simulazioni è stata inizializzata con i seguenti parametri:
+$$
+ \rho = 0.7 \qquad <\frac{E}{N \epsilon}> = -2.98 \qquad N = 100,150,250,500,800,1000
+$$
+Sono stati raccolti i dati di energia interna e temperatura ad ogni step e sono stati poi binnati in intervalli di larghezza 2000 bin.
+Dopo il binning, sono stati calcolati gli errori.\\
+Infine è stato estrapolato il valore delle grandezze nel limite termodinamico facendo un fit con una retta del tipo:
+$$
+	O(N) \, = \,A \frac{1}{N} + B
+$$
+in modo tale che il valore di $O(\infty) = B$.
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%CONTINUAAAAA
+%%%%%%%% FIGURE E TABELLE 
+
+
 
 
 

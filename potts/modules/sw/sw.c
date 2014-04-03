@@ -15,7 +15,7 @@
 
 
 int cluster_max = -1;
-
+//Inizializza il reticolo con valori casuali dei 3 possibili stati
 void spin_init ( Spin * matrix, Node * n, int N){
 	int i,j;
 	double tmp;
@@ -42,6 +42,7 @@ void spin_init ( Spin * matrix, Node * n, int N){
 		}
 	}
 }
+//Resetta i cluster
 void reset_cluster (Spin * matrix, Node * n, int N){
 	int i,j;
 	for ( i = 0; i< N; i++){
@@ -70,6 +71,7 @@ int set_bond (Spin * s1, Spin * s2, float BETA){
 		return 0;
 }
 
+//Riempie i cluster
 void fillCluster( Spin * matrix, Node * nodes, List * l, int N, float BETA){
 /* Matrice con le possibili direzioni: 4 coppie di vettori bidimensionali
 	-1 	0	1 	0
@@ -114,6 +116,7 @@ void startClustering (Spin * matrix, Node * nodes, int N, float BETA){
 	}
 }
 
+//Ritorna la magnetizzazione per il numero di siti, senza il modulo. È  ancora un numero complesso.
 inline cNum magnetization(Spin *x, int N){
 	int i,j;
 	cNum mag= { .r= 0.0 ,.i=0.0, .index=0};
@@ -146,6 +149,7 @@ inline void savePPM(Spin * s, int N, char * filename)
     fclose(f);
 }
 
+//Sceglie in modo casuale la nuova configurazione in modo equiprobabile tra i tre stati per tutto il cluster
 void flip_spin ( Spin * m, int N){
 	int i,j;
 	int * flipper;
@@ -175,7 +179,7 @@ void flip_spin ( Spin * m, int N){
 	}
 	free(flipper);
 }
-
+//Evoluzione di termalizzazione
 void evolve_therm (Spin * matrix, Node * nodes, int N, float BETA){
 	int iteration = 0;
 	FILE * f_mag = fopen("data/mag_therm.dat","w");
@@ -191,6 +195,8 @@ void evolve_therm (Spin * matrix, Node * nodes, int N, float BETA){
 	fclose(f_en);
 }
 
+
+//Evoluzione per la produzione, la raccolta dati avviene nel main.
 void evolve( Spin * matrix, Node * nodes, int N, float BETA){
 	reset_cluster(matrix,nodes,N);
 	startClustering(matrix,nodes,N,BETA);
@@ -199,6 +205,7 @@ void evolve( Spin * matrix, Node * nodes, int N, float BETA){
 
 }
 
+//Calcola l'hamiltoniana, partendo da in alto a sinistra e usa i link a destra e in basso.
 inline double hamiltoniana( Spin * s, int N){
 	double ham=0;
 	int a,b;
@@ -215,7 +222,7 @@ inline double hamiltoniana( Spin * s, int N){
 	}
 	return (ham);
 }
-
+//Somma sulle righe per correlazione. ritorna un numero complesso
 cNum sum_row(Spin * s, int row, int N){
 	cNum sum = {0,0,0};
 	int j = 0;
@@ -224,6 +231,7 @@ cNum sum_row(Spin * s, int row, int N){
 	}
 	return cNum_mul(sum , cNum_create_real( 1.0/(double) N)) ;
 }
+//Somma sulle colonne per correlazione. ritorna un numero complesso
 
 cNum sum_col(Spin * s, int col, int N){
 	cNum sum = {0,0,0};
@@ -234,7 +242,7 @@ cNum sum_col(Spin * s, int col, int N){
 	return cNum_mul(sum , cNum_create_real( 1.0/(double) N)) ;
 }
 
-
+//Restituisce la magnetizzazione nella definizione improved. Ossia come frazione di siti nel cluster + grande.
 double mag_improved(Spin *s , int N){
 	int i;
 	int max=0;

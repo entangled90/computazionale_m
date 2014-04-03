@@ -6,7 +6,7 @@
 
 #define METROPOLIS_C
 
-
+// Inizializza gli spin
 void spin_init (short int * configuration, int N){
 	int i,j;
 	double tmp;
@@ -23,6 +23,8 @@ void spin_init (short int * configuration, int N){
 	}
 }
 
+
+//Salva lo stato del sistema come immagine .ppm in bianco/nero
 inline void savePPM(short int * x, int N)
 {
     unsigned char white[3] = {255,255,255};
@@ -40,7 +42,7 @@ inline void savePPM(short int * x, int N)
     fclose(f);
 }
 
-
+//calcola la magnetizzazione moltiplicata per il numero di siti
 inline double magnetization(short int *x, int N){
 	int i,j;
 	int mag=0;
@@ -52,7 +54,7 @@ inline double magnetization(short int *x, int N){
 	return mag;
 }
 
-
+// Calcola la variazione dell'hamiltoniana in seguito all'inversione dello spin nel sito (a,b)
 inline double delta_Ham_ising ( short int * configuration,int a, int b, int N){
 	double ham;
 	ham = -J * ( configuration[ ((a+1)%N)*N + b]+ configuration[((a-1+N)%N)*N+b]
@@ -60,6 +62,8 @@ inline double delta_Ham_ising ( short int * configuration,int a, int b, int N){
 	return ham;
 }
 
+
+// Esegue uno step dell'algoritmo metropolis per ogni sito
 inline void metropolis_ising( short int *x, int N , double BETA ){
 	double dH;
 	int i,j;
@@ -73,18 +77,19 @@ inline void metropolis_ising( short int *x, int N , double BETA ){
 	}
 }
 
+//Ritorna l'hamiltoniana. Viene calcolata partendo da in alto a sinistra e vengono usati i link destra e in basso.
 inline double hamiltoniana ( short int * configuration, int N){
 	double ham=0;
 	int a,b;
 	for (a = 0; a<N ; a++){
 		for ( b= 0; b<N; b++){
-			ham += -( configuration[ ((a+1+N)%N)*N + b]+ configuration[((a-1+N)%N)*N+b]
-				+ configuration[a*N+(b+1+N)%N]+configuration[a*N + (b-1+N)%N])*(configuration[a*N +b]); 
+			ham += -( configuration[ ((a+1+N)%N)*N + b]	+ configuration[a*N+(b+1+N)%N])*(configuration[a*N +b]); 
 		}
 	}
-	return (ham/2.0);
+	return (ham);
 }
 
+/*Somma su righe per la correlazione*/
 double sum_row(short int * configuration, int row, int N){
 	double sum = 0;
 	int j = 0;
@@ -93,6 +98,8 @@ double sum_row(short int * configuration, int row, int N){
 	}
 	return sum /= (double)N ;
 }
+
+/*Somma su colonne per la correlazione*/
 
 double sum_col(short int * configuration, int col, int N){
 	double sum = 0;

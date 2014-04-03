@@ -10,7 +10,7 @@
 #include "mtwist.h"
 
 int cluster_max = -1;
-
+/*Inizializza gli spin*/
 void spin_init ( Spin * matrix, Node * n, int N){
 	int i,j;
 	double tmp;
@@ -31,6 +31,8 @@ void spin_init ( Spin * matrix, Node * n, int N){
 		}
 	}
 }
+
+/*Cancella tutti i cluster*/
 void reset_cluster (Spin * matrix, Node * n, int N){
 	int i,j;
 	for ( i = 0; i< N; i++){
@@ -59,8 +61,9 @@ int set_bond (Spin * s1, Spin * s2, float BETA){
 		return 0;
 }
 
+/*Funzione che riempie i cluster */
 void fillCluster( Spin * matrix, Node * nodes, List * l, int N, float BETA){
-/* Matrice con le possibili direzioni: 4 coppie di vettori bidimensionali
+/* Matrice con le possibili direzioni: 4 vettori bidimensionali
 	-1 	0	1 	0
 	0 	-1 	0 	1 
 */
@@ -85,7 +88,7 @@ void fillCluster( Spin * matrix, Node * nodes, List * l, int N, float BETA){
 	}
 }
 
-
+/*Funzione che crea effettivamente i cluster per tutto il sistema*/
 void startClustering (Spin * matrix, Node * nodes, int N, double BETA){
 	int i,j;
 	List * cluster = malloc(sizeof(List));
@@ -131,7 +134,7 @@ inline void savePPM(Spin * s, int N)
         }
     fclose(f);
 }
-
+/*Stampa a schermo i cluster a cui appartengono gli spin. SOLO DEBUG*/
 void drawCluster(Spin * s, int N){
 	int i,j;
 	for ( i = 0; i<N;i++){
@@ -141,7 +144,7 @@ void drawCluster(Spin * s, int N){
 		printf("|\n");
 	}
 }
-
+/*Stampa a schermo i valori degli spin. SOLO DEBUG*/
 void drawSpin(Spin * s, int N){
 	int i,j;
 	for ( i = 0; i<N;i++){
@@ -156,6 +159,7 @@ void drawSpin(Spin * s, int N){
 	}
 }
 
+/* Modifica gli spin del sistema secondo l'appartenenza ai cluster*/
 void flip_spin ( Spin * m, int N){
 	int i,j;
 	int * flipper;
@@ -184,6 +188,10 @@ void print_data (Spin * m,int N){
 		printf("---------------------------------------------------------------------------\n\n");
 
 }
+
+/*Serve per evoluzione in fase di termalizzazione
+Gli unici dati raccolti servono a controllare la corretta termalizzazione del sistema
+*/
 void evolve_therm (Spin * matrix, Node * nodes, int N, float BETA){
 	int iteration = 0;
 	FILE * f_en_therm = fopen("data/en_therm.dat","w");
@@ -201,6 +209,9 @@ void evolve_therm (Spin * matrix, Node * nodes, int N, float BETA){
 
 }
 
+/*Evoluzione del sistema in cui si raccolgono dati.
+La raccolta dati vera e proprio viene fatta nel "main"
+*/
 void evolve( Spin * matrix, Node * nodes, int N, float BETA){
 	reset_cluster(matrix,nodes,N);
 	startClustering(matrix,nodes,N,BETA);
@@ -208,6 +219,8 @@ void evolve( Spin * matrix, Node * nodes, int N, float BETA){
 	//PRENDERE DATI QUI
 }
 
+/*Hamiltoniana del sistema. Viene calcolata da in alto a sinistra, considerando i link a destra e in basso
+*/
 inline double hamiltoniana( Spin * s, int N){
 	double ham=0;
 	int a,b;
@@ -219,6 +232,7 @@ inline double hamiltoniana( Spin * s, int N){
 	return (ham);
 }
 
+/*Somma sulle righe degli spin.Serve per calcolare la correlazione*/
 double sum_row(Spin * s, int row, int N){
 	double sum = 0;
 	int j = 0;
@@ -227,6 +241,7 @@ double sum_row(Spin * s, int row, int N){
 	}
 	return sum /= ((double) N) ;
 }
+/*Somma sulle colonne degli spin.Serve per calcolare la correlazione*/
 
 double sum_col(Spin * s, int col, int N){
 	double sum = 0;
@@ -237,6 +252,8 @@ double sum_col(Spin * s, int col, int N){
 	return sum /= ((double) N) ;
 }
 
+/*Magnetizzazione improved: Equivale alla frazione di spin nel cluster più grande
+*/
 double mag_improved(Spin *s , int N){
 	int i;
 	int max=0;

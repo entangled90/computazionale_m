@@ -304,6 +304,7 @@ void step (double time_step){
 }
 
 
+/*Modifica le velocità delle particelle coinvolte nella collisione*/
 void switch_speeds(){
 	int j;
 	int  x,y,z;
@@ -512,8 +513,10 @@ inline void copyList ( particle_s * in , particle_s * out){
 	}
 }
 
-/*Calcola il minimo di dr2 fra tutte le immagini*/
-inline double r_squared_calc ( particle_s * list_0, particle_s * list_1){
+/*Calcola il minimo di dr2 fra tutte le immagini
+	Viene calcolato per tutte le particelle. Le due liste passate sono le liste di particelle a istanti di tempo diversi
+	Deve essere chiamata da r_squared_save
+*/inline double r_squared_calc ( particle_s * list_0, particle_s * list_1){
 	unsigned int i,k;
 	double sum = 0;
 	double rdiff[N];
@@ -572,13 +575,13 @@ void r_squared_save ( char * filename){
 	fclose(f);
 }
 
-////// CANNATA é per 2D -> inizializza a T*(2/3)
+/*Riscala la velocità in modo da avere la temperatura desiderata T_D*/
 inline void riscala_vel_temp (){
 	int i,j;
-	double k_en = kin_en();
+	double temp = 2/3.0*kin_en();
 	for ( i = 0; i<NUMBER_OF_PARTICLES;i++){
 		for (j = 0; j<N;j++){
-			particleList[i].speed[j] *= sqrt( NUMBER_OF_PARTICLES* T_D/k_en);
+			particleList[i].speed[j] *= sqrt( NUMBER_OF_PARTICLES* T_D/temp);
 		}
 	}
 }

@@ -1,3 +1,6 @@
+/*E' quasi uguale a ising 2D con swendsen-wang
+Le differenze tra i due algoritmi sono nelle funzioni presenti nei moduli*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>

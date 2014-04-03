@@ -50,7 +50,6 @@ int main (int argc, char *argv[]){
 	matrix = malloc(N*N*sizeof(short int));
 	spin_init(matrix,N);
 	/***** FILENAMES AND FILE OPENING ******/
-	/***** FILENAMES AND FILE OPENING ******/
 /* ------------------MAGN*/
 	char mag_filename[64] = "";
 	snprintf(mag_filename,64,"data/mag_mean%d.dat",N);
@@ -76,6 +75,7 @@ int main (int argc, char *argv[]){
 	char en_tau_filename[64] = "";
 	snprintf(en_tau_filename,64,"data/tau_enN%d.dat",N);
 
+/* Correlazione righe/colonne*/
 	char corr_row_filename[64]="";
 	snprintf(corr_row_filename,64,"data/corr_row/corr_row_N%dB%.8lf.dat",N,BETA);
 
@@ -140,17 +140,18 @@ int main (int argc, char *argv[]){
 	double * S_var_fin=malloc(sizeof(double)*N_CORR);
 	double S_test[N_CORR];
 
-	/*** Calcolo correlazione su righe e colonne*/
 	vec_zeros(S_xt,N);
 	vec_zeros(S_yt,N);
 	vec_zeros(S_med_temp,N_CORR);
-// Non serve, annullo già in binning:	vec_zeros(S_dati_binnati,(n_bin)*N_CORR);
 	vec_zeros(S_fin,N_CORR);
 	vec_zeros(S_var_fin,N_CORR);
 	vec_zeros(S_test,N_CORR);
 	iteration =0;
+	/*Ciclo di produzione dati*/
 	while(iteration < ITERATION_MAX){
+		//evolve il sistema di uno step
 		metropolis_ising(matrix,N,BETA);
+		//Salvataggio dati
 		mag_vet_dati[iteration] = fabs(magnetization(matrix,N));
 		en_vet_dati[iteration] = hamiltoniana(matrix,N);
 		iteration++;
@@ -166,6 +167,7 @@ int main (int argc, char *argv[]){
 				S_yt[i]+= Y_n[j]*Y_n[(i+j)%N]; 
 			}
 		}
+		//Normalizzo
 		for (i = 0; i < N;i++){
 		S_xt[i]/=(double)N;
 		S_yt[i]/=(double)N;
@@ -175,6 +177,7 @@ int main (int argc, char *argv[]){
 			S_med_temp[i] = S_xt[i]+S_yt[i]+S_xt[N-1-i]+ S_yt[N-1-i];
 			S_med_temp[i] /=(4.0);
 		}
+		//Salvo sul vettore che si analizzerà poi
 		for(j = 0;j<N_CORR;j++){
 			S_dati[iteration*N_CORR+j] = S_med_temp[j];
 		}
@@ -208,6 +211,8 @@ int main (int argc, char *argv[]){
 	/* Binning osservabili scalari*/
 	binning(mag_vet_dati,mag_vet_binnato,ITERATION_MAX,larghezza_bin);
 	binning(en_vet_dati,en_vet_binnato,ITERATION_MAX,larghezza_bin);
+
+// Data la diversa definizione di queste osservabili, il binning è fatto in modo diverso, con intervalli + grandi.
 	binning_deriv(mag_vet_dati,chi_vet_binnato,ITERATION_MAX,larghezza_bin);
 	binning_deriv(en_vet_dati,cv_vet_binnato,ITERATION_MAX,larghezza_bin);
 
@@ -244,13 +249,17 @@ int main (int argc, char *argv[]){
 	}
 
 
-	/* Calcolo autocorrelazione per le due grandezze */
+	/* Calcolo autocorrelazione per le due grandezze, verrà usato per stimare tau dal fit con l'esponenziale
+	da uno script esterno in python
+	*/
 	autocorrelation(en_vet_dati,en_autocorr,ITERATION_MAX,CORR_MAX);
 	if(f_en_autocorr){
 		for (i = 0; i<CORR_MAX;i++){
 			fprintf(f_en_autocorr,"%d\t%.14e\n",i,en_autocorr[i]);
 		}
 	}
+
+	/*Calcolo del tau di autocorrelazione attraverso la formula esplicita, invece che come fit dell'autocorrelazione */
 	double tau_en = 0.5;
 	for (i=0;i<CORR_ESTREMO;i++){
 		tau_en+=en_autocorr[i];
@@ -270,7 +279,7 @@ int main (int argc, char *argv[]){
 	}
 	fprintf(f_mag_tau, "%.14e\t%.14e\n",BETA,tau_mag);
 
-
+	/*Salva su file tutti i valori di magnetizzazione ed energia nel caso serva analizzarli*/
 
 	for ( i=0;i<ITERATION_MAX;i++){
 		fprintf(f_en_temp,"%.14e\n",en_vet_dati[i]);
@@ -293,9 +302,7 @@ int main (int argc, char *argv[]){
 	fclose(f_en_bin);
 	fclose(f_en_autocorr);
 	fclose(f_cv);
-
 	fclose(f_corr_row);
-
 		/* Free della memoria */
 	free(chi_vet_binnato);
 	free(cv_vet_binnato);	free(mag_vet_dati) ;

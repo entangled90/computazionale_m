@@ -1,6 +1,8 @@
 #ifndef CNUM_C 
 #define CNUM_C
-
+//MODULO CON LA DEFINIZIONE DELLE FUNZIONI UTILIZZABILI PER I NUMERI COMPLESSI.
+// Sono implementate solo quelle richieste.
+//la definizione della struttura è nel file cnum.h
 #include "cnum.h"
 #include <math.h>
 #include <stdio.h>

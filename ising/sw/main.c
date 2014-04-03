@@ -1,3 +1,6 @@
+/*** Il programma è sostanzialmente identico a Metropolis eccetto per l'algoritmo che genera nuove configurazioni 
+(che è appunto Swendsen-Wang)
+**/
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -183,14 +186,7 @@ int main ( int argc, char * argv[]) {
 		}
 
 	}
-/*	for ( i = 0; i<N;i++){
-		S_xt[i] += S_yt[i]+S_xt[N-1-i] + S_yt[N-1-i];
-		S_xt[i]/=4.0*ITERATION_MAX;
-	}
-	for ( i = 0; i<N/2;i++){
-		fprintf(f_corr_row, "%d\t%lf\n",i,S_xt[i] );
-		}
-*/
+
 	divideByScalar(S_test,ITERATION_MAX,N_CORR);
 /**** BINNING E AUTOCORRELAZIONI */
 /* tutto il BINNING della Correlazione fra righe e colonne*/
@@ -208,7 +204,6 @@ int main ( int argc, char * argv[]) {
 	}
 	for ( i = 0; i<N_CORR;i++){
 		fprintf(f_corr_row, "%d\t%.14e\t%.14e\n",i,S_fin[i],S_var_fin[i]);
-	//	fprintf(f_corr_row,"%d\t%.14e\t%.14e\n",i,S_test[i],0.000001);
 	}
 
 

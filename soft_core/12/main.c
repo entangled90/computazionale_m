@@ -6,7 +6,7 @@
 
 #define NUMBER_OF_PARTICLES 108
 #define N 3
-#define ITERATION_MAX 5e4
+#define ITERATION_MAX 2e4
 #define ITERATION_THERM 5000
 #define skip_times 100
 double SIGMA=1;
@@ -590,7 +590,7 @@ while ( iteration < ITERATION_MAX){
 	verlet(particleList);
 	total_time+=D_T;
 //	vmd_file_save();
-	energy_vec[iteration] = total_energy()/EPS;
+	energy_vec[iteration] = potential_energy()/EPS;
 	temp_vec[iteration]	= 2/3.0*kin_en();
 //	fprintf(f_energy,"%e\t%e\n",total_time,tmp);
 	iteration++;

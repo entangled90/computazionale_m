@@ -1,3 +1,8 @@
+/*********
+NOTA BENE: Sono state commentate le funzioni che differiscono dai programmi sfere rigide 2D/3D
+*******/
+
+
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
@@ -103,7 +108,9 @@ double total_momentum (){
 	}
 	return sqrt(scalar_prod(sum,sum));
 	}
-/*Lennard-Jones 6-12 -> U* = U/epsilon */
+/*Lennard-Jones 6-12 -> U* = U/epsilon 
+Potenziale shiftato come indicato sulle note
+*/
 inline double potential ( double r ){
 	if (r<R_LIM){
 		double tmp=pow(r,6);
@@ -127,7 +134,7 @@ void fix_boundaries ( particle_s * particleList){
 	}
 }
 /*******************************************************************************************/
-
+/*Genera un reticolo cubico*/
 void genera_sottoreticolo(double rx_in, double ry_in,double rz_in,int q,int start, double passo){
 	int p = start; 
 	int c=0;
@@ -168,7 +175,7 @@ void genera_sottoreticolo(double rx_in, double ry_in,double rz_in,int q,int star
 	}
 }
 
-//genera un reticolo BCC
+/* Utilizzata per generare un reticolo cubico semplice in questo caso. */
 void reticolo () { 
 	double passo = 0.0;//passo del reticolo 
 	//contatori 
@@ -203,7 +210,7 @@ void reticolo () {
 	print_speed();
 
 }
-/* Crea liste*/
+/* Crea liste dei vicini per ogni particella*/
 void create_list (){
 	int i,j;
 	int x,y,z;
@@ -247,11 +254,12 @@ void create_list (){
 	last_index = list_index;
 	particleList[NUMBER_OF_PARTICLES].list_start=last_index;
 }
-/*Si intende forza* (adimensionata)*/
+/*Si intende forza* (adimensionata) e shiftata come prescritto nelle note*/
 inline double force (double r){
 		return (24*(2*pow(1/r,13) - pow(1/r,7))+ DeltaF);
 }
-
+/*Calcola l'accelerazione per ogni particella. 
+Essa verrà salvata nel vettore "acc" presente nella struttura dedicata a ogni particella.*/
 inline void calc_acc (){
 	double r;
 	double F;
@@ -296,6 +304,9 @@ inline void calc_acc (){
 	}
 }
 
+/*Implementazione dell'algoritmo velocity verlet.
+Richiama il calcolo dell'accelerazione quando necessario ed è usato per effettuare uno step temporale al sistema
+*/
 
 inline void verlet( particle_s * partList){
 	int i,j;
@@ -314,6 +325,8 @@ inline void verlet( particle_s * partList){
 		}
 	}
 }
+
+/*Calcola l'energia potenziale (ossia l'energia interna) del sistema normalizzandola al numero di particelle.*/
 
 inline double potential_energy(){
 	int i,j;
@@ -349,6 +362,8 @@ inline double potential_energy(){
 	u /= (double) NUMBER_OF_PARTICLES;
 	return u;
 }
+
+/*Restituisce la somma di energia totale per particella */
 inline double total_energy(){
 	double k_en,u;
 	k_en = kin_en();
@@ -356,7 +371,7 @@ inline double total_energy(){
 	return ( k_en+u);
 }
 
-
+/*RIscala le velocità in modo da ottenere la temperatura desiderata*/
 inline void riscala_vel_temp (){
 	int i,j;
 	double temp = 2/3.0*kin_en();
@@ -378,7 +393,10 @@ inline void boltzmann_file_save ( void ){
 	}
 	fclose(f);
 }
-
+/*Crea il file box.tcl, uno script che permette di visualizzare la dinamica del sistema a patto di usare la funzione
+vmd_file_save().
+Per utilizzare lo script è necessario avere installato il programma "vmd" e dare il comando "vmd -e box.tcl" nella cartella data/
+*/
 void create_box_file(){
 	FILE *f = fopen("data/box.tcl","w");
 	fprintf(f,"set minx 0\n");
@@ -406,7 +424,7 @@ void create_box_file(){
 	fclose(f);
 }
 
-
+/*Funzione che serve a salvare lo stato del sistema per essere visualizzato in vmd*/
 inline void vmd_file_save(){
 	int i ;
 	FILE *f_vmd = fopen("data/vmd.xyz","a");
@@ -417,7 +435,7 @@ inline void vmd_file_save(){
 	fclose(f_vmd);
 }
 
-
+/*Stampa sul file "file", il vettore "vec" lungo "Len"*/
 void print_vec(char * file, double * vec, int Len){
 	int i=0;
 	FILE *f=fopen(file,"w");
@@ -426,13 +444,15 @@ void print_vec(char * file, double * vec, int Len){
 	}
 	fclose(f);
 }
-
+/**********************************
+MAIN
+*********************************/
 
 int main (int argc, char *argv[]){
 double rho=0.7;
 R_LIM = 2.5*SIGMA;
 R_LIST = 2.8*SIGMA;
-DeltaF = +0.0389994774528;
+DeltaF = 0.0389994774528;
 int iteration = 0 ;
 u_R_LIM = 4*(1/(pow(R_LIM,12))-1/(pow(R_LIM,6)));
 srand(time(NULL));
@@ -454,18 +474,6 @@ create_list();
 riscala_vel_temp();
 //create_box_file();
 
-
-
-/**********************FILES ***************************/
-//char r2_file[64] = "";
-//snprintf(r2_file,64,"data/dr2/dr2%.3d.dat",NUMBER_OF_PARTICLES); 
-
-/*
- * FILE *f_mom = fopen("data/momentum.dat","w+");
-FILE *f_vmd=fopen("data/vmd.xyz","w+");
-fclose(f_vmd);
-fclose(f_mom);
-*/
 total_time=0;
 char  energy_therm_filename[128] = "data/energy_therm.dat";
 //FILE * f_energy_therm = fopen(energy_therm_filename,"a");
@@ -473,6 +481,7 @@ printf("TEMP = %e \t E_TOT = %e\t P = %e\n",2/3.0*kin_en(), total_energy() ,tota
 
 double * energy_vec = malloc(sizeof(double)*ITERATION_THERM);
 double * temp_therm = malloc(sizeof(double)*ITERATION_THERM);
+/*Ciclo di termalizzazione in cui viene fissata la temperatura (o l'energia totale negli altri programmi)*/
 for(iteration=0;iteration<ITERATION_THERM;iteration++){
 	if (iteration %2000== 0){
 		printf("Iterazione %d\n",iteration);
@@ -499,6 +508,8 @@ snprintf(energy_filename,128,"data/energy/intenergy%d.dat",NUMBER_OF_PARTICLES);
 //FILE * f_energy = fopen(energy_filename,"w");
 //FILE *f_mom = fopen("data/momentum.dat","w");
 energy_vec = malloc(sizeof(double)*ITERATION_MAX);
+
+/*Ciclo di produzione e raccolta dati*/
 while ( iteration < ITERATION_MAX){
 	if (iteration %4000== 0){
 		printf("Iterazione %d\n",iteration);

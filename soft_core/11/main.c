@@ -6,9 +6,9 @@
 
 #define NUMBER_OF_PARTICLES 256
 #define N 3
-#define ITERATION_MAX 5e4
+#define ITERATION_MAX 1e5
 #define ITERATION_THERM 5000
-#define skip_times 50
+#define skip_times 25
 double SIGMA=1;
 double DIST_RET = 1;
 double EPS = 1;
@@ -181,15 +181,15 @@ void reticolo () {
      //Definisco il passo del reticolo cercando il minimo doppio di un cubo: m >= n.
       //Questa procedur  	a permette di sfruttare l'intero spazio a disposizione per la creazione del reticolo.
      for (q = 0; m < NUMBER_OF_PARTICLES; q++){
-    	m = 2*q*q*q;
+    	m = q*q*q;
     }
-    passo = cbrt(pow(L,3)*2/(double)(m));
+    passo = cbrt(pow(L,3)/(double)(m));
 	printf("passo %lf\n", passo);
  	//creazione reticolo
 	//printf("Primo reticolo\n");
   	genera_sottoreticolo(0,0,0,q,0,passo);
 //	printf("Secondo reticolo\n");
-  	genera_sottoreticolo(passo/2.0,passo/2.0,passo/2.0,q,NUMBER_OF_PARTICLES/2, passo);
+//	genera_sottoreticolo(passo/2.0,passo/2.0,passo/2.0,q,NUMBER_OF_PARTICLES/2, passo);
 	for (i =0 ; i< NUMBER_OF_PARTICLES; i++){
 		for ( j = 0; j<N;j++){	
 				speed_cm[j] += particleList[i].speed[j];
@@ -587,7 +587,7 @@ while ( iteration < ITERATION_MAX){
 	
 	if ( iteration %10== 0){
 		create_list();
-		vmd_file_save();
+	//	vmd_file_save();
 	}
 	verlet(particleList);
 	total_time+=D_T;
@@ -602,6 +602,7 @@ r_squared_save(r2_filename);
 //free(energy_vec);
 free(neighboursList);
 free(particleList);
+free(time_list);
 
 
 return (EXIT_SUCCESS);

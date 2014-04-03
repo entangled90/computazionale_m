@@ -7,7 +7,8 @@
 #include <list.h>
 
 
-/*Il primo elemento dlela lista sarà l'ultimo ed ha NULL come puntatore a next*/
+/* Inizializza il cluster
+Il primo elemento dlela lista sarà l'ultimo ed ha NULL come puntatore a next*/
 void  initCluster(Node * n, int n_cluster, List * l){
 	n->next = NULL;
 	l->head = n;
