@@ -18,7 +18,7 @@ int main (int argc, char *argv[]){
 	int N ;
 	int iteration = 0;
 	int i,j ;
-	int larghezza_bin = 200;
+	int larghezza_bin = 500;
 	int n_bin = ITERATION_MAX/larghezza_bin;
 	printf("%d\n",n_bin);
 
