@@ -19,14 +19,14 @@
 \contentsline {section}{\numberline {2.1}Inizializzazione e definizione dei parametri}{20}{section.2.1}
 \contentsline {subsection}{\numberline {2.1.1}Termalizzazione}{20}{subsection.2.1.1}
 \contentsline {section}{\numberline {2.2}Produzione e analisi dati}{21}{section.2.2}
-\contentsline {subsection}{\numberline {2.2.1}Primo caso}{21}{subsection.2.2.1}
-\contentsline {subsection}{\numberline {2.2.2}Secondo caso}{23}{subsection.2.2.2}
+\contentsline {subsection}{\numberline {2.2.1}Esercizio 9}{21}{subsection.2.2.1}
+\contentsline {subsection}{\numberline {2.2.2}Esercizio 10}{23}{subsection.2.2.2}
 \contentsline {subsubsection}{Temperatura}{23}{subsubsection*.3}
 \contentsline {subsubsection}{Pressione}{24}{subsubsection*.4}
 \contentsline {subsubsection}{Energia interna}{24}{subsubsection*.5}
 \contentsline {subsubsection}{Confronto tra le osservabili}{24}{subsubsection*.6}
-\contentsline {subsection}{\numberline {2.2.3}Terzo caso}{26}{subsection.2.2.3}
-\contentsline {subsection}{\numberline {2.2.4}Quarto caso}{27}{subsection.2.2.4}
+\contentsline {subsection}{\numberline {2.2.3}Esercizio 11}{26}{subsection.2.2.3}
+\contentsline {subsection}{\numberline {2.2.4}Esercizio 12}{27}{subsection.2.2.4}
 \contentsline {chapter}{\numberline {3}Modello di Ising}{28}{chapter.3}
 \contentsline {section}{\numberline {3.1}Termalizzazione}{28}{section.3.1}
 \contentsline {section}{\numberline {3.2}Autocorrelazione fra le configurazioni}{29}{section.3.2}

@@ -305,7 +305,7 @@ int main (int argc, char *argv[]){
 	fclose(f_corr_row);
 		/* Free della memoria */
 	free(chi_vet_binnato);
-	free(cv_vet_binnato);	free(mag_vet_dati) ;
+	free(cv_vet_binnato);
 	free(mag_vet_dati) ;
 	free(mag_vet_binnato);
 	free(en_vet_dati);

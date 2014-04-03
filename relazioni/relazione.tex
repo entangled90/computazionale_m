@@ -437,7 +437,7 @@ Dopo aver fatto termalizzare il sistema il valore di temperatura o energia total
 
 \section{Produzione e analisi dati}
 La raccolta e l'analisi dei dati viene divisa nelle 4 richieste delle note
-\subsection{Primo caso}
+\subsection{Esercizio 9}
 In questa prima raccolta dati prevede le seguenti condizioni iniziali:
 $$
 	\rho = 0.7 \qquad <T>=1.19 \qquad N=108,\,500
@@ -470,7 +470,7 @@ Ci aspetta quindi che le fluttuazioni sulla temperatura diminuiscano all'aumenta
 
 %%%%%%%%%%%%%%CONTROLLA
 
-\subsection{Secondo caso}
+\subsection{Esercizio 10}
 Il sistema viene ora inizializzato con questi parametri:
 $$
 	\rho = 0.6 \qquad <T> = 1.22 \qquad N=108
@@ -529,7 +529,7 @@ $$
 Quindi le oscillazioni della temperatura devono essere minori di quelle sull'energia interna. Infatti, l'errore associato alla temperatura è minore rispetto all'errore sull'energia interna.
 
 
-\subsection{Terzo caso}
+\subsection{Esercizio 11}
 Il sistema è stato inizializzato con queste condizioni iniziali:
 $$
 	\rho = 0.9 \qquad N=256 \qquad <T> = 0.8,\, 1.087
@@ -543,7 +543,7 @@ Il grafico è stato generato a partire da 5 simulazioni indipendenti per ogni va
 Si può vedere come abbassando la temperatura la rapidità con cui il valore dello spostamento quadratico medio diminuisce, in modo simile a quando accadeva nel caso delle sfere rigide.\\
 Anche in questo caso il valore limite di questa quantità è $\Delta r^2(t \rightarrow \infty) = 0.25$ come nel caso delle sfere rigide in 3 dimensioni.
 
-\subsection{Quarto caso}
+\subsection{Esercizio 12}
 L'ultima classe di simulazioni è stata inizializzata con i seguenti parametri:
 $$
  \rho = 0.7 \qquad <\frac{E}{N \epsilon}> = -2.98 \qquad N = 100,150,250,500,800,1000
@@ -660,17 +660,17 @@ Come si può immaginare, la larghezza del bin è associata al tempo di autocorel
 \subsection*{Metropolis}
 Si vedano ora alcuni grafici di questa quantità a diverse temperature e per due diverse osservabili.
 \begin{figure}[h!]
-\subfigure[$\sigma$ Energia a $\beta=0.325$]{
-	\includegraphics[scale=0.45]{metropolis/bin_en_0325.png}
+\subfigure[$\sigma$ Energia a $\beta=0.35$]{
+	\includegraphics[scale=0.45]{metropolis/bin_en_035.png}
 }
-\subfigure[$\sigma$ Energia $\beta=0.4508$]{
-\includegraphics[scale=0.45]{metropolis/bin_en_0408.png}
+\subfigure[$\sigma$ Energia $\beta=0.435$]{
+\includegraphics[scale=0.45]{metropolis/bin_en_043.png}
 }
 \caption{Metropolis}
 \end{figure}
 \begin{figure}[h!]
-\subfigure[$\sigma$ Energia a $\beta=0.453$]{
-	\includegraphics[scale=0.45]{metropolis/bin_en_043.png}
+\subfigure[$\sigma$ Energia a $\beta=0.439$]{
+	\includegraphics[scale=0.45]{metropolis/bin_en_0439.png}
 }
 \subfigure[$\sigma$ Energia $\beta=0.459$]{
 \includegraphics[scale=0.45]{metropolis/bin_en_049.png}
@@ -679,17 +679,17 @@ Si vedano ora alcuni grafici di questa quantità a diverse temperature e per due
 \end{figure}
 
 \begin{figure}[h!]
-\subfigure[$\sigma$ Magnetizzazione a $\beta=0.325$]{
-	\includegraphics[scale=0.45]{metropolis/bin_mag_0325.png}
+\subfigure[$\sigma$ Magnetizzazione a $\beta=0.35$]{
+	\includegraphics[scale=0.45]{metropolis/bin_mag_035.png}
 }
-\subfigure[$\sigma$ Magnetizzazione $\beta=0.4508$]{
-\includegraphics[scale=0.45]{metropolis/bin_mag_0408.png}
+\subfigure[$\sigma$ Magnetizzazione $\beta=0.43$]{
+\includegraphics[scale=0.45]{metropolis/bin_mag_043.png}
 }
 \caption{Metropolis}
 \end{figure}
 \begin{figure}[h!]
-\subfigure[$\sigma$ Magnetizzazione a $\beta=0.43$]{
-	\includegraphics[scale=0.45]{metropolis/bin_mag_043.png}
+\subfigure[$\sigma$ Magnetizzazione a $\beta=0.439$]{
+	\includegraphics[scale=0.45]{metropolis/bin_mag_0439.png}
 }
 \subfigure[$\sigma$ Magnetizzazione $\beta=0.49$]{
 \includegraphics[scale=0.45]{metropolis/bin_mag_049.png}
@@ -701,17 +701,17 @@ Si vedano ora alcuni grafici di questa quantità a diverse temperature e per due
 \subsection*{Swendsen-Wang}
 Si vedano anche per questo algoritmo le stesse osservabili alle stesse temperature di Metropolis. 
 \begin{figure}[h!]
-\subfigure[$\sigma$ Energia a $\beta=0.325$]{
-	\includegraphics[scale=0.45]{sw/bin_en_0325.png}
+\subfigure[$\sigma$ Energia a $\beta=0.344$]{
+	\includegraphics[scale=0.45]{sw/bin_en_0344.png}
 }
-\subfigure[$\sigma$ Energia $\beta=0.4508$]{
-\includegraphics[scale=0.45]{sw/bin_en_0408.png}
+\subfigure[$\sigma$ Energia $\beta=0.43$]{
+\includegraphics[scale=0.45]{sw/bin_en_043.png}
 }
 \caption{Swendsen-Wang}
 \end{figure}
 \begin{figure}[h!]
-\subfigure[$\sigma$ Energia a $\beta=0.453$]{
-	\includegraphics[scale=0.45]{sw/bin_en_043.png}
+\subfigure[$\sigma$ Energia a $\beta=0.44$]{
+	\includegraphics[scale=0.45]{sw/bin_en_044.png}
 }
 \subfigure[$\sigma$ Energia $\beta=0.459$]{
 \includegraphics[scale=0.45]{sw/bin_en_049.png}
@@ -721,17 +721,17 @@ Si vedano anche per questo algoritmo le stesse osservabili alle stesse temperatu
 
 
 \begin{figure}[h!]
-\subfigure[$\sigma$ Magnetizzazione a $\beta=0.325$]{
-	\includegraphics[scale=0.45]{sw/bin_mag_0325.png}
+\subfigure[$\sigma$ Magnetizzazione a $\beta=0.344$]{
+	\includegraphics[scale=0.45]{sw/bin_mag_0344.png}
 }
-\subfigure[$\sigma$ Magnetizzazione $\beta=0.4508$]{
-\includegraphics[scale=0.45]{sw/bin_mag_0408.png}
+\subfigure[$\sigma$ Magnetizzazione $\beta=0.43$]{
+\includegraphics[scale=0.45]{sw/bin_mag_043.png}
 }
 \caption{Swendsen-Wang}
 \end{figure}
 \begin{figure}[h!]
-\subfigure[$\sigma$ Magnetizzazione a $\beta=0.43$]{
-	\includegraphics[scale=0.45]{sw/bin_mag_043.png}
+\subfigure[$\sigma$ Magnetizzazione a $\beta=0.44$]{
+	\includegraphics[scale=0.45]{sw/bin_mag_044.png}
 }
 \subfigure[$\sigma$ Magnetizzazione $\beta=0.49$]{
 \includegraphics[scale=0.45]{sw/bin_mag_049.png}
@@ -744,8 +744,8 @@ Si stima la larghezza ottimale dell'intervallo cercando il punto in cui la curva
 Si può vedere inoltre, come avvicinandosi al punto critico sia necessario avere un intervallo più largo: ciò è una chiara conseguenza della crescita di $\tau_{corr}$ all'avvicinarsi al punto critico.\\
 Inoltre, prendiamo l'esempio del caso metropolis. Alla temperatura $\beta = 0.325$ possiamo prendere come larghezza del bin 20. Poco sotto il punto critico, avremo come larghezza bin ~ 150/200. Come nel caso dell'autocorrelazione avvicinandosi del punto critico la quantità in questione è aumentata di circa un fattore 10 in entrambi i casi.
 Ciò può far capire perchè tempo di autocorrelazione e larghezza del bin siano due quantità non indipendenti.\\
-A riprova di ciò, si può fare la stessa analisi con Swendsen-Wang: si passa da un larghezza del bin di circa 10 a una larghezza di circa 20. Esso è aumentato di un fattore simile al tempo di autocorrelazione, che è passato da 2.5 a 5.5 .\\
-In seguito a questa analisi è stata scelta come larghezza dei bin per Metropolis  200 e per Swendsen-Wang 30.\\
+A riprova di ciò, si può fare la stessa analisi con Swendsen-Wang: si passa da un larghezza del bin di circa 10 a una larghezza di circa 30. Esso è aumentato di un fattore simile al tempo di autocorrelazione, che è passato da 2.5 a 5.5 .\\
+In seguito a questa analisi è stata scelta come larghezza dei bin per Metropolis  200 e per Swendsen-Wang 40.\\
 Per via di questa grande differenza di larghezza dei bin il numero di passi temporali eseguiti con Metropolis è stato aumentato a 120000, mentre Swendsen-Wang rimane con 20000 passi in modo da avere errori più simili con i due algoritmi. In questo modo infatti si ha un numero di misure molto simile dopo il binning.\\
 Nonostante Metropolis sia molto più veloce di Swendsen-Wang a parità di step temporali, la grande autocorrelazione fra le configurazioni generate impone di dover generare molte più configurazioni. Questo fatto lo rende più lento di Swendsen-Wang a generare un sample di dati simili.\\
 Si confrontino i tempi dei due algoritmi in un reticolo 100x100:

@@ -23,7 +23,7 @@ int main ( int argc, char * argv[]) {
 	int iteration = 0;
 	mt_seed();
 	int i,j;
-	int larghezza_bin = 30;
+	int larghezza_bin = 40;
 	int n_bin = ITERATION_MAX/larghezza_bin;
 	printf("%d\n",n_bin);
 	if (n_bin ==0){
