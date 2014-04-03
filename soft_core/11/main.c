@@ -539,7 +539,7 @@ unsigned int i;
 
 /**********************FILES ***************************/
 char r2_filename[64] = "";
-snprintf(r2_filename,64,"data/dr2/dr2%.5lf.dat",T_D); 
+snprintf(r2_filename,64,"data/dr2/dr2_%d_%.5lf.dat",(int)time(NULL),T_D); 
 
 /*
  FILE *f_mom = fopen("data/momentum.dat","w+");

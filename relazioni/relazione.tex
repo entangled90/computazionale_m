@@ -229,7 +229,8 @@ Si vede un comportamento del tutto simile a quanto accade con il tempo medio di 
 
 \newpage
 \subsection{Spostamento quadratico medio in funzione del tempo}
-Il valore di $\Delta r^2(t)$ è stato calcolato per ogni singola particella, sfruttando l'invarianza temporale del sistema, mediando così tra tutti gli istanti distanti tra loro un tempo $t$. Infine, da questo campione di dati si è calcolato valor medio ed errore.\\
+Il valore di $\Delta r^2(t)$ è stato calcolato per ogni singola particella, sfruttando l'invarianza temporale del sistema, mediando così tra tutti gli istanti distanti tra loro un tempo $t$. 
+Il grafico è stato generato a partire da 5 simulazioni indipendenti per ogni valore della temperatura. Si è calcolato il valor medio e l'errore a partire da questo insieme di dati per ogni istante temporale.\\
 Il sistema è stato simulato fino a un valore del tempo pari a 15, ma i valori di $\Delta r^2(t)$ per $t$ superiore a 10 sono stati scartati in quando tendevano ad oscillare in quanto per essi il campione di dati era minore.\\
 Si è calcolata questa quantità ad istanti di tempo discreti pari a 0.03 e per fare ciò è stato necessario spezzare l'evoluzione temporale in modo da prendere dati per valori multipli di 0.03.\\
 Il valore aspettato per un sistema disordinato, prima della transizione di fase, è calcolabile teoricamente assumendo che in un tempo abbastanza grande ogni particella abbia avuto l'oppportunità di spostarsi in tutta la scatola. Esso è calcolabile in questo modo:
@@ -259,7 +260,7 @@ Da notare, inoltre, l'enorme tempo necessario per arrivare al valore limite, ris
 
 
 \newpage
-\section{Sfere rigide 3D}
+\section{3 Dimensioni}
 
 \subsection{Inizializzazione}
 L'inizializzazione dell'algoritmo avviene in maniera del tutto simile a quanto fatto con i dischi in 2 dimensioni.
@@ -439,10 +440,10 @@ La raccolta e l'analisi dei dati viene divisa nelle 4 richieste delle note
 \subsection{Primo caso}
 In questa prima raccolta dati prevede le seguenti condizioni iniziali:
 $$
-	\rho = 0.7 \qquad <T>=1.19 \qquad N=108,500
+	\rho = 0.7 \qquad <T>=1.19 \qquad N=108,\,500
 $$
 Si veda ora il confronto fra l'energia interna del sistema fra $N=108$ e $N=500$ particelle con queste condizioni iniziali.
-Il numero di step in cui sono stati raccolti dati è stato 20000.
+Il numero di step in cui sono stati raccolti dati è stato 20000.L'errore è stato calcolato attraverso il \emph{binning} con intervalli contenenti 2000 dati.
 \begin{myfig}[h]
 	\subfigure[$N=108$ particelle]{
 		\includegraphics[scale=0.35]{soft_core/9_int108.png}
@@ -457,13 +458,16 @@ Il numero di step in cui sono stati raccolti dati è stato 20000.
 	\includegraphics[scale=0.5]{soft_core/9cfr.png}
 	\caption{Confronto tra $N=108$ e $N=500$}
 \end{myfig}
-
 \begin{align}
 N=108 \qquad <\frac{U}{N \epsilon}> &= -3.520 \pm 0.004 \\
 N=500 \qquad <\frac{U}{N \epsilon}> &= -3.503 \pm 0.001 \\
 \end{align}
 Come si può vedere dalla sovrapposizione dei due grafici, aumentando il numero di particelle le fluttuazioni sull'energia interna diminuiscono e quindi anche l'errore associato.
-L'errore è stato calcolato attraverso il \emph{binning} con intervalli contenenti 2000 dati.
+Questo fatto può essere visto come conseguenza dell'equivalenza dell'ensemble microcanonico con l'ensemble canonico al limite termodinamico.
+Nel nostro caso, infatti, il nostro sistema è isolato e con energia totale costante. L'energia interna, invece è legata alle fluttuazioni della temperatura del sistema in quanto la temperatura è proporzionale all'energia cinetica.
+L'equivalenza fra i due ensemble implica che al limite termodinamico il sistema simulato, è equivalente a un sistema immerso in un bagno termico a una temperatura fissata.\\
+Ci aspetta quindi che le fluttuazioni sulla temperatura diminuiscano all'aumentare del numero di particelle e di conseguenza anche le fluttuazioni sull'energia interna.
+
 %%%%%%%%%%%%%%CONTROLLA
 
 \subsection{Secondo caso}
@@ -522,7 +526,20 @@ Siccome essa può essere scritta in questo modo:
 $$
 	E_{tot} = \frac{1}{N} (K + U) = \frac{3}{2} T+ \frac{U}{N} 
 $$
-Quindi le oscillazioni della temperatura devono essere circa 1 volta e mezzo quelle dell'energia interna.
+Quindi le oscillazioni della temperatura devono essere minori di quelle sull'energia interna. Infatti, l'errore associato alla temperatura è minore rispetto all'errore sull'energia interna.
+
+
+\subsection{Terzo caso}
+Il sistema è stato inizializzato con queste condizioni iniziali:
+$$
+	\rho = 0.9 \qquad N=256 \qquad <T> = 0.8,\, 1.087
+$$
+Si è interessati a confrontare l'andamento dello spostamento quadratico medio in funzione del tempo alle varie temperature. Il calcolo di $\Delta r^2(t)$ è stato effettuato in maniera del tutto analoga a quanto fatto per le sfere rigide in 3D, con l'unica differenza che ora il lato della scatola è diverso da 1 e quindi si è normalizzato il risultato dividento per $L^2$
+\begin{myfig}[h]
+\includegraphics[scale=0.6]{soft_core/11_dr2pepe.png}
+\caption{Confronto di $\Delta r^2(t)$ a varie temperature}
+\end{myfig}
+Il grafico è stato generato a partire da 5 simulazioni indipendenti per ogni valore della temperatura. Si è calcolato il valor medio e l'errore a partire da questo insieme di dati per ogni istante temporale.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%CONTINUAAAAA

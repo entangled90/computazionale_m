@@ -1,5 +1,5 @@
 # Fdb version 3
-["pdflatex"] 1396467354 "relazione.tex" "relazione.pdf" "relazione" 1396467367
+["pdflatex"] 1396524516 "relazione.tex" "relazione.pdf" "relazione" 1396524529
   "/usr/share/texmf-dist/tex/context/base/supp-pdf.mkii" 1394609583 71627 94eb9990bed73c364d7f53f960cc8c5b ""
   "/usr/share/texmf-dist/tex/generic/babel-italian/italian.ldf" 1394609578 11067 cefc270d47105eff772228df789cd123 ""
   "/usr/share/texmf-dist/tex/generic/babel/babel.def" 1394609578 44590 cbeafe75704649248599c30a21c5b6b4 ""
@@ -114,10 +114,10 @@
   "potts/potts099.png" 1395256271 55528 0348b8454b2df9d8c74c01c5a1553463 ""
   "potts/potts1005.png" 1395256368 51497 cf236cbf76e337614eaebce8e6b23b5f ""
   "potts/potts1015.png" 1395256294 45961 e686cc6f9aa666ddefbca719d57fc95c ""
-  "relazione.aux" 1396467367 22786 93c63bf0f9e6804a4abc1c6ec0c79b5f ""
-  "relazione.out" 1396467367 2423 86702162cfb76930add2783748ba7131 ""
-  "relazione.tex" 1396467339 64606 c3431b51c1b17de6d2845cc14a26604f ""
-  "relazione.toc" 1396467367 3405 97d0ace99c635d7891930a6e9cbc1993 ""
+  "relazione.aux" 1396524529 23021 2afcbc41959a95cdf68b3b91e105787f ""
+  "relazione.out" 1396524529 2484 5c82db5944acc3c3d5baba939b964e78 ""
+  "relazione.tex" 1396524434 66423 e6df64f0dd09835d8c9250a7ecac4e6c ""
+  "relazione.toc" 1396524529 3482 63347cd94defbd0de88e42bc41246993 ""
   "sfere2D/boltzmann.png" 1395858699 38826 827d7528e51396edfe02af9aa5d54ac7 ""
   "sfere2D/dr2cfr.png" 1396005021 51362 56d65fcdd0149469cbdd0fae28b07d3d ""
   "sfere2D/dr2vari.png" 1395917506 80741 5da43fbc0582c7ebd934e8962c38c4dd ""
@@ -147,6 +147,7 @@
   "soft_core/10_cfr.png" 1396467109 86306 76944a0726254047cc0e00deb65545a7 ""
   "soft_core/10_pres.png" 1396464423 128185 61dbb0456f41b6f8e1ea1f1bbf4334bc ""
   "soft_core/10_temp.png" 1396464548 131729 f0df1aa1161322462d48db1281d37caa ""
+  "soft_core/11_dr2pepe.png" 1396523276 42301 50ef648ed2a4ca3db65d7d38aebbbf02 ""
   "soft_core/9_int108.png" 1396458455 114399 287052b381f0b0bf4e271ccf4a0856e9 ""
   "soft_core/9_int500.png" 1396459953 132528 653dd3fea4c697e72e6887b5ae5a8017 ""
   "soft_core/9cfr.png" 1396459973 169570 1219bfad3438281600a3518074d79a51 ""
@@ -185,8 +186,8 @@
   "sw/pdfM1.png" 1395163744 39409 ab2f63349eb2829d61857a7bb57d1b87 ""
   "title.tex" 1395758417 436 159623bc5bba2c3a0f3c6dd67c0e9226 ""
   (generated)
-  "relazione.aux"
-  "relazione.toc"
-  "relazione.log"
-  "relazione.pdf"
   "relazione.out"
+  "relazione.toc"
+  "relazione.pdf"
+  "relazione.log"
+  "relazione.aux"
