@@ -4,7 +4,7 @@
 #include <time.h>
 #include <float.h>
 
-#define NUMBER_OF_PARTICLES 108
+#define NUMBER_OF_PARTICLES 1000
 #define N 3
 #define ITERATION_MAX 2e4
 #define ITERATION_THERM 5000
@@ -425,7 +425,7 @@ inline void vmd_file_save(){
 
 void print_vec(char * file, double * vec, int Len){
 	int i=0;
-	FILE *f=fopen(file,"w");
+	FILE *f=fopen(file,"a");
 	for(i=0;i<Len;i++){
 		fprintf(f,"%e\t%e\n",i*D_T,vec[i]);
 	}

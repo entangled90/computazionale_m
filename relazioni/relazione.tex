@@ -548,13 +548,74 @@ L'ultima classe di simulazioni è stata inizializzata con i seguenti parametri:
 $$
  \rho = 0.7 \qquad <\frac{E}{N \epsilon}> = -2.98 \qquad N = 100,150,250,500,800,1000
 $$
-Sono stati raccolti i dati di energia interna e temperatura ad ogni step e sono stati poi binnati in intervalli di larghezza 2000 bin.
-Dopo il binning, sono stati calcolati gli errori.\\
+Sono stati raccolti i dati di energia interna e temperatura per ogni simulazione. Ogni simulazione è stata ripetuta 5 volte per stimare in maniera corretta l'errore e il valor medio.
 Infine è stato estrapolato il valore delle grandezze nel limite termodinamico facendo un fit con una retta del tipo:
 $$
 	O(N) \, = \,A \frac{1}{N} + B
 $$
 in modo tale che il valore di $O(\infty) = B$.
+\subsubsection{Energia interna}
+I valori dell'energia interna in funzione del numero di particelle sono i seguenti:
+\begin{center}
+	\begin{tabular}{c c c }
+		\toprule	
+		$N$ & $<\frac{U}{N \epsilon} $ Errore \\
+		\midrule
+100 &  -3.901282 & 0.001692 \\ 
+150 &  -3.906181 & 0.001839 \\ 
+250 &  -3.906673 & 0.001397 \\ 
+ 500 &  -3.912322 & 0.001174 \\ 
+ 800 &  -3.913474 & 0.002585 \\ 
+ 1000 &  -3.910644 & 0.001489 \\ 
+ 
+	\end{tabular}
+\end{center}
+
+
+I valori restituiti dal fit sono:
+$$
+	A =  1.2\pm 0.2 \qquad B = -3.913 \pm 0.001
+$$
+Il valore al limite termodinamico dell'energia interna è quindi:
+$$
+	<\frac{U_{LT}}{N \epsilon}> = -.3913 \pm 0.001
+$$
+\begin{myfig}
+\includegraphics[scale=0.6]{soft_core/12lt.png}
+\caption{Limite termodinamico per la densità di energia interna}
+\end{myfig}
+
+
+\subsubsection{Temperatura}
+Per la temperatura è stata fatta una cosa analoga. I valori sono i seguenti:
+
+\begin{center}
+	\begin{tabular}{c c c }
+		\toprule	
+		$N$ & $<\frac{T}{\epsilon} $ Errore \\
+		\midrule
+		100 &  0.614190  & 0.001128 	\\
+		150 &  0.617455  & 0.001226 	\\
+		250 &  0.617782  & 0.000932 	\\
+		500 &  0.621547  & 0.000783 	\\
+		800 &  0.622315  & 0.001724 	\\
+		1000 &  0.620430  & 0.000992 	\\
+		\bottomrule
+	\end{tabular}
+\end{center}
+
+
+
+e il risultato del fit è:
+$$
+	A = -0.81 \pm 0.14 \qquad B = 0.6223 \pm 0.0007
+$$
+
+\begin{myfig}
+\includegraphics[scale=0.6]{soft_core/12lt_temp.png}
+\caption{Limite termodinamico per la temperatura}
+\end{myfig}
+
 
 
 %%%%%%%% FIGURE E TABELLE 

@@ -7,10 +7,12 @@ import glob
 import os
 from scipy.optimize import curve_fit
 
+
 def fit(x,*p):
 	return p[0]*x + p[1]
+
 L_bin = 20000
-files = glob.glob('energy*.dat')	
+files = glob.glob('temperature*.dat')	
 n=[]
 m=[]
 d=[]
@@ -33,19 +35,23 @@ out_file = open('binned_energy',"w")
 for i in range(len(n)):
 	out_file.write('%d\t%.14e\t%.14e\n'%(1/n[i],m[i],d[i]))
 out_file.close()
+
 for i in range(len(n)):
 	n[i] = 1/n[i]
+
 m_np=np.asarray(m)
 n_np=np.asarray(n)
 guess=[0,-3]
 popt,pcov = curve_fit(fit,n_np,m_np,p0=guess)
 print(popt , pcov)
 x=np.linspace(0,0.012,1000)
+
 fig = plt.figure()
-fig.suptitle("Energia interna in funzione del numero di particelle")
+fig.suptitle("Temperatura in funzione del numero di particelle")
 plt.grid()
 plt.xlabel(r'$\frac{1}{N}$')
-plt.ylabel(r'$\frac{U}{N \epsilon}$')
+plt.ylabel(r'$<T>$')
 plt.errorbar(n,m,fmt='+',yerr=dev)
 plt.plot(x,fit(x,*popt))
+
 plt.show()

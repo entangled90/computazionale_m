@@ -119,9 +119,6 @@ void genera_sottoreticolo(double rx_in, double ry_in,double rz_in,int q,int star
 				particleList[p].position[1]=ry;		
 				particleList[p].position[2]=rz;
 	//			printf("P %d %lf \t %lf\n", p,particleList[p].position[0],particleList[p].position[1]);
-				speed_cm[0] += particleList[p].speed[0];
-				speed_cm[1] += particleList[p].speed[1];
-				speed_cm[2] += particleList[p].speed[2];
 				rx = rx + passo;
 				p++;
 				c++; 
@@ -636,7 +633,7 @@ riscala_vel_temp();
 
 /****** GESTIONE FILE  ******/
 char r2_file[64] = "";
-snprintf(r2_file,64,"data/dr2/%d/%.6lf.dat",NUMBER_OF_PARTICLES, fraz_imp); 
+snprintf(r2_file,64,"data/dr2/%d/dr2_%d_%.6lf.dat",NUMBER_OF_PARTICLES,(int) time(NULL),fraz_imp); 
 //char * press_file = "data/press.dat";
 char  pression_filename[128] = "";
 snprintf(pression_filename,128,"data/pression/%d/pression%.6lf.dat",NUMBER_OF_PARTICLES,fraz_imp);

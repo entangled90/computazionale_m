@@ -16,7 +16,7 @@ altrimenti eta viene impostato di default a eta = 0.1 (fraz_imp)
 #define TERM_TIME 10000
 #define MAX_COLLISION 2e5
 //tempo adimensionato in cui si simula il sistema
-#define TIME_MAX 15
+#define TIME_MAX 200
 /*Numero particelle */
 int number_of_particles = 128;
 /* Diametro sfere */
@@ -160,10 +160,10 @@ void reticolo () {
       	  //creazione reticolo
 	rx=0;
 	ry=0;
-    genera_sottoreticolo(rx,ry,q,0,passo,speed_cm);
+    genera_sottoreticolo(rx,ry,q,0,passo);
 	rx = passo/2.0;
 	ry = passo/2.0;
-    genera_sottoreticolo(rx,ry,q,number_of_particles/2, passo,speed_cm);
+    genera_sottoreticolo(rx,ry,q,number_of_particles/2, passo);
 	for (i =0 ; i< number_of_particles; i++){
 		for ( j = 0; j<N;j++){	
 				speed_cm[j] += particleList[i].speed[j];
@@ -628,7 +628,7 @@ printf("Temperature is: %f \n",temperature );
 
 /****** GESTIONE FILE  ******/
 char r2_file[64] = "";
-snprintf(r2_file,64,"data/dr2/%.6lf.dat",fraz_imp); 
+snprintf(r2_file,64,"data/dr2/dr2_%d_%.6lf.dat",(int)time(NULL),fraz_imp); 
 //char * press_file = "data/press.dat";
 char  tc_filename[64] = "";
 snprintf(tc_filename, 64, "data/tc/%d/tc%6f.dat",number_of_particles, fraz_imp);

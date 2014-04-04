@@ -19,7 +19,7 @@ ax.grid(True)
 plt.xlabel(r'$t$',fontsize='15')
 plt.ylabel(r'$\Delta r^2(t)$',fontsize='15')
 for f in file_list:
-	eta_temp=float(f[:8])
+	eta_temp=float(f[-9:-4])
 	eta,mfp,ers=np.loadtxt(f,unpack=True)
 	ax.errorbar(eta, mfp,yerr=ers,fmt='+',label=r'$\eta=%.5lf$'%(eta_temp))
 box = ax.get_position()
