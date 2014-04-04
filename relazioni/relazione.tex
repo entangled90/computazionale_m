@@ -258,18 +258,12 @@ $$
 \end{center}
 Come si può vedere dal grafico, per valori di $\eta$ non troppo vicini alla regione di transizione la curva arriva al valore teorico calcolato prima e poi si appiattisce. All'aumentare di $\eta$ la forma della curva cambia e diventa una retta in prima approssimazione, con una pendenza che decresce sempre più all'aumentare della frazione di impacchettamento. Questo comportamento è segno della scarsa mobilità dei dischi all'aumentare del loro diametro (ossia di $\eta$).
 Per veder meglio questo fatto, si consideri il seguente grafico:
-\begin{center}
-	\begin{figure}[h!]
-		\centering
-		\includegraphics[scale=0.5]{sfere2D/dr2trans2.png}
-	\end{figure}
-\end{center}
-Come si può vedere, prima della transizione di fase ($\eta=0.6$) il sistema arriva rapidamente al valore teorico e continua ad oscillare intorno a quel valore.
-Per i valori successivi alla transizione di fase, le curve continuano ad avere una pendenza sempre minore.
-\begin{myfig}[ht]
+\begin{myfig}[h!]
 	\includegraphics[scale=0.5]{sfere2D/dr2cfr.png}
 \caption{Confronto di $\Delta r^2$ fino a $t=250$ dopo la transizione di fase}
 \end{myfig}
+Come si può vedere, prima della transizione di fase ($\eta=0.6$) il sistema arriva rapidamente al valore teorico e continua ad oscillare intorno a quel valore.
+Per i valori successivi alla transizione di fase, le curve continuano ad avere una pendenza sempre minore.
 Aumentando il tempo della simulazione fino a $t=300$ si è visto che l'andamento di $\Delta r^2$ si mantiene lineare per tutto il tempo della simulazione, anche se sembra che la pendenza delle curve diminuisca leggermente.
 
 \newpage
@@ -1116,7 +1110,7 @@ Per questo, gli esponenti critici del modello simulato sembrano risultare simili
 \chapter{Modello di Potts}
 Il modello di Potts è una generalizzazione del modello di Ising studiato nel capitolo precedente.
 Esso generalizza il modello di Ising aggiungendo un numero arbitrario di stati.\\
- Si analizzerà ora il modello di Potts in 2 dimensioni con 3 stati. La sua implementazione ha sfruttato la rappresentazione degli stati come radici dell'unità $e^{2 \pi i}$ con $i=0,1,2$.
+ Si analizzerà ora il modello di Potts in 2 dimensioni con 3 stati. La sua implementazione ha sfruttato la rappresentazione degli stati come radici dell'unità $e^{\frac{2 \pi i}{3} }$ con $i=0,1,2$.
 Il modello è stato implementato solo usando l'algoritmo Swendsen-Wang e verrà svolta un'analisi simile a quanto fatto con Ising data l'analogia tra i due modelli.
 
 
@@ -1185,10 +1179,12 @@ Le curve sono relative a reticoli 30x30, 75x75 e 150x150:
 
 \begin{figure}[h]
 \centering
-\includegraphics[scale=0.5]{potts/mag_taglia.png}
+\includegraphics[scale=0.6]{potts/mag_taglia.png}
 \caption{Magnetizzazione per L=30,75,150.}
 \end{figure}
 \newpage
+\newpage
+\clearpage
 \section{Distribuzione di probabilità della magnetizzazione}
 In questo modello, si può analizzare la distribuzione della probabilità della magnetizzazione nel piano complesso.
 Ciò può essere fatto utilizzando la seguente definizione di magnetizzazione:
@@ -1277,7 +1273,7 @@ $\beta_{crit} = log(1+\sqrt(3)) = 1.0050525..$
 \begin{center}
 \begin{figure}[h]
 \centering
- 	\includegraphics[scale=0.65]{potts/corr150.png}
+ 	\includegraphics[scale=0.55]{potts/corr150.png}
  	\caption{Lunghezza di correlazione.}
 \end{figure}
 \end{center}

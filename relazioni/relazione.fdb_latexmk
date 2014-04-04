@@ -1,5 +1,5 @@
 # Fdb version 3
-["pdflatex"] 1396624093 "relazione.tex" "relazione.pdf" "relazione" 1396624107
+["pdflatex"] 1396624940 "relazione.tex" "relazione.pdf" "relazione" 1396624954
   "/usr/share/texmf-dist/tex/context/base/supp-pdf.mkii" 1394609583 71627 94eb9990bed73c364d7f53f960cc8c5b ""
   "/usr/share/texmf-dist/tex/generic/babel-italian/italian.ldf" 1394609578 11067 cefc270d47105eff772228df789cd123 ""
   "/usr/share/texmf-dist/tex/generic/babel/babel.def" 1394609578 44590 cbeafe75704649248599c30a21c5b6b4 ""
@@ -115,13 +115,12 @@
   "potts/potts099.png" 1395256271 55528 0348b8454b2df9d8c74c01c5a1553463 ""
   "potts/potts1005.png" 1395256368 51497 cf236cbf76e337614eaebce8e6b23b5f ""
   "potts/potts1015.png" 1395256294 45961 e686cc6f9aa666ddefbca719d57fc95c ""
-  "relazione.aux" 1396624107 23730 ddf9f7a6fb4f69b699e56dd0e26773aa ""
-  "relazione.out" 1396624107 2553 3a1143905d172ebb8e34b343e9ab2e6c ""
-  "relazione.tex" 1396624093 70028 90a91b8240dd0b40b64ce9f730545b1f ""
-  "relazione.toc" 1396624107 3702 296e7327124ceb7aa09308b26d22ee0d ""
+  "relazione.aux" 1396624953 23730 89f1c96644d924e879d4b096ccddf8f7 ""
+  "relazione.out" 1396624953 2553 3a1143905d172ebb8e34b343e9ab2e6c ""
+  "relazione.tex" 1396624926 69929 6a9ead4b46266c70c8fce180e6c440da ""
+  "relazione.toc" 1396624953 3702 0611c1821ec29b990baa6cfae71dbe61 ""
   "sfere2D/boltzmann.png" 1395858699 38826 827d7528e51396edfe02af9aa5d54ac7 ""
   "sfere2D/dr2cfr.png" 1396621669 36993 4aa6127c6b923b049904e44995de10c9 ""
-  "sfere2D/dr2trans2.png" 1396602193 46723 54fc287c5acaa3b800c441e4ca7a9443 ""
   "sfere2D/dr2vari.png" 1396597949 74574 b16da71c2fa14af3f02a0855812b8d04 ""
   "sfere2D/fit_pdf_tc.png" 1395944586 40171 cb1ab3ff20f57ee9a0d8dcdce6b167e4 ""
   "sfere2D/mfp.png" 1395915811 30593 76b59825be99a2108242447e02f8426c ""
@@ -190,8 +189,8 @@
   "sw/pdfM1.png" 1395163744 39409 ab2f63349eb2829d61857a7bb57d1b87 ""
   "title.tex" 1396548072 515 fac1b0c500c4d02c3f24fb3526b103fb ""
   (generated)
-  "relazione.pdf"
-  "relazione.log"
   "relazione.aux"
   "relazione.toc"
+  "relazione.log"
   "relazione.out"
+  "relazione.pdf"
