@@ -16,7 +16,7 @@ altrimenti eta viene impostato di default a eta = 0.1 (fraz_imp)
 #define TERM_TIME 10000
 #define MAX_COLLISION 2e5
 //tempo adimensionato in cui si simula il sistema
-#define TIME_MAX 200
+#define TIME_MAX 300
 /*Numero particelle */
 int number_of_particles = 128;
 /* Diametro sfere */

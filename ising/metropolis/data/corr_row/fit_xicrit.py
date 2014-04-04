@@ -65,7 +65,6 @@ for l in l_ord:
 beta_np = np.asarray(beta,dtype='float64')
 xi_np = np.asarray(xi,dtype='float64')
 error_np = np.asarray(error,dtype='float64')
-error_np *= 600
 guess = [1, -1]#,0.438]
 popt,pcov = curve_fit(fit_fun_corr,beta_np,xi_np, sigma=error, p0=guess )
 file_list = glob.glob('../xi_corrN%s_NU*.dat'%(N))

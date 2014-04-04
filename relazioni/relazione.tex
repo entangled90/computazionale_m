@@ -5,6 +5,8 @@
 \input{title.tex}
 \tableofcontents 
 \newpage
+\section{Prefazione}
+
 
 \chapter{Sfere rigide}
 
@@ -149,7 +151,7 @@ Esso è stato calcolato per ogni simulazione e come nel caso della pressione, so
 
 Come si può vedere dal grafico si ha una regione in cui la curva è quasi piatta a partire da un valore della frazione di impacchettamento poco sotto $\eta \sim 0.69$ fino a $\eta \sim 0.71$.\\
 Questi sono gli stessi valori per cui si è notato un comportamento diverso della pressione nel grafico precedente.\\
-Come si vedrà in seguito, questo intervallo di temperature caratterizzerà tutte le quantità che analizzeremo.
+Come si vedrà in seguito, questo intervallo di temperature caratterizzerà tutte le quantità che verranno analizzate.
  
 \subsubsection{Distribuzione di probabilità tempi di collisione}
 Oltre ad analizzare il valor medio del tempo di collisione per particella, si può studiare anche la sua distribuzione di probabilità durante ogni simulazione.\\
@@ -249,15 +251,16 @@ Per veder meglio questo fatto, si consideri il seguente grafico:
 \begin{center}
 	\begin{figure}[h!]
 		\centering
-		\includegraphics[scale=0.5]{sfere2D/dr2cfr.png}
+		\includegraphics[scale=0.5]{sfere2D/dr2trans2.png}
 	\end{figure}
 \end{center}
-
 Come si può vedere, prima della transizione di fase ($\eta=0.6$) il sistema arriva rapidamente al valore teorico e continua ad oscillare intorno a quel valore.
-Per i valori successivi alla transizione di fase, le curve oltre ad avere una pendenza minore, esibiscono un comportamento diverso: non tendono più al valore calcolato teorico, calcolato nel caso di completa mobilità, ma si appiattiscono ad un altro valore, più basso.
-Tale valore, come si può vedere, diminuisce all'aumentare di $\eta$, segno della sempre più scarsa mobilità dei dischi del sistema.
-Da notare, inoltre, l'enorme tempo necessario per arrivare al valore limite, rispetto alla fase \emph{liquida}.
-
+Per i valori successivi alla transizione di fase, le curve continuano ad avere una pendenza sempre minore.
+\begin{myfig}[ht]
+	\includegraphics[scale=0.5]{sfere2D/dr2cfr.png}
+\caption{Confronto di $\Delta r^2$ fino a $t=250$ dopo la transizione di fase}
+\end{myfig}
+Aumentando il tempo della simulazione fino a $t=300$ si è visto che l'andamento di $\Delta r^2$ si mantiene lineare per tutto il tempo della simulazione, anche se sembra che la pendenza delle curve diminuisca leggermente.
 
 \newpage
 \section{3 Dimensioni}
@@ -330,7 +333,6 @@ Infine si veda il confronto tra grafici della pressione per $n=128$ e $n=250$:
 Nonostante il numero di sfere sia quasi raddoppiato, la curva mantiene lo stesso andamento e anche il valore di $\eta$ per cui si ha la transizione di fase sono del tutto simili. 
 
 
-
 \subsection{Spostamento quadratico medio}
 Come per la pressione, anche lo spostamento quadratico medio è stato calcolato in maniera uguale a quanto fatto in 2 dimensioni. Chiaramente, il valore limite che ci possiamo aspettare per $\eta$ piccoli è diverso:
 $$
@@ -342,18 +344,13 @@ Il comportamento del sistema è analogo a quello bidimensionale, come si può ve
 	\includegraphics[scale=0.55]{sfere3D/dr2vari.png}
 	\caption{Spostamento quadratico medio a vari $\eta$}
 \end{myfig}
-Anche qui, la rapidità con cui esso tende al valore limite diminuisce all'aumentare di $\eta$ e simulando per tempi maggiori si può vedere come per frazioni di impacchettamento dopo la transizione di fase il valore limite diminuisca all'aumentare della frazione di impacchettamento.
-
-\begin{myfig}[h!]
-	\includegraphics[scale=0.55]{sfere3D/dr2trans.png}
-	\caption{Spostamento quadratico medio fino a $t=140$ prima e dopo la transizione}
-\end{myfig}
-
 Come si può vedere dal grafico, c'è una netta differenza tra i grafici prima della solidificazione e dopo.\\
 Infatti il sistema per $\eta=0.5$ è nella zona di transizione, prima che il solidifichi e si può vedere come la curva abbia ancora un comportamento simile a quello in fase liquida.
 Diventa completamente diverso, invece, per il valore $\eta=0.51$, che come si è visto dal grafico della pressione è il valore per cui il sistema inizia ad entrare in fase solida.
-
-
+\begin{myfig}[ht]
+\includegraphics[scale=0.55]{sfere3D/dr2trans.png}
+\caption{$\Delta r^2$ per valori di $\eta$ vicini alla transizione}
+\end{myfig}
 
 \subsection{Limite termodinamico}
 Si studia ora l'estrapolazione al limite termodinamico della pressione. Il limite termodinamico viene effettuato aumentando il numero di particelle del sistema e il volume, in modo tale che il loro rapporto rimanga costante. Il limite termodinamico viene raggiunto mandando $N,V \rightarrow \infty$
@@ -534,22 +531,23 @@ Il sistema è stato inizializzato con queste condizioni iniziali:
 $$
 	\rho = 0.9 \qquad N=256 \qquad <T> = 0.8,\, 1.087
 $$
-Si è interessati a confrontare l'andamento dello spostamento quadratico medio in funzione del tempo alle varie temperature. Il calcolo di $\Delta r^2(t)$ è stato effettuato in maniera del tutto analoga a quanto fatto per le sfere rigide in 3D, con l'unica differenza che ora il lato della scatola è diverso da 1 e quindi si è normalizzato il risultato dividento per $L^2$
+Si è interessati a confrontare l'andamento dello spostamento quadratico medio in funzione del tempo alle varie temperature. Il calcolo di $\Delta r^2(t)$ è stato effettuato in maniera del tutto analoga a quanto fatto per le sfere rigide in 3D, con l'unica differenza che ora il lato della scatola è diverso da 1 e quindi si è normalizzato il risultato dividento per $L^2$.
 \begin{myfig}[h]
-\includegraphics[scale=0.6]{soft_core/11_dr2pepe.png}
+\includegraphics[scale=0.6]{soft_core/11_dr2.png}
 \caption{Confronto di $\Delta r^2(t)$ a varie temperature}
 \end{myfig}
-Il grafico è stato generato a partire da 5 simulazioni indipendenti per ogni valore della temperatura. Si è calcolato il valor medio e l'errore a partire da questo insieme di dati per ogni istante temporale.
+Il grafico è stato generato a partire da 6 simulazioni indipendenti per ogni valore della temperatura. Si è calcolato il valor medio e l'errore a partire da questo insieme di dati per ogni istante temporale.
 Si può vedere come abbassando la temperatura la rapidità con cui il valore dello spostamento quadratico medio diminuisce, in modo simile a quando accadeva nel caso delle sfere rigide.\\
-Anche in questo caso il valore limite di questa quantità è $\Delta r^2(t \rightarrow \infty) = 0.25$ come nel caso delle sfere rigide in 3 dimensioni.
+Anche in questo caso il valore limite di questa quantità è $\Delta r^2(t \rightarrow \infty) = 0.25$ come nel caso delle sfere rigide in 3 dimensioni.\\
+Il valore limite viene raggiunto (nel tempo per cui è stato simulato il sistema) solo nel caso di temperatura più alta. Si può vedere inoltre come la pendenza della curva a temperatura più bassa sia sempre minore della pendenza dell'altra curva.
 
 \subsection{Esercizio 12}
 L'ultima classe di simulazioni è stata inizializzata con i seguenti parametri:
 $$
  \rho = 0.7 \qquad <\frac{E}{N \epsilon}> = -2.98 \qquad N = 100,150,250,500,800,1000
 $$
-Sono stati raccolti i dati di energia interna e temperatura per ogni simulazione. Ogni simulazione è stata ripetuta 5 volte per stimare in maniera corretta l'errore e il valor medio.
-Infine è stato estrapolato il valore delle grandezze nel limite termodinamico facendo un fit con una retta del tipo:
+Sono stati raccolti i dati di energia interna e temperatura per ogni simulazione. Ogni simulazione è stata ripetuta 5 volte per stimare in maniera corretta l'errore e il valor medio.\\
+Infine è stato estrapolato il valore delle grandezze nel limite termodinamico, per una generica osservabile $O$, facendo un fit con una retta in funzione di $\frac{1}{N}$:
 $$
 	O(N) \, = \,A \frac{1}{N} + B
 $$
@@ -559,14 +557,14 @@ I valori dell'energia interna in funzione del numero di particelle sono i seguen
 \begin{center}
 	\begin{tabular}{c c c }
 		\toprule	
-		$N$ & $<\frac{U}{N \epsilon} $ Errore \\
+		$N$ & $ <\frac{U}{N \epsilon}>  $ Errore \\
 		\midrule
-100 &  -3.901282 & 0.001692 \\ 
-150 &  -3.906181 & 0.001839 \\ 
-250 &  -3.906673 & 0.001397 \\ 
- 500 &  -3.912322 & 0.001174 \\ 
- 800 &  -3.913474 & 0.002585 \\ 
- 1000 &  -3.910644 & 0.001489 \\ 
+100 &  -3.901 & 0.002 \\ 
+150 &  -3.906 & 0.002 \\ 
+250 &  -3.907 & 0.0014 \\ 
+ 500 &  -3.9123 & 0.0012 \\ 
+ 800 &  -3.913 & 0.003 \\ 
+ 1000 &  -3.9106 & 0.0015 \\ 
  
 	\end{tabular}
 \end{center}
@@ -578,41 +576,41 @@ $$
 $$
 Il valore al limite termodinamico dell'energia interna è quindi:
 $$
-	<\frac{U_{LT}}{N \epsilon}> = -.3913 \pm 0.001
+	<\frac{U_{LT}}{N \epsilon}> = -3.913 \pm 0.001
 $$
-\begin{myfig}
-\includegraphics[scale=0.6]{soft_core/12lt.png}
+\begin{myfig}[ht]
+\includegraphics[scale=0.5]{soft_core/12lt.png}
 \caption{Limite termodinamico per la densità di energia interna}
 \end{myfig}
 
 
 \subsubsection{Temperatura}
-Per la temperatura è stata fatta una cosa analoga. I valori sono i seguenti:
-
+Per la temperatura è stata fatta una cosa analoga. I valori ottenuti ripetendo 5 simulazioni sono i seguenti:
 \begin{center}
 	\begin{tabular}{c c c }
 		\toprule	
 		$N$ & $<\frac{T}{\epsilon} $ Errore \\
 		\midrule
-		100 &  0.614190  & 0.001128 	\\
-		150 &  0.617455  & 0.001226 	\\
-		250 &  0.617782  & 0.000932 	\\
-		500 &  0.621547  & 0.000783 	\\
-		800 &  0.622315  & 0.001724 	\\
-		1000 &  0.620430  & 0.000992 	\\
+		100 &  0.6141  & 0.0011 	\\
+		150 &  0.6174  & 0.0012 	\\
+		250 &  0.6177  & 0.0009 	\\
+		500 &  0.6215  & 0.0008 	\\
+		800 &  0.622  & 0.002 	\\
+		1000 &  0.620  & 0.001 	\\
 		\bottomrule
 	\end{tabular}
 \end{center}
 
-
-
-e il risultato del fit è:
+Il risultato del fit è:
 $$
 	A = -0.81 \pm 0.14 \qquad B = 0.6223 \pm 0.0007
 $$
-
-\begin{myfig}
-\includegraphics[scale=0.6]{soft_core/12lt_temp.png}
+Il valore della temperatura estrapolato al limite termodinamico è quindi:
+$$
+	T_{LT} = 0.6223 \pm 0.0007
+$$
+\begin{myfig}[h]
+\includegraphics[scale=0.5]{soft_core/12lt_temp.png}
 \caption{Limite termodinamico per la temperatura}
 \end{myfig}
 
@@ -704,7 +702,7 @@ Gli errori nel grafico sono quelli generati dal fit dell'esponenziale.
 
 \begin{figure}
 \centering
-	\includegraphics[scale=0.55]{sw/autocorrelazioneN100fit.png}
+	\includegraphics[scale=0.55]{sw/autocorrelazioneN150fit.png}
 	\caption{Tempo di autocorrelazione con Swendsen-Wang tramite fit.}
 \end{figure}
 Il calcolo del tempo di autocorrelazione calcolato tramite fit concorda pienamente con l'altro metodo di calcolo.\\
@@ -803,10 +801,9 @@ Si vedano anche per questo algoritmo le stesse osservabili alle stesse temperatu
 Come si può vedere da un confronto diretto dei grafici, analizzando il valore per cui la curva di appiattisce, si può notare che, come ci si poteva aspettare, nell'algoritmo Metropolis è necessario scegliere una larghezza dell'intervallo molto alta vicino al punto critico, addirittura un ordine di grandezza superiore rispetto a Swendsen-Wang.
 Si stima la larghezza ottimale dell'intervallo cercando il punto in cui la curva si appiattisce o inizia ad avere una derivata prima molto più piccola rispetto ai punti iniziali.
 Si può vedere inoltre, come avvicinandosi al punto critico sia necessario avere un intervallo più largo: ciò è una chiara conseguenza della crescita di $\tau_{corr}$ all'avvicinarsi al punto critico.\\
-Inoltre, prendiamo l'esempio del caso metropolis. Alla temperatura $\beta = 0.325$ possiamo prendere come larghezza del bin 20. Poco sotto il punto critico, avremo come larghezza bin ~ 150/200. Come nel caso dell'autocorrelazione avvicinandosi del punto critico la quantità in questione è aumentata di circa un fattore 10 in entrambi i casi.
-Ciò può far capire perchè tempo di autocorrelazione e larghezza del bin siano due quantità non indipendenti.\\
-A riprova di ciò, si può fare la stessa analisi con Swendsen-Wang: si passa da un larghezza del bin di circa 10 a una larghezza di circa 30. Esso è aumentato di un fattore simile al tempo di autocorrelazione, che è passato da 2.5 a 5.5 .\\
-In seguito a questa analisi è stata scelta come larghezza dei bin per Metropolis  500 e per Swendsen-Wang 40.\\
+Inoltre, prendiamo l'esempio del caso metropolis. Alla temperatura $\beta = 0.325$ possiamo prendere come larghezza del bin 20. Poco sotto il punto critico, si ha come larghezza bin ~ 400/500.
+Come si può immaginare, la larghezza del bin ottimale è strettamente dipendente dal tempo di autocorrelazione dell'osservabile.
+Infine è stata scelta come larghezza dei bin per Metropolis 500 e per Swendsen-Wang 40.\\
 Per via di questa grande differenza di larghezza dei bin il numero di passi temporali eseguiti con Metropolis è stato aumentato a 120000, mentre Swendsen-Wang rimane con 20000 passi in modo da avere errori più simili con i due algoritmi. In questo modo infatti si ha un numero di misure molto simile dopo il binning.\\
 Nonostante Metropolis sia molto più veloce di Swendsen-Wang a parità di step temporali, la grande autocorrelazione fra le configurazioni generate impone di dover generare molte più configurazioni. Questo fatto lo rende più lento di Swendsen-Wang a generare un sample di dati simili.\\
 Si confrontino i tempi dei due algoritmi in un reticolo 100x100:

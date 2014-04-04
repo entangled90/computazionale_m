@@ -1,46 +1,47 @@
 \select@language {italian}
 \select@language {italian}
-\contentsline {chapter}{\numberline {1}Sfere rigide}{3}{chapter.1}
-\contentsline {section}{\numberline {1.1}2 Dimensioni}{3}{section.1.1}
-\contentsline {subsection}{\numberline {1.1.1}Inizializzazione}{3}{subsection.1.1.1}
-\contentsline {subsection}{\numberline {1.1.2}Termalizzazione}{4}{subsection.1.1.2}
-\contentsline {subsection}{\numberline {1.1.3}Pressione}{5}{subsection.1.1.3}
-\contentsline {subsection}{\numberline {1.1.4}Tempi di collisioni}{6}{subsection.1.1.4}
-\contentsline {subsubsection}{Distribuzione di probabilit\IeC {\`a} tempi di collisione}{7}{subsubsection*.2}
-\contentsline {subsection}{\numberline {1.1.5}Libero cammino medio}{10}{subsection.1.1.5}
-\contentsline {subsection}{\numberline {1.1.6}Spostamento quadratico medio in funzione del tempo}{12}{subsection.1.1.6}
-\contentsline {section}{\numberline {1.2}3 Dimensioni}{14}{section.1.2}
-\contentsline {subsection}{\numberline {1.2.1}Inizializzazione}{14}{subsection.1.2.1}
-\contentsline {subsection}{\numberline {1.2.2}Termalizzazione}{14}{subsection.1.2.2}
-\contentsline {subsection}{\numberline {1.2.3}Pressione}{15}{subsection.1.2.3}
+\contentsline {section}{\numberline {0.1}Prefazione}{3}{section.0.1}
+\contentsline {chapter}{\numberline {1}Sfere rigide}{4}{chapter.1}
+\contentsline {section}{\numberline {1.1}2 Dimensioni}{4}{section.1.1}
+\contentsline {subsection}{\numberline {1.1.1}Inizializzazione}{4}{subsection.1.1.1}
+\contentsline {subsection}{\numberline {1.1.2}Termalizzazione}{5}{subsection.1.1.2}
+\contentsline {subsection}{\numberline {1.1.3}Pressione}{6}{subsection.1.1.3}
+\contentsline {subsection}{\numberline {1.1.4}Tempi di collisioni}{7}{subsection.1.1.4}
+\contentsline {subsubsection}{Distribuzione di probabilit\IeC {\`a} tempi di collisione}{8}{subsubsection*.2}
+\contentsline {subsection}{\numberline {1.1.5}Libero cammino medio}{11}{subsection.1.1.5}
+\contentsline {subsection}{\numberline {1.1.6}Spostamento quadratico medio in funzione del tempo}{13}{subsection.1.1.6}
+\contentsline {section}{\numberline {1.2}3 Dimensioni}{15}{section.1.2}
+\contentsline {subsection}{\numberline {1.2.1}Inizializzazione}{15}{subsection.1.2.1}
+\contentsline {subsection}{\numberline {1.2.2}Termalizzazione}{16}{subsection.1.2.2}
+\contentsline {subsection}{\numberline {1.2.3}Pressione}{16}{subsection.1.2.3}
 \contentsline {subsection}{\numberline {1.2.4}Spostamento quadratico medio}{17}{subsection.1.2.4}
 \contentsline {subsection}{\numberline {1.2.5}Limite termodinamico}{18}{subsection.1.2.5}
-\contentsline {chapter}{\numberline {2}Sfere soffici}{20}{chapter.2}
-\contentsline {section}{\numberline {2.1}Inizializzazione e definizione dei parametri}{20}{section.2.1}
-\contentsline {subsection}{\numberline {2.1.1}Termalizzazione}{20}{subsection.2.1.1}
-\contentsline {section}{\numberline {2.2}Produzione e analisi dati}{21}{section.2.2}
-\contentsline {subsection}{\numberline {2.2.1}Esercizio 9}{21}{subsection.2.2.1}
-\contentsline {subsection}{\numberline {2.2.2}Esercizio 10}{23}{subsection.2.2.2}
-\contentsline {subsubsection}{Temperatura}{23}{subsubsection*.3}
-\contentsline {subsubsection}{Pressione}{24}{subsubsection*.4}
-\contentsline {subsubsection}{Energia interna}{24}{subsubsection*.5}
-\contentsline {subsubsection}{Confronto tra le osservabili}{24}{subsubsection*.6}
-\contentsline {subsection}{\numberline {2.2.3}Esercizio 11}{26}{subsection.2.2.3}
-\contentsline {subsection}{\numberline {2.2.4}Esercizio 12}{27}{subsection.2.2.4}
-\contentsline {subsubsection}{Energia interna}{27}{subsubsection*.7}
-\contentsline {subsubsection}{Temperatura}{27}{subsubsection*.8}
-\contentsline {chapter}{\numberline {3}Modello di Ising}{29}{chapter.3}
-\contentsline {section}{\numberline {3.1}Termalizzazione}{29}{section.3.1}
-\contentsline {section}{\numberline {3.2}Autocorrelazione fra le configurazioni}{30}{section.3.2}
-\contentsline {section}{\numberline {3.3}Binning}{32}{section.3.3}
-\contentsline {section}{\numberline {3.4}Energia e Magnetizzazione}{37}{section.3.4}
-\contentsline {section}{\numberline {3.5}Distribuzione di probabilit\IeC {\`a} della magnetizzazione}{38}{section.3.5}
-\contentsline {section}{\numberline {3.6}Lunghezza di correlazione}{40}{section.3.6}
-\contentsline {section}{\numberline {3.7}Finite Size Scaling}{43}{section.3.7}
-\contentsline {chapter}{\numberline {4}Modello di Potts}{48}{chapter.4}
-\contentsline {section}{\numberline {4.1}Termalizzazione}{48}{section.4.1}
-\contentsline {section}{\numberline {4.2}Binning}{49}{section.4.2}
-\contentsline {section}{\numberline {4.3}Energia e Magnetizzazione}{49}{section.4.3}
-\contentsline {section}{\numberline {4.4}Distribuzione di probabilit\IeC {\`a} della magnetizzazione}{50}{section.4.4}
-\contentsline {section}{\numberline {4.5}Lunghezza di correlazione}{53}{section.4.5}
-\contentsline {section}{\numberline {4.6}Finite Size Scaling}{54}{section.4.6}
+\contentsline {chapter}{\numberline {2}Sfere soffici}{22}{chapter.2}
+\contentsline {section}{\numberline {2.1}Inizializzazione e definizione dei parametri}{22}{section.2.1}
+\contentsline {subsection}{\numberline {2.1.1}Termalizzazione}{22}{subsection.2.1.1}
+\contentsline {section}{\numberline {2.2}Produzione e analisi dati}{23}{section.2.2}
+\contentsline {subsection}{\numberline {2.2.1}Esercizio 9}{23}{subsection.2.2.1}
+\contentsline {subsection}{\numberline {2.2.2}Esercizio 10}{25}{subsection.2.2.2}
+\contentsline {subsubsection}{Temperatura}{25}{subsubsection*.3}
+\contentsline {subsubsection}{Pressione}{26}{subsubsection*.4}
+\contentsline {subsubsection}{Energia interna}{26}{subsubsection*.5}
+\contentsline {subsubsection}{Confronto tra le osservabili}{26}{subsubsection*.6}
+\contentsline {subsection}{\numberline {2.2.3}Esercizio 11}{28}{subsection.2.2.3}
+\contentsline {subsection}{\numberline {2.2.4}Esercizio 12}{29}{subsection.2.2.4}
+\contentsline {subsubsection}{Energia interna}{29}{subsubsection*.7}
+\contentsline {subsubsection}{Temperatura}{29}{subsubsection*.8}
+\contentsline {chapter}{\numberline {3}Modello di Ising}{31}{chapter.3}
+\contentsline {section}{\numberline {3.1}Termalizzazione}{31}{section.3.1}
+\contentsline {section}{\numberline {3.2}Autocorrelazione fra le configurazioni}{32}{section.3.2}
+\contentsline {section}{\numberline {3.3}Binning}{34}{section.3.3}
+\contentsline {section}{\numberline {3.4}Energia e Magnetizzazione}{39}{section.3.4}
+\contentsline {section}{\numberline {3.5}Distribuzione di probabilit\IeC {\`a} della magnetizzazione}{40}{section.3.5}
+\contentsline {section}{\numberline {3.6}Lunghezza di correlazione}{42}{section.3.6}
+\contentsline {section}{\numberline {3.7}Finite Size Scaling}{45}{section.3.7}
+\contentsline {chapter}{\numberline {4}Modello di Potts}{50}{chapter.4}
+\contentsline {section}{\numberline {4.1}Termalizzazione}{50}{section.4.1}
+\contentsline {section}{\numberline {4.2}Binning}{51}{section.4.2}
+\contentsline {section}{\numberline {4.3}Energia e Magnetizzazione}{51}{section.4.3}
+\contentsline {section}{\numberline {4.4}Distribuzione di probabilit\IeC {\`a} della magnetizzazione}{52}{section.4.4}
+\contentsline {section}{\numberline {4.5}Lunghezza di correlazione}{55}{section.4.5}
+\contentsline {section}{\numberline {4.6}Finite Size Scaling}{56}{section.4.6}

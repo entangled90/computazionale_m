@@ -20,9 +20,9 @@ for f in file_list:
 
 print (temps)
 for temp in temps:
-	time_np= np.zeros(999,dtype='float64')
-	mean = np.zeros(999,dtype='float64')
-	var = np.zeros(999,dtype='float64')
+	time_np= np.zeros(3199,dtype='float64')
+	mean = np.zeros(3199,dtype='float64')
+	var = np.zeros(3199,dtype='float64')
 	print('dr2_*_%.6lf.dat'%(temp))
 	file_temp = glob.glob('dr2_*_%.5lf.dat'%(temp))
 	print(file_temp)

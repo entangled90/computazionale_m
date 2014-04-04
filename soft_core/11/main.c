@@ -6,7 +6,7 @@
 
 #define NUMBER_OF_PARTICLES 256
 #define N 3
-#define ITERATION_MAX 1e5
+#define ITERATION_MAX 8e4
 #define ITERATION_THERM 5000
 #define skip_times 25
 double SIGMA=1;

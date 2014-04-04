@@ -17,12 +17,12 @@ file_list = glob.glob('dr2_*_*.dat')
 #	tmp=float(f[-12:-4])
 #	if tmp not in temps:
 #		temps.append(tmp)
-temps=[0.6,0.75,0.785]
+temps=[0.75,0.785]
 print (temps)
 for temp in temps:
-	time_np= np.zeros(6664,dtype='float64')
-	mean = np.zeros(6664,dtype='float64')
-	var = np.zeros(6664,dtype='float64')
+	time_np= np.zeros(9998,dtype='float64')
+	mean = np.zeros(9998,dtype='float64')
+	var = np.zeros(9998,dtype='float64')
 	print('dr2_*_%.6lf.dat'%(temp))
 	file_temp = glob.glob('dr2_*_%.6lf.dat'%(temp))
 	print(file_temp)
