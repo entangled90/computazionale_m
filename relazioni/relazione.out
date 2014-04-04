@@ -1,38 +1,37 @@
-\BOOKMARK [1][-]{section.0.1}{Prefazione}{}% 1
-\BOOKMARK [0][-]{chapter.1}{Sfere rigide}{}% 2
-\BOOKMARK [1][-]{section.1.1}{2 Dimensioni}{chapter.1}% 3
-\BOOKMARK [2][-]{subsection.1.1.1}{Inizializzazione}{section.1.1}% 4
-\BOOKMARK [2][-]{subsection.1.1.2}{Termalizzazione}{section.1.1}% 5
-\BOOKMARK [2][-]{subsection.1.1.3}{Pressione}{section.1.1}% 6
-\BOOKMARK [2][-]{subsection.1.1.4}{Tempi di collisioni}{section.1.1}% 7
-\BOOKMARK [2][-]{subsection.1.1.5}{Libero cammino medio}{section.1.1}% 8
-\BOOKMARK [2][-]{subsection.1.1.6}{Spostamento quadratico medio in funzione del tempo}{section.1.1}% 9
-\BOOKMARK [1][-]{section.1.2}{3 Dimensioni}{chapter.1}% 10
-\BOOKMARK [2][-]{subsection.1.2.1}{Inizializzazione}{section.1.2}% 11
-\BOOKMARK [2][-]{subsection.1.2.2}{Termalizzazione}{section.1.2}% 12
-\BOOKMARK [2][-]{subsection.1.2.3}{Pressione}{section.1.2}% 13
-\BOOKMARK [2][-]{subsection.1.2.4}{Spostamento quadratico medio}{section.1.2}% 14
-\BOOKMARK [2][-]{subsection.1.2.5}{Limite termodinamico}{section.1.2}% 15
-\BOOKMARK [0][-]{chapter.2}{Sfere soffici}{}% 16
-\BOOKMARK [1][-]{section.2.1}{Inizializzazione e definizione dei parametri}{chapter.2}% 17
-\BOOKMARK [2][-]{subsection.2.1.1}{Termalizzazione}{section.2.1}% 18
-\BOOKMARK [1][-]{section.2.2}{Produzione e analisi dati}{chapter.2}% 19
-\BOOKMARK [2][-]{subsection.2.2.1}{Esercizio 9}{section.2.2}% 20
-\BOOKMARK [2][-]{subsection.2.2.2}{Esercizio 10}{section.2.2}% 21
-\BOOKMARK [2][-]{subsection.2.2.3}{Esercizio 11}{section.2.2}% 22
-\BOOKMARK [2][-]{subsection.2.2.4}{Esercizio 12}{section.2.2}% 23
-\BOOKMARK [0][-]{chapter.3}{Modello di Ising}{}% 24
-\BOOKMARK [1][-]{section.3.1}{Termalizzazione}{chapter.3}% 25
-\BOOKMARK [1][-]{section.3.2}{Autocorrelazione fra le configurazioni}{chapter.3}% 26
-\BOOKMARK [1][-]{section.3.3}{Binning}{chapter.3}% 27
-\BOOKMARK [1][-]{section.3.4}{Energia e Magnetizzazione}{chapter.3}% 28
-\BOOKMARK [1][-]{section.3.5}{Distribuzione di probabilit\340 della magnetizzazione}{chapter.3}% 29
-\BOOKMARK [1][-]{section.3.6}{Lunghezza di correlazione}{chapter.3}% 30
-\BOOKMARK [1][-]{section.3.7}{Finite Size Scaling}{chapter.3}% 31
-\BOOKMARK [0][-]{chapter.4}{Modello di Potts}{}% 32
-\BOOKMARK [1][-]{section.4.1}{Termalizzazione}{chapter.4}% 33
-\BOOKMARK [1][-]{section.4.2}{Binning}{chapter.4}% 34
-\BOOKMARK [1][-]{section.4.3}{Energia e Magnetizzazione}{chapter.4}% 35
-\BOOKMARK [1][-]{section.4.4}{Distribuzione di probabilit\340 della magnetizzazione}{chapter.4}% 36
-\BOOKMARK [1][-]{section.4.5}{Lunghezza di correlazione}{chapter.4}% 37
-\BOOKMARK [1][-]{section.4.6}{Finite Size Scaling}{chapter.4}% 38
+\BOOKMARK [0][-]{chapter.1}{Sfere rigide}{}% 1
+\BOOKMARK [1][-]{section.1.1}{2 Dimensioni}{chapter.1}% 2
+\BOOKMARK [2][-]{subsection.1.1.1}{Inizializzazione}{section.1.1}% 3
+\BOOKMARK [2][-]{subsection.1.1.2}{Termalizzazione}{section.1.1}% 4
+\BOOKMARK [2][-]{subsection.1.1.3}{Pressione}{section.1.1}% 5
+\BOOKMARK [2][-]{subsection.1.1.4}{Tempi di collisioni}{section.1.1}% 6
+\BOOKMARK [2][-]{subsection.1.1.5}{Libero cammino medio}{section.1.1}% 7
+\BOOKMARK [2][-]{subsection.1.1.6}{Spostamento quadratico medio in funzione del tempo}{section.1.1}% 8
+\BOOKMARK [1][-]{section.1.2}{3 Dimensioni}{chapter.1}% 9
+\BOOKMARK [2][-]{subsection.1.2.1}{Inizializzazione}{section.1.2}% 10
+\BOOKMARK [2][-]{subsection.1.2.2}{Termalizzazione}{section.1.2}% 11
+\BOOKMARK [2][-]{subsection.1.2.3}{Pressione}{section.1.2}% 12
+\BOOKMARK [2][-]{subsection.1.2.4}{Spostamento quadratico medio}{section.1.2}% 13
+\BOOKMARK [2][-]{subsection.1.2.5}{Limite termodinamico}{section.1.2}% 14
+\BOOKMARK [0][-]{chapter.2}{Sfere soffici}{}% 15
+\BOOKMARK [1][-]{section.2.1}{Inizializzazione e definizione dei parametri}{chapter.2}% 16
+\BOOKMARK [2][-]{subsection.2.1.1}{Termalizzazione}{section.2.1}% 17
+\BOOKMARK [1][-]{section.2.2}{Produzione e analisi dati}{chapter.2}% 18
+\BOOKMARK [2][-]{subsection.2.2.1}{Esercizio 9}{section.2.2}% 19
+\BOOKMARK [2][-]{subsection.2.2.2}{Esercizio 10}{section.2.2}% 20
+\BOOKMARK [2][-]{subsection.2.2.3}{Esercizio 11}{section.2.2}% 21
+\BOOKMARK [2][-]{subsection.2.2.4}{Esercizio 12}{section.2.2}% 22
+\BOOKMARK [0][-]{chapter.3}{Modello di Ising}{}% 23
+\BOOKMARK [1][-]{section.3.1}{Termalizzazione}{chapter.3}% 24
+\BOOKMARK [1][-]{section.3.2}{Autocorrelazione fra le configurazioni}{chapter.3}% 25
+\BOOKMARK [1][-]{section.3.3}{Binning}{chapter.3}% 26
+\BOOKMARK [1][-]{section.3.4}{Energia e Magnetizzazione}{chapter.3}% 27
+\BOOKMARK [1][-]{section.3.5}{Distribuzione di probabilit\340 della magnetizzazione}{chapter.3}% 28
+\BOOKMARK [1][-]{section.3.6}{Lunghezza di correlazione}{chapter.3}% 29
+\BOOKMARK [1][-]{section.3.7}{Finite Size Scaling}{chapter.3}% 30
+\BOOKMARK [0][-]{chapter.4}{Modello di Potts}{}% 31
+\BOOKMARK [1][-]{section.4.1}{Termalizzazione}{chapter.4}% 32
+\BOOKMARK [1][-]{section.4.2}{Binning}{chapter.4}% 33
+\BOOKMARK [1][-]{section.4.3}{Energia e Magnetizzazione}{chapter.4}% 34
+\BOOKMARK [1][-]{section.4.4}{Distribuzione di probabilit\340 della magnetizzazione}{chapter.4}% 35
+\BOOKMARK [1][-]{section.4.5}{Lunghezza di correlazione}{chapter.4}% 36
+\BOOKMARK [1][-]{section.4.6}{Finite Size Scaling}{chapter.4}% 37

@@ -5,7 +5,17 @@
 \input{title.tex}
 \tableofcontents 
 \newpage
-\section{Prefazione}
+\section*{Prefazione}
+I programmi e gli algoritmi sono stati implementati seguendo le note del corso. Molti dettagli ampiamente discussi nelle note riguardo l'effettiva implementazione degli algoritmi sono stati tralasciati nella stesura di questa relazione.\\
+I programmi che simulano gli algoritmi sono stati implementati interamente in linguaggio C e includono una prima analisi dei dati come il \emph{binning} e il calcolo di $\Delta r^2$ nei programmi di dinamica molecolare.\\
+Sono stati scritti molti script in \emph{python} per operazioni in cui la velocità di esecuzione non era importante, tra cui script per mandare in esecuzione copie di un programma sui vari core, programmi per calcolare medie ed errori su dati provenienti da diverse run dei programmi, programmi per effettuare i fit e infine per fare grafici dei dati.\\
+È stato scelto \emph{python} in quanto è un linguaggio di alto livello che ha permesso di svolgere questi task molto rapidamente, soprattutto in quanto sono state utilizzate queste librerie \emph{opensource}, tra cui:
+\begin{itemize}
+\item scipy: insieme di moduli che permette di usare \emph{python} in maniera simile a MatLab, usato principalmente per effettuare i fit
+\item matplotlib: insieme di moduli usati per fare grafici 
+\item numpy: insieme di moduli che permettono di velocizzare moltissimo le operazioni vettoriali e includono utili funzioni di statistica.
+\end{itemize}
+Per poter eseguire gli script in python è necessario avere queste librerie installate con una versione di \emph{python} superiore alla 3.0 .
 
 
 \chapter{Sfere rigide}
@@ -263,6 +273,7 @@ Per i valori successivi alla transizione di fase, le curve continuano ad avere u
 Aumentando il tempo della simulazione fino a $t=300$ si è visto che l'andamento di $\Delta r^2$ si mantiene lineare per tutto il tempo della simulazione, anche se sembra che la pendenza delle curve diminuisca leggermente.
 
 \newpage
+\clearpage
 \section{3 Dimensioni}
 
 \subsection{Inizializzazione}
@@ -307,11 +318,11 @@ in pieno accordo con la temperatura a cui è stato inizializzato il sistema.
 Il calcolo della pressione è del tutto analogo al caso bidimensionale con l'unica differenza data dalla relazione tra energia e temperatura in 2 dimensioni e 3 dimensioni. I valori medi e gli errori sono stati calcolati con lo stesso metodo.\\
 L'andamento della pressione in funzione di $\eta$ è simile al caso bidimensionale al di fuori della zona di transizione, mentre in quella regione, la curva ha un comportamento molto diverso.
 \begin{myfig}[h]
-	\includegraphics[scale=0.55]{sfere3D/pressione.png}
+	\includegraphics[scale=0.5]{sfere3D/pressione.png}
 	\caption{Grafico relativo alla pressione per $n=128$ sfere.}
 \end{myfig}
 \begin{myfig}[h]
-	\includegraphics[scale=0.55]{sfere3D/pressionezoomzoom.png}
+	\includegraphics[scale=0.5]{sfere3D/pressionezoomzoom.png}
 	\caption{Particolare della transizione di fase del grafico relativo alla pressione per $n=128$ sfere.}
 \end{myfig}
 
@@ -340,15 +351,16 @@ $$
 $$
 Il comportamento del sistema è analogo a quello bidimensionale, come si può vedere da questo grafico:
 
-\begin{myfig}
-	\includegraphics[scale=0.55]{sfere3D/dr2vari.png}
+\begin{myfig}[h]
+	\includegraphics[scale=0.5]{sfere3D/dr2vari.png}
 	\caption{Spostamento quadratico medio a vari $\eta$}
 \end{myfig}
 Come si può vedere dal grafico, c'è una netta differenza tra i grafici prima della solidificazione e dopo.\\
 Infatti il sistema per $\eta=0.5$ è nella zona di transizione, prima che il solidifichi e si può vedere come la curva abbia ancora un comportamento simile a quello in fase liquida.
 Diventa completamente diverso, invece, per il valore $\eta=0.51$, che come si è visto dal grafico della pressione è il valore per cui il sistema inizia ad entrare in fase solida.
-\begin{myfig}[ht]
-\includegraphics[scale=0.55]{sfere3D/dr2trans.png}
+
+\begin{myfig}[h]
+\includegraphics[scale=0.5]{sfere3D/dr2trans.png}
 \caption{$\Delta r^2$ per valori di $\eta$ vicini alla transizione}
 \end{myfig}
 
@@ -361,11 +373,11 @@ La raccolta dati è stata ripetuta 9 volte per ogni $n$ e si è calcolato valor 
 	\toprule
 	$N$ & $\frac{1}{N}$ & $<\frac{P V}{n k_b T} -1> $ & Errore \\
 	\midrule
-	$32	$	& $0.031250$	&$ 6.06	$	& $3e-02 $\\
-	$64	$	& $0.015625$	&$ 6.01	$	& $1e-02 $\\
-	$128$	& $0.007812$	&$ 5.989$	& $ 2.e-03 $\\
-	$256$	& $0.003906$	&$ 5.981$	& $ 4.e-03$ \\
-	$512$	& $0.001953$	&$ 5.973$	& $3.e-03$ \\
+	$32	$	& $0.031250$	&$ 6.06	$	& $0.03 $\\
+	$64	$	& $0.015625$	&$ 6.01	$	& $0.01 $\\
+	$128$	& $0.007812$	&$ 5.989$	& $ 0.002 $\\
+	$256$	& $0.003906$	&$ 5.981$	& $ 0.004$ \\
+	$512$	& $0.001953$	&$ 5.973$	& $ 0.003$ \\
 	\bottomrule
 	\end{tabular}
 \end{center}
@@ -539,7 +551,7 @@ Si è interessati a confrontare l'andamento dello spostamento quadratico medio i
 Il grafico è stato generato a partire da 6 simulazioni indipendenti per ogni valore della temperatura. Si è calcolato il valor medio e l'errore a partire da questo insieme di dati per ogni istante temporale.
 Si può vedere come abbassando la temperatura la rapidità con cui il valore dello spostamento quadratico medio diminuisce, in modo simile a quando accadeva nel caso delle sfere rigide.\\
 Anche in questo caso il valore limite di questa quantità è $\Delta r^2(t \rightarrow \infty) = 0.25$ come nel caso delle sfere rigide in 3 dimensioni.\\
-Il valore limite viene raggiunto (nel tempo per cui è stato simulato il sistema) solo nel caso di temperatura più alta. Si può vedere inoltre come la pendenza della curva a temperatura più bassa sia sempre minore della pendenza dell'altra curva.
+Il valore limite viene raggiunto (nel tempo in cui è stato simulato il sistema) solo nel caso di temperatura più alta. Si può vedere inoltre come la pendenza della curva a temperatura più bassa sia sempre minore della pendenza dell'altra curva.
 
 \subsection{Esercizio 12}
 L'ultima classe di simulazioni è stata inizializzata con i seguenti parametri:
@@ -1139,7 +1151,7 @@ I siti del reticolo vengono inizializzati in modo uniformemente casuale tra i tr
 Dopo aver analizzato l'andamento di energia e magnetizzazione nella fase di termalizzazione si è scelto di impostare un tempo di termalizzazione pari a 1000 passi temporali anche se come si può vedere dai grafici, già 100 passi sono sufficienti.
 
 \section{Binning}
-Il binning è stato implementato esattamente come nel modello di Ising. Siccome questo modello è stato simulato attraverso Swendsen-Wang ci si aspetta che la larghezza dei bin sia comparabile a quella nel modello di Ising con il medesimo algoritmo. Infatti così accade e anche in questo caso è stata scelta una larghezza degli intervalli pari a 30. Il numero totale di passi temporali dell'algoritmo è in questo caso di 10000, quindi si hanno circa la metà dei dati rispetto a Ising con Swendsen-Wang.\\
+Il binning è stato implementato esattamente come nel modello di Ising. Siccome questo modello è stato simulato attraverso Swendsen-Wang ci si aspetta che la larghezza dei bin sia comparabile a quella nel modello di Ising con il medesimo algoritmo. Infatti così accade e anche in questo caso è stata scelta una larghezza degli intervalli pari a 40. Il numero totale di passi temporali dell'algoritmo è in questo caso di 10000, quindi si hanno circa la metà dei dati rispetto a Ising con Swendsen-Wang.\\
 Si veda ora l'andamento della deviazione standar nel punto critico, temperatura in cui si ha l'autocorrelazione massima tra le configurazioni. A tutte le altre temperature, come nel modello di Ising, la curva si appiattisce molto più rapidamente.
 \begin{center}
 \begin{figure}[h!]
@@ -1169,7 +1181,7 @@ Si può vedere che la temperatura a cui avviene la transizione di fase è di poc
 	\caption{Magnetizzazione (improved) per $L=100$}
 \end{figure}
 Come nel caso del modello Ising, si possono apprezzare le differenze fra le diverse taglie del reticolo osservando la curva di magnetizzazione nella fase paramagnetica, dove le curve sono molto diverse tra loro, a differenza della fase ferromagnetica in cui questa differenza sparisce.\\
-Le curve sono relative a reticoli 30x30,75x75 e 150x150:
+Le curve sono relative a reticoli 30x30, 75x75 e 150x150:
 
 \begin{figure}[h]
 \centering
